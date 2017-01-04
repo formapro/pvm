@@ -1,0 +1,28 @@
+{
+    "name": "formapro/pvm",
+    "license": "MIT",
+    "type": "lib",
+    "description": "FormaPro PVM",
+    "autoload": {
+        "psr-4": { "Formapro\\Pvm\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Tests\\": "tests/" }
+    },
+    "require": {
+        "php": ">=7.0.0",
+        "makasim/values": "@dev",
+        "makasim/yadm": "@dev",
+        "mongodb/mongodb": "^1"
+    },
+    "config": {
+        "platform": {
+            "php": "7.0.0"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
