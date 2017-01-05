@@ -1,7 +1,7 @@
 <?php
 namespace Formapro\Pvm;
 
-use Makasim\Values\ValuesTrait;
+use Makasim\Yadm\ValuesTrait;
 
 class Transition
 {
@@ -12,59 +12,53 @@ class Transition
     const STATE_INTERRUPTED = 'interrupted';
 
     /**
-     * @var Node
+     * @var Process
      */
-    private $from;
+    private $_process;
 
     /**
      * @var Node
      */
-    private $to;
+    private $_from;
 
     /**
-     * @var int
+     * @var Node
      */
-    private $weight;
+    private $_to;
 
-    /**
-     * @var boolean
-     */
-    private $async;
-
-    /**
-     * @var boolean
-     */
-    private $active;
-
-    /**
-     * @var string
-     */
-    private $state;
-
-    /**
-     * @param Node $from
-     * @param Node $to
-     */
-    public function __construct(Node $from = null, Node $to)
+    public function __construct()
     {
-        $this->from = $from;
-        $this->to = $to;
-        $this->weight = 1;
-        $this->async = false;
-        $this->active = true;
-        $this->state = self::STATE_OPENED;
-
         $this->setId(UUID::generate());
+        $this->setWeight(1);
+        $this->setAsync(false);
+        $this->setActive(true);
+        $this->setState(self::STATE_OPENED);
     }
 
     public function setId($id)
     {
-        $this->setSelfValue('id', $id);
+        $this->setValue('id', $id);
     }
 
     public function getId()
     {
-        return $this->getSelfValue('id');
+        return $this->getValue('id');
+    }
+
+    /**
+     * @param Process $process
+     */
+    public function setProcess(Process $process)
+    {
+        $this->_process = $process;
+    }
+
+    /**
+     * @return Process
+     */
+    public function getProcess()
+    {
+        return $this->_process;
     }
 
     /**
@@ -72,7 +66,20 @@ class Transition
      */
     public function getFrom()
     {
-        return $this->from;
+        if (null === $this->_from && ($id = $this->getValue('from'))) {
+            $this->_from = $this->_process->getNode($id);
+        }
+
+        return $this->_from;
+    }
+
+    /**
+     * @param Node $node
+     */
+    public function setFrom(Node $node)
+    {
+        $this->_from = $node;
+        $this->setValue('from', $node->getId());
     }
 
     /**
@@ -80,7 +87,20 @@ class Transition
      */
     public function getTo()
     {
-        return $this->to;
+        if (null === $this->_to && ($id = $this->getValue('to'))) {
+            $this->_to = $this->_process->getNode($id);
+        }
+
+        return $this->_to;
+    }
+
+    /**
+     * @param Node $node
+     */
+    public function setTo(Node $node)
+    {
+        $this->_to = $node;
+        $this->setValue('to', $node->getId());
     }
 
     /**
@@ -88,7 +108,7 @@ class Transition
      */
     public function getWeight()
     {
-        return $this->weight;
+        return $this->getValue('weight');
     }
 
     /**
@@ -96,7 +116,7 @@ class Transition
      */
     public function setWeight($weight)
     {
-        $this->weight = $weight;
+        $this->setValue('weight', $weight);
     }
 
     /**
@@ -104,7 +124,7 @@ class Transition
      */
     public function isAsync()
     {
-        return $this->async;
+        return $this->getValue('async');
     }
 
     /**
@@ -112,7 +132,7 @@ class Transition
      */
     public function setAsync($async)
     {
-        $this->async = $async;
+        $this->setValue('async', (bool) $async);
     }
 
     /**
@@ -120,7 +140,7 @@ class Transition
      */
     public function isActive()
     {
-        return $this->active;
+        return $this->getValue('active');
     }
 
     /**
@@ -128,16 +148,21 @@ class Transition
      */
     public function setActive($active)
     {
-        $this->active = $active;
+        $this->setValue('active', (bool) $active);
     }
 
     public function setPassed()
     {
-        $this->state = self::STATE_PASSED;
+        $this->setState(self::STATE_PASSED);
     }
 
     public function setInterrupted()
     {
-        $this->state = self::STATE_INTERRUPTED;
+        $this->setState(self::STATE_INTERRUPTED);
+    }
+
+    private function setState($state)
+    {
+        $this->setValue('state', $state);
     }
 }

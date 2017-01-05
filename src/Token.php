@@ -1,22 +1,41 @@
 <?php
 namespace Formapro\Pvm;
 
+use Makasim\Yadm\ValuesTrait;
+
 class Token
 {
+    use ValuesTrait;
+
     /**
      * @var Process
      */
-    private $process;
+    private $_process;
 
     /**
      * @var Transition
      */
-    private $transition;
+    private $_transition;
 
-    public function __construct(Process $process, Transition $transition)
+    public function __construct()
     {
-        $this->process = $process;
-        $this->transition = $transition;
+        $this->setId(UUID::generate());
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->setValue('id', $id);
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->getValue('id');
     }
 
     /**
@@ -24,7 +43,15 @@ class Token
      */
     public function getProcess()
     {
-        return $this->process;
+        return $this->_process;
+    }
+
+    /**
+     * @param Process $process
+     */
+    public function setProcess(Process $process)
+    {
+        $this->_process = $process;
     }
 
     /**
@@ -32,7 +59,8 @@ class Token
      */
     public function setTransition(Transition $transition)
     {
-        $this->transition = $transition;
+        $this->_transition = $transition;
+        $this->setValue('transition', $transition->getId());
     }
 
     /**
@@ -40,6 +68,10 @@ class Token
      */
     public function getTransition()
     {
-        return $this->transition;
+        if (null === $this->_transition && ($id = $this->getValue('transition'))) {
+            $this->_transition = $this->_process->getTransition($id);
+        }
+
+        return $this->_transition;
     }
 }

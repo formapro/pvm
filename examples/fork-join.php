@@ -9,37 +9,38 @@ use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\Node;
 use Formapro\Pvm\Process;
-use Formapro\Pvm\Transition;
+use Symfony\Component\Console\Logger\ConsoleLogger;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 include_once __DIR__.'/../vendor/autoload.php';
 
 $process = new Process();
 
 $fork = new Node();
-$fork->setId('1');
+$fork->setId('fork');
 $fork->setBehavior('fork');
 
 $task1 = new Node();
-$task1->setId('2');
+$task1->setId('task 1');
 $task1->setBehavior('echo');
 $task1->setOption('text', 'task 1');
 
 $task2 = new Node();
-$task2->setId('3');
+$task2->setId('task 2');
 $task2->setBehavior('echo');
 $task2->setOption('text', 'task 2');
 
 $task3 = new Node();
-$task3->setId('4');
+$task3->setId('task 3');
 $task3->setBehavior('echo');
 $task3->setOption('text', 'task 3');
 
 $join = new Node();
-$join->setId('5');
+$join->setId('join');
 $join->setBehavior('join');
 
 $task4 = new Node();
-$task4->setId('6');
+$task4->setId('task 4');
 $task4->setBehavior('echo');
 $task4->setOption('text', 'task 4');
 
@@ -49,19 +50,19 @@ $process->addNode($task2);
 $process->addNode($task3);
 $process->addNode($task4);
 $process->addNode($join);
-$process->addTransition($start = new Transition(null, $fork));
-$process->addTransition(new Transition($fork, $task1));
-$process->addTransition(new Transition($fork, $task2));
-$process->addTransition(new Transition($fork, $task3));
-$process->addTransition(new Transition($task1, $join));
-$process->addTransition(new Transition($task2, $join));
-$process->addTransition(new Transition($task3, $join));
-$process->addTransition(new Transition($join, $task4));
+$start = $process->createTransition(null, $fork);
+$process->createTransition($fork, $task1);
+$process->createTransition($fork, $task2);
+$process->createTransition($fork, $task3);
+$process->createTransition($task1, $join);
+$process->createTransition($task2, $join);
+$process->createTransition($task3, $join);
+$process->createTransition($join, $task4);
 
 $behaviorRegistry = new DefaultBehaviorRegistry();
 $behaviorRegistry->register('echo', new EchoBehavior());
 $behaviorRegistry->register('fork', new CallbackBehavior(function (Token $token) {
-    $transitions = $token->getProcess()->getOutTransitionsForNode($token->getTransition()->getTo());
+    $transitions = $token->getProcess()->getOutTransitions($token->getTransition()->getTo());
 
     $transitions[0]->setWeight(1);
     $transitions[1]->setWeight(1);
@@ -80,8 +81,13 @@ $behaviorRegistry->register('join', new CallbackBehavior(function (Token $token)
     throw new InterruptExecutionException();
 }));
 
-$processStorage = new MongoProcessStorage();
+$client = new \MongoDB\Client();
+$collection = $client->selectCollection('pvm', 'process');
+$mongoStorage = new \Makasim\Yadm\MongodbStorage($collection, new \Makasim\Yadm\Hydrator(Process::class));
+$processStorage = new MongoProcessStorage($mongoStorage);
+
+$logger = new ConsoleLogger(new ConsoleOutput(ConsoleOutput::VERBOSITY_DEBUG));
 
 $engine = new ProcessEngine($behaviorRegistry, $processStorage);
-$engine->proceed($process->createToken($start));
+$engine->proceed($process->createToken($start), $logger);
 
