@@ -2,6 +2,7 @@
 namespace Formapro\Pvm;
 
 use Formapro\Pvm\Exception\InterruptExecutionException;
+use Formapro\Pvm\Exception\WaitExecutionException;
 use Psr\Log\LoggerInterface;
 
 class ProcessEngine
@@ -77,8 +78,8 @@ class ProcessEngine
             }
 
             $this->log('On transition: %s -> %s',
-                $token->getTransition()->getFrom() ? $token->getTransition()->getFrom()->getId() : 'start',
-                $token->getTransition()->getTo() ? $token->getTransition()->getTo()->getId() : 'end'
+                $token->getTransition()->getFrom() ? $token->getTransition()->getFrom()->getLabel() : 'start',
+                $token->getTransition()->getTo() ? $token->getTransition()->getTo()->getLabel() : 'end'
             );
 
             $behavior = $this->behaviorRegistry->get($node->getBehavior());
@@ -104,8 +105,8 @@ class ProcessEngine
             $first = true;
             foreach ($transitions as $transition) {
                 $this->log('Next transition: %s -> %s',
-                    $transition->getFrom() ? $transition->getFrom()->getId() : 'start',
-                    $transition->getTo() ? $transition->getTo()->getId() : 'end'
+                    $transition->getFrom() ? $transition->getFrom()->getLabel() : 'start',
+                    $transition->getTo() ? $transition->getTo()->getLabel() : 'end'
                 );
 
                 if ($first) {
@@ -117,9 +118,13 @@ class ProcessEngine
                 }
             }
         } catch (InterruptExecutionException $e) {
-            $token->getTransition()->setPassed();
+            $token->getTransition()->setInterrupted();
 
             return;
+        } catch (WaitExecutionException $e) {
+            $token->getTransition()->setWaiting();
+
+            // save
         }
     }
 

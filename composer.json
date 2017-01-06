@@ -11,10 +11,10 @@
     },
     "require": {
         "php": ">=7.0.0",
-        "makasim/values": "@dev",
         "makasim/yadm": "@dev",
         "mongodb/mongodb": "^1",
-        "symfony/console": "^3.2"
+        "symfony/console": "^3.2",
+        "graphp/graphviz": "^0.2.1"
     },
     "config": {
         "platform": {

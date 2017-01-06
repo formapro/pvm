@@ -1,21 +1,35 @@
 <?php
 namespace Formapro\Pvm;
 
+use Makasim\Yadm\ObjectsTrait;
 use Makasim\Yadm\ValuesTrait;
 
 class Node
 {
-    use ValuesTrait;
+    use ValuesTrait {
+        setValue as public;
+        getValue as public;
+    }
+
+    use ObjectsTrait {
+        setObject as public;
+        getObject as public;
+    }
 
     /**
      * @var Process
      */
     private $_process;
 
+    public function __construct()
+    {
+        $this->setId(UUID::generate());
+    }
+
     /**
      * @return Process
      */
-    public function getProcess(): Process
+    public function getProcess()
     {
         return $this->_process;
     }
@@ -42,6 +56,22 @@ class Node
     public function setId($id)
     {
         $this->setValue('id', $id);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->getValue('label');
+    }
+
+    /**
+     * @param string $label
+     */
+    public function setLabel($label)
+    {
+        $this->setValue('label', $label);
     }
 
     /**

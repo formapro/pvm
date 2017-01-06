@@ -5,10 +5,14 @@ use Makasim\Yadm\ValuesTrait;
 
 class Transition
 {
-    use ValuesTrait;
+    use ValuesTrait {
+        setValue as public;
+        getValue as public;
+    }
 
     const STATE_OPENED = 'opened';
     const STATE_PASSED = 'passed';
+    const STATE_WAITING = 'waiting';
     const STATE_INTERRUPTED = 'interrupted';
 
     /**
@@ -35,11 +39,17 @@ class Transition
         $this->setState(self::STATE_OPENED);
     }
 
+    /**
+     * @param string $id
+     */
     public function setId($id)
     {
         $this->setValue('id', $id);
     }
 
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->getValue('id');
@@ -151,14 +161,42 @@ class Transition
         $this->setValue('active', (bool) $active);
     }
 
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->getValue('state');
+    }
+
     public function setPassed()
     {
         $this->setState(self::STATE_PASSED);
     }
 
+    public function isPassed()
+    {
+        return $this->getState() === self::STATE_PASSED;
+    }
+
     public function setInterrupted()
     {
         $this->setState(self::STATE_INTERRUPTED);
+    }
+
+    public function isInterrupted()
+    {
+        return $this->getState() === self::STATE_INTERRUPTED;
+    }
+
+    public function setWaiting()
+    {
+        $this->setState(self::STATE_WAITING);
+    }
+
+    public function isWaiting()
+    {
+        return $this->getState() === self::STATE_WAITING;
     }
 
     private function setState($state)

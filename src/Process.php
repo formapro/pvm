@@ -23,6 +23,9 @@ class Process
 
     public function __construct()
     {
+        $this->objectBuilder = function ($object) {
+            $object->setProcess($this);
+        };
     }
 
     public function setId($id)
@@ -61,9 +64,20 @@ class Process
             throw new \LogicException('Not found');
         }
 
-        $node->setProcess($this);
-
         return $this->_nodes[$id] = $node;
+    }
+
+    public function getNodes()
+    {
+        return $this->getObjects('nodes', Node::class);
+    }
+
+    /**
+     * @return Transition[]
+     */
+    public function getTransitions()
+    {
+        return $this->getObjects('transitions', Transition::class);
     }
 
     /**
@@ -81,8 +95,6 @@ class Process
         if (null === $transition = $this->getObject('transitions.'.$id, Transition::class)) {
             throw new \LogicException('Not found');
         }
-
-        $transition->setProcess($this);
 
         return $this->_transitions[$id] = $transition;
     }
@@ -105,12 +117,16 @@ class Process
     }
 
     /**
-     * @param Node $node
+     * @return Node
      */
-    public function addNode(Node $node)
+    public function createNode()
     {
+        $node = new Node();
         $node->setProcess($this);
+
         $this->setObject('nodes.'.$node->getId(), $node);
+
+        return $node;
     }
 
     public function createTransition(Node $from = null, Node $to = null)
