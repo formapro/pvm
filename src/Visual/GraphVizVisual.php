@@ -119,6 +119,9 @@ class GraphVizVisual
             case Transition::STATE_PASSED:
                 $transitionColor = 'blue';
                 break;
+            case Transition::STATE_WAITING:
+                $transitionColor = 'orange';
+                break;
             default:
                 $transitionColor = 'black';
         }

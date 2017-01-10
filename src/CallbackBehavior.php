@@ -1,19 +1,26 @@
 <?php
 namespace Formapro\Pvm;
 
-class CallbackBehavior implements Behavior
+class CallbackBehavior implements Behavior, SignalBehavior
 {
     /**
      * @var \Closure
      */
-    private $callback;
+    private $execute;
 
     /**
-     * @param \Closure $callback
+     * @var \Closure
      */
-    public function __construct(\Closure $callback)
+    private $signal;
+
+    /**
+     * @param \Closure $execute
+     * @param \Closure $signal
+     */
+    public function __construct(\Closure $execute, \Closure $signal = null)
     {
-        $this->callback = $callback;
+        $this->execute = $execute;
+        $this->signal = $signal;
     }
 
     /**
@@ -21,6 +28,16 @@ class CallbackBehavior implements Behavior
      */
     public function execute(Token $token)
     {
-        return call_user_func($this->callback, $token);
+        return call_user_func($this->execute, $token);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function signal(Token $token)
+    {
+        if ($this->signal) {
+            return call_user_func($this->signal, $token);
+        }
     }
 }

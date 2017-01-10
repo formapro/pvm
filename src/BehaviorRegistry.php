@@ -6,7 +6,7 @@ interface BehaviorRegistry
     /**
      * @param string $name
      *
-     * @return Behavior
+     * @return Behavior|SignalBehavior
      */
     public function get(string $name) :Behavior;
 }

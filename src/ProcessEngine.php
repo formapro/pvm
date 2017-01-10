@@ -28,18 +28,30 @@ class ProcessEngine
     private $asyncTokens;
 
     /**
+     * @var Token[]
+     */
+    private $waitTokens;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
      * @param BehaviorRegistry $behaviorRegistry
-     * @param ProcessStorage   $processStorage
+     * @param ProcessStorage $processStorage
+     * @param AsyncTransition $asyncTransition
      */
-    public function __construct(BehaviorRegistry $behaviorRegistry, ProcessStorage $processStorage)
-    {
+    public function __construct(
+        BehaviorRegistry $behaviorRegistry,
+        ProcessStorage $processStorage,
+        AsyncTransition $asyncTransition
+    ) {
         $this->behaviorRegistry = $behaviorRegistry;
         $this->processStorage = $processStorage;
+        $this->asyncTransition = $asyncTransition;
+        $this->asyncTokens = [];
+        $this->waitTokens = [];
     }
 
     private function log($text, ...$args)
@@ -56,12 +68,15 @@ class ProcessEngine
             $this->doProceed($token);
             $this->processStorage->persist($token->getProcess());
             $this->asyncTransition->transition($this->asyncTokens);
+
+            return $this->waitTokens;
         } catch (\Exception $e) {
             // handle error
         } catch (\Error $e) {
             // handle error
         } finally {
             $this->asyncTokens = [];
+            $this->waitTokens = [];
             $this->logger = null;
         }
     }
@@ -84,9 +99,18 @@ class ProcessEngine
 
             $behavior = $this->behaviorRegistry->get($node->getBehavior());
 
-            $this->log('Execute behavior: %s', $node->getBehavior());
+            if ($token->getTransition()->isWaiting()) {
+                if (false === $behavior instanceof SignalBehavior) {
+                    throw new \LogicException(sprintf('Expected SignalBehavior'));
+                }
 
-            $transitions = $behavior->execute($token);
+                $this->log('Signal behavior: %s', $node->getBehavior());
+                $transitions = $behavior->signal($token);
+            } else {
+                $this->log('Execute behavior: %s', $node->getBehavior());
+                $transitions = $behavior->execute($token);
+            }
+
             $token->getTransition()->setPassed();
 
             if (false == $transitions) {
@@ -123,8 +147,9 @@ class ProcessEngine
             return;
         } catch (WaitExecutionException $e) {
             $token->getTransition()->setWaiting();
+            $this->waitTokens[] = $token;
 
-            // save
+            return;
         }
     }
 
