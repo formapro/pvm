@@ -15,6 +15,15 @@ class GraphVizVisual
      */
     private $vertext = [];
 
+    public function createImageSrc(Process $process)
+    {
+        try {
+            return (new GraphViz())->createImageSrc($this->createGraph($process));
+        } finally {
+            $this->vertext = [];
+        }
+    }
+
     public function display(Process $process)
     {
         try {

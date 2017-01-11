@@ -59,6 +59,12 @@ class ProcessEngine
         $this->logger->debug(sprintf('[ProcessEngine] '.$text, ...$args));
     }
 
+    /**
+     * @param Token $token
+     * @param LoggerInterface $logger
+     *
+     * @return Token[]
+     */
     public function proceed(Token $token, LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -66,14 +72,16 @@ class ProcessEngine
         try {
             $this->log('Start execution: process: %s, token: %s', $token->getProcess()->getId(), $token->getId());
             $this->doProceed($token);
-            $this->processStorage->persist($token->getProcess());
+            $this->processStorage->saveExecution($token->getProcess());
             $this->asyncTransition->transition($this->asyncTokens);
 
             return $this->waitTokens;
         } catch (\Exception $e) {
             // handle error
+            throw $e;
         } catch (\Error $e) {
             // handle error
+            throw $e;
         } finally {
             $this->asyncTokens = [];
             $this->waitTokens = [];

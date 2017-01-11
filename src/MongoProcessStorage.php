@@ -9,22 +9,48 @@ class MongoProcessStorage implements ProcessStorage
     /**
      * @var MongodbStorage
      */
-    private $storage;
+    private $processStorage;
 
     /**
-     * @param MongodbStorage $storage
+     * @var MongodbStorage
      */
-    public function __construct(MongodbStorage $storage)
+    private $executionStorage;
+
+    /**
+     * @param MongodbStorage $processStorage
+     * @param MongodbStorage $executionStorage
+     */
+    public function __construct(MongodbStorage $processStorage, MongodbStorage $executionStorage)
     {
-        $this->storage = $storage;
+        $this->processStorage = $processStorage;
+        $this->executionStorage = $executionStorage;
     }
 
     public function persist(Process $process)
     {
         if (get_object_id($process)) {
-            $this->storage->update($process);
+            $this->processStorage->update($process);
         } else {
-            $this->storage->insert($process);
+            $this->processStorage->insert($process);
         }
+    }
+
+    public function saveExecution(Process $process)
+    {
+        if (get_object_id($process)) {
+            $this->executionStorage->update($process);
+        } else {
+            $this->executionStorage->insert($process);
+        }
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return Process
+     */
+    public function findExecution($id)
+    {
+        return $this->executionStorage->findOne(['id' => $id]);
     }
 }

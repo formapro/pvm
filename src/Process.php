@@ -20,10 +20,14 @@ class Process
      * @var Token[]
      */
     private $_tokens;
+    
+    private $hash;
 
     public function __construct()
     {
+        $this->hash = spl_object_hash($this);
         $this->objectBuilder = function ($object) {
+            $hash = spl_object_hash($this);
             $object->setProcess($this);
         };
     }
@@ -64,6 +68,9 @@ class Process
             throw new \LogicException('Not found');
         }
 
+        //??
+        $node->setProcess($this);
+
         return $this->_nodes[$id] = $node;
     }
 
@@ -77,7 +84,13 @@ class Process
      */
     public function getTransitions()
     {
-        return $this->getObjects('transitions', Transition::class);
+        $transitions = [];
+        foreach ($this->getObjects('transitions', Transition::class) as $transition) {
+            $transition->setProcess($this);
+            $transitions[] = $transition;
+        }
+
+        return $transitions;
     }
 
     /**
@@ -95,6 +108,8 @@ class Process
         if (null === $transition = $this->getObject('transitions.'.$id, Transition::class)) {
             throw new \LogicException('Not found');
         }
+
+        $transition->setProcess($this);
 
         return $this->_transitions[$id] = $transition;
     }
@@ -163,5 +178,17 @@ class Process
         $this->setObject('tokens.'.$token->getId(), $token);
 
         return $token;
+    }
+
+    public function getToken($id)
+    {
+        /** @var Token $token */
+        foreach ($this->getObjects('tokens', Token::class) as $token) {
+            if ($token->getId() === $id) {
+                $token->setProcess($this);
+
+                return $token;
+            }
+        }
     }
 }

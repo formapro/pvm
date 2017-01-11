@@ -36,6 +36,8 @@ class CallbackBehavior implements Behavior, SignalBehavior
      */
     public function signal(Token $token)
     {
+        return $this->execute($token);
+
         if ($this->signal) {
             return call_user_func($this->signal, $token);
         }
