@@ -12,7 +12,7 @@ class DefaultBehaviorRegistry implements BehaviorRegistry
      * @param string   $name
      * @param Behavior $behavior
      */
-    public function register(string $name, Behavior $behavior)
+    public function register($name, Behavior $behavior)
     {
         $this->behaviors[$name] = $behavior;
     }
@@ -20,7 +20,7 @@ class DefaultBehaviorRegistry implements BehaviorRegistry
     /**
      * {@inheritdoc}
      */
-    public function get(string $name) :Behavior
+    public function get($name)
     {
         if (false == isset($this->behaviors[$name])) {
             throw new \LogicException(sprintf('Behavior is not registered with name: "%s"', $name));

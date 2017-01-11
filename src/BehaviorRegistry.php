@@ -8,5 +8,5 @@ interface BehaviorRegistry
      *
      * @return Behavior|SignalBehavior
      */
-    public function get(string $name) :Behavior;
+    public function get($name);
 }
