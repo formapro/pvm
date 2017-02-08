@@ -36,8 +36,9 @@ class GraphVizVisual
     public function createGraph(Process $process)
     {
         $graph = new Graph();
-        $graph->setAttribute('graphviz.graph.rankdir', 'LR');
-        $graph->setAttribute('graphviz.graph.splines', 'ortho');
+        $graph->setAttribute('graphviz.graph.rankdir', 'TB');
+//        $graph->setAttribute('graphviz.graph.constraint', false);
+//        $graph->setAttribute('graphviz.graph.splines', 'ortho');
 
         foreach ($process->getTransitions() as $transition) {
             // from
