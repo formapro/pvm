@@ -123,6 +123,25 @@ class Process
     }
 
     /**
+     * @param Node $node
+     *
+     * @return Transition[]
+     */
+    public function getOutTransitionWithName(Node $node, $name)
+    {
+        $outTransitions = $this->getValue('outTransitions.'.$node->getId(), []);
+
+        foreach ($outTransitions as $id) {
+            $transition = $this->getTransition($id);
+            if ($transition->getName() == $name) {
+                return $transition;
+            }
+        }
+
+        throw new \LogicException(sprintf('The transition with name %s could not be found', $name));
+    }
+
+    /**
      * @return Node
      */
     public function createNode()
@@ -135,9 +154,10 @@ class Process
         return $node;
     }
 
-    public function createTransition(Node $from = null, Node $to = null)
+    public function createTransition(Node $from = null, Node $to = null, $name = null)
     {
         $transition = new Transition();
+        $transition->setName($name);
         $transition->setProcess($this);
         $from && $transition->setFrom($from);
         $to && $transition->setTo($to);

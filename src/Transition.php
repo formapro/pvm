@@ -47,6 +47,19 @@ class Transition
         $this->setValue('id', $id);
     }
 
+    public function getName()
+    {
+        return $this->getValue('name');
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->setValue('name', $name);
+    }
+
     /**
      * @return string
      */
