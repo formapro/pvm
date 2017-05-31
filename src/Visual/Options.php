@@ -1,7 +1,7 @@
 <?php
 namespace Formapro\Pvm\Visual;
 
-use Makasim\Yadm\ValuesTrait;
+use Makasim\Values\ValuesTrait;
 
 class Options
 {

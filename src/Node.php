@@ -1,8 +1,8 @@
 <?php
 namespace Formapro\Pvm;
 
-use Makasim\Yadm\ObjectsTrait;
-use Makasim\Yadm\ValuesTrait;
+use Makasim\Values\ObjectsTrait;
+use Makasim\Values\ValuesTrait;
 
 class Node
 {

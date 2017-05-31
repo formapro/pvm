@@ -2,25 +2,25 @@
 namespace Formapro\Pvm;
 
 use function Makasim\Yadm\get_object_id;
-use Makasim\Yadm\MongodbStorage;
+use Makasim\Yadm\Storage;
 
 class MongoProcessStorage implements ProcessStorage
 {
     /**
-     * @var MongodbStorage
+     * @var Storage
      */
     private $processStorage;
 
     /**
-     * @var MongodbStorage
+     * @var Storage
      */
     private $executionStorage;
 
     /**
-     * @param MongodbStorage $processStorage
-     * @param MongodbStorage $executionStorage
+     * @param Storage $processStorage
+     * @param Storage $executionStorage
      */
-    public function __construct(MongodbStorage $processStorage, MongodbStorage $executionStorage)
+    public function __construct(Storage $processStorage, Storage $executionStorage)
     {
         $this->processStorage = $processStorage;
         $this->executionStorage = $executionStorage;
@@ -47,7 +47,7 @@ class MongoProcessStorage implements ProcessStorage
     /**
      * @param string $id
      *
-     * @return Process
+     * @return Process|object
      */
     public function findExecution($id)
     {

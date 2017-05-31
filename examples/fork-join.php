@@ -76,7 +76,7 @@ $behaviorRegistry->register('join', new CallbackBehavior(function (Token $token)
 
 $client = new \MongoDB\Client();
 $collection = $client->selectCollection('pvm', 'process');
-$mongoStorage = new \Makasim\Yadm\MongodbStorage($collection, new \Makasim\Yadm\Hydrator(Process::class));
+$mongoStorage = new \Makasim\Yadm\Storage($collection, new \Makasim\Yadm\Hydrator(Process::class));
 $processStorage = new MongoProcessStorage($mongoStorage);
 
 $logger = new ConsoleLogger(new ConsoleOutput(ConsoleOutput::VERBOSITY_DEBUG));
