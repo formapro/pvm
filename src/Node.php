@@ -63,7 +63,7 @@ class Node
      */
     public function getLabel()
     {
-        return $this->getValue('label');
+        return $this->getValue('label', '');
     }
 
     /**

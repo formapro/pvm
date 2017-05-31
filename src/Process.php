@@ -22,13 +22,6 @@ class Process
      */
     private $_tokens;
 
-    public function __construct()
-    {
-        $this->objectBuilder = function ($object) {
-            $object->setProcess($this);
-        };
-    }
-
     public function getHash()
     {
         return $this->hash;
