@@ -1,8 +1,5 @@
 <?php
-namespace Formapro\Pvm\Yadm;
-
-use Formapro\Pvm\Process;
-use Formapro\Pvm\ProcessStorage;
+namespace Formapro\Pvm;
 
 class NullProcessStorage implements ProcessStorage
 {

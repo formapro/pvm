@@ -3,7 +3,6 @@ namespace Formapro\Pvm;
 
 use Formapro\Pvm\Exception\InterruptExecutionException;
 use Formapro\Pvm\Exception\WaitExecutionException;
-use Formapro\Pvm\Yadm\NullProcessStorage;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -75,7 +74,10 @@ class ProcessEngine
             $this->log('Start execution: process: %s, token: %s', $token->getProcess()->getId(), $token->getId());
             $this->doProceed($token);
             $this->processExecutionStorage->persist($token->getProcess());
-            $this->asyncTransition->transition($this->asyncTokens);
+
+            if ($this->asyncTokens) {
+                $this->asyncTransition->transition($this->asyncTokens);
+            }
 
             return $this->waitTokens;
         } catch (\Exception $e) {
