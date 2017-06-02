@@ -19,7 +19,7 @@ class Token
 
     public function __construct()
     {
-        $this->setId(UUID::generate());
+        $this->setId(Uuid::generate());
     }
 
     /**

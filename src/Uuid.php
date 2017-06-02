@@ -1,8 +1,7 @@
 <?php
 namespace Formapro\Pvm;
 
-
-class UUID
+class Uuid
 {
     public static function generate()
     {
