@@ -26,7 +26,7 @@ use Formapro\Pvm\Process;
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('hello_world', new CallbackBehavior(function() {
-    echo 'Hello world';
+    echo 'Hello world!';
 }));
 
 $process = new Process();
@@ -38,12 +38,63 @@ $transition = $process->createTransition(null, $node);
 $token = $process->createToken($transition);
 
 (new ProcessEngine($registry))->proceed($token);
+
+// Prints "Hello world!"
 ```
 
-Here's the process diagram:
+The diagram: ![Hello world graph](docs/images/hello_world_example.png)
 
-![Hello world graph](docs/images/hello_world_example.png)
+## Fork process example
 
+The example shows how to fork execution. It is still done synchronously internally so the first will be executed `bar` and after `baz`.
+The async execution is supported and covered in this tutorial.
+
+```php
+<?php
+namespace Acme;
+
+use Formapro\Pvm\DefaultBehaviorRegistry;
+use Formapro\Pvm\CallbackBehavior;
+use Formapro\Pvm\ProcessEngine;
+use Formapro\Pvm\Process;
+
+$registry = new DefaultBehaviorRegistry();
+$registry->register('foo', new CallbackBehavior(function() {
+    echo 'Foo ';
+}));
+$registry->register('bar', new CallbackBehavior(function() {
+    echo 'BAR ';
+}));
+$registry->register('baz', new CallbackBehavior(function() {
+    echo 'BAZ ';
+}));
+
+$process = new Process();
+$foo = $process->createNode();
+$foo->setLabel('foo');
+$foo->setBehavior('foo');
+
+$bar = $process->createNode();
+$bar->setLabel('bar');
+$bar->setBehavior('bar');
+
+$baz = $process->createNode();
+$baz->setLabel('baz');
+$baz->setBehavior('baz');
+
+$process->createTransition($foo, $bar);
+$process->createTransition($foo, $baz);
+$transition = $process->createTransition(null, $foo);
+
+$token = $process->createToken($transition);
+
+(new ProcessEngine($registry))->proceed($token);
+
+// Prints "Foo Bar Baz "
+```
+
+The diagram: ![Hello world graph](docs/images/fork_example.png)
+        
 ## Resources
 
 * [Documentation](https://github.com/formapro/pvm/blob/master/docs/index.md)
