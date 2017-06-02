@@ -4,7 +4,7 @@ use Formapro\Pvm\CallbackBehavior;
 use Formapro\Pvm\DefaultBehaviorRegistry;
 use Formapro\Pvm\EchoBehavior;
 use Formapro\Pvm\Exception\InterruptExecutionException;
-use Formapro\Pvm\MongoProcessStorage;
+use Formapro\Pvm\Yadm\MongoProcessStorage;
 use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\Process;

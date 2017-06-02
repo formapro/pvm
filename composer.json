@@ -11,11 +11,15 @@
     },
     "require": {
         "php": "^5.5.0|^7.0",
-        "makasim/yadm": "@dev",
+        "makasim/values": "@dev",
         "mongodb/mongodb": "^1",
         "symfony/console": "^3.1",
         "graphp/graphviz": "^0.2.1",
         "ramsey/uuid": "^3"
+    },
+    "suggest": {
+        "enqueue/enqueue": "Install the Enqueue library to be able to process tasks async (by using MQ).",
+        "makasim/yadm": "Install the Yadm library to be able to persist store in MongoDB"
     },
     "extra": {
         "branch-alias": {

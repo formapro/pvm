@@ -16,7 +16,7 @@ class ProcessEngine
     /**
      * @var ProcessStorage
      */
-    private $processStorage;
+    private $processExecutionStorage;
 
     /**
      * @var AsyncTransition
@@ -40,17 +40,17 @@ class ProcessEngine
 
     /**
      * @param BehaviorRegistry $behaviorRegistry
-     * @param ProcessStorage $processStorage
+     * @param ProcessStorage $processExecutionStorage
      * @param AsyncTransition $asyncTransition
      */
     public function __construct(
         BehaviorRegistry $behaviorRegistry,
-        ProcessStorage $processStorage,
-        AsyncTransition $asyncTransition
+        ProcessStorage $processExecutionStorage = null,
+        AsyncTransition $asyncTransition = null
     ) {
         $this->behaviorRegistry = $behaviorRegistry;
-        $this->processStorage = $processStorage;
-        $this->asyncTransition = $asyncTransition;
+        $this->processExecutionStorage = $processExecutionStorage ?: new NullProcessStorage();
+        $this->asyncTransition = $asyncTransition ?: new AsyncTransitionIsNotConfigured();
         $this->asyncTokens = [];
         $this->waitTokens = [];
     }
@@ -73,8 +73,11 @@ class ProcessEngine
         try {
             $this->log('Start execution: process: %s, token: %s', $token->getProcess()->getId(), $token->getId());
             $this->doProceed($token);
-            $this->processStorage->saveExecution($token->getProcess());
-            $this->asyncTransition->transition($this->asyncTokens);
+            $this->processExecutionStorage->persist($token->getProcess());
+
+            if ($this->asyncTokens) {
+                $this->asyncTransition->transition($this->asyncTokens);
+            }
 
             return $this->waitTokens;
         } catch (\Exception $e) {
