@@ -4,6 +4,7 @@ namespace Formapro\Pvm;
 use Formapro\Pvm\Exception\InterruptExecutionException;
 use Formapro\Pvm\Exception\WaitExecutionException;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 class ProcessEngine
 {
@@ -65,9 +66,9 @@ class ProcessEngine
      *
      * @return Token[]
      */
-    public function proceed(Token $token, LoggerInterface $logger)
+    public function proceed(Token $token, LoggerInterface $logger = null)
     {
-        $this->logger = $logger;
+        $this->logger = $logger ?: new NullLogger();
 
         try {
             $this->log('Start execution: process: %s, token: %s', $token->getProcess()->getId(), $token->getId());
@@ -122,10 +123,26 @@ class ProcessEngine
             $token->getTransition()->setPassed();
 
             if (false == $transitions) {
-                $transitions = $token->getProcess()->getOutTransitions($node);
+                $tmpTransitions = $token->getProcess()->getOutTransitions($node);
 
-                foreach ($transitions as $transition) {
-                    $transition->setWeight($token->getTransition()->getWeight());
+                $transitions = [];
+                foreach ($tmpTransitions as $transition) {
+                    if (empty($transition->getName())) {
+                        $transition->setWeight($token->getTransition()->getWeight());
+
+                        $transitions[] = $transition;
+                    }
+
+                }
+            }
+
+            $tmpTransitions = $transitions;
+            $transitions = [];
+            foreach ($tmpTransitions as $transition) {
+                if (is_string($transition)) {
+                    $transitions = array_merge($transitions, $token->getProcess()->getOutTransitionsWithName($node, $transition));
+                } else {
+                    $transitions[] = $transition;
                 }
             }
 

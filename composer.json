@@ -14,7 +14,8 @@
         "makasim/yadm": "@dev",
         "mongodb/mongodb": "^1",
         "symfony/console": "^3.1",
-        "graphp/graphviz": "^0.2.1"
+        "graphp/graphviz": "^0.2.1",
+        "ramsey/uuid": "^3"
     },
     "extra": {
         "branch-alias": {

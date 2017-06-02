@@ -13,9 +13,9 @@ class Process
 
     use ObjectsTrait;
 
-    private $_nodes;
+    protected $_nodes;
 
-    private $_transitions;
+    protected $_transitions;
 
     /**
      * @var Token[]
@@ -118,7 +118,7 @@ class Process
     /**
      * @param Node $node
      *
-     * @return Transition[]
+     * @return Transition
      */
     public function getOutTransitionWithName(Node $node, $name)
     {
@@ -132,6 +132,35 @@ class Process
         }
 
         throw new \LogicException(sprintf('The transition with name %s could not be found', $name));
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return Transition[]
+     */
+    public function getOutTransitionsWithName(Node $node, $name)
+    {
+        $outTransitions = $this->getValue('outTransitions.'.$node->getId(), []);
+
+        $outTransitionsWithName = [];
+        foreach ($outTransitions as $id) {
+            $transition = $this->getTransition($id);
+            if ($transition->getName() == $name) {
+                $outTransitionsWithName[] = $transition;
+            }
+        }
+
+        return $outTransitionsWithName;
+    }
+
+    /**
+     * @param Node $node
+     */
+    public function registerNode(Node $node)
+    {
+        $node->setProcess($this);
+        $this->setObject('nodes.'.$node->getId(), $node);
     }
 
     /**
@@ -166,6 +195,17 @@ class Process
         }
 
         return $transition;
+    }
+
+    public function breakTransition(Transition $transition, Node $node, $newName = null)
+    {
+        $oldTo = $transition->getTo();
+        $transition->setTo($node);
+
+        $newTransition = $this->createTransition($node, $oldTo);
+        $newTransition->setName($newName);
+
+        return $newTransition;
     }
 
     /**
