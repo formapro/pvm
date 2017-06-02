@@ -43,7 +43,9 @@ $token = $process->createToken($transition);
 // Prints "Hello world!"
 ```
 
-The diagram: ![Hello world graph](docs/images/hello_world_example.png)
+The diagram: 
+
+![Hello world graph](docs/images/hello_world_example.png)
 
 ## Fork process example
 
@@ -89,7 +91,9 @@ $token = $process->createToken($transition);
 // Prints "foo bar baz "
 ```
 
-The diagram: ![Hello world graph](docs/images/fork_example.png)
+The diagram: 
+
+![Hello world graph](docs/images/fork_example.png)
         
 ## Resources
 
