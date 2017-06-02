@@ -1,7 +1,6 @@
 <?php
 namespace Formapro\Pvm\Enqueue;
 
-use App\Async\Topics;
 use Enqueue\Client\ProducerInterface;
 use Formapro\Pvm\Token;
 
@@ -28,7 +27,7 @@ class AsyncTransition implements \Formapro\Pvm\AsyncTransition
         foreach ($tokens as $token) {
             /** @var Token $token */
 
-            $this->producer->send(Topics::PVM_HANDLE_ASYNC_TRANSITION, [
+            $this->producer->send(HandleAsyncTransitionProcessor::TOPIC, [
                 'process' => $token->getProcess()->getId(),
                 'token' => $token->getId(),
             ]);
