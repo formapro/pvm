@@ -3,11 +3,12 @@
 The library provides us with a frame to build a [workflow](https://en.wikipedia.org/wiki/Workflow), business processes such as [BPMN](http://www.bpmn.org/). 
 It works like this: you build a process, create nodes and transitions, link them up. Than you can do:
 
-* It could be saved and used later. 
-* It could be executed with the process engine. 
-* The processes could be visualized.
-* Tasks could be executed asynchronously 
-* It shows the current state and reflect any chagnes or movements
+* Save process and execute later.
+* Clone and execute several processes.
+* Pause & continue execution. 
+* Supports async transition. Execute tasks in parallel.
+* Supports fork-join, conditions, cycles
+* 
 
 It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories.
  
@@ -57,30 +58,25 @@ use Formapro\Pvm\DefaultBehaviorRegistry;
 use Formapro\Pvm\CallbackBehavior;
 use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\Process;
+use Formapro\Pvm\Token;
 
 $registry = new DefaultBehaviorRegistry();
-$registry->register('foo', new CallbackBehavior(function() {
-    echo 'Foo ';
-}));
-$registry->register('bar', new CallbackBehavior(function() {
-    echo 'BAR ';
-}));
-$registry->register('baz', new CallbackBehavior(function() {
-    echo 'BAZ ';
+$registry->register('print_out_node_label', new CallbackBehavior(function(Token $token) {
+    echo $token->getTransition()->getTo()->getLabel().' ';
 }));
 
 $process = new Process();
 $foo = $process->createNode();
 $foo->setLabel('foo');
-$foo->setBehavior('foo');
+$foo->setBehavior('print_out_node_label');
 
 $bar = $process->createNode();
 $bar->setLabel('bar');
-$bar->setBehavior('bar');
+$bar->setBehavior('print_out_node_label');
 
 $baz = $process->createNode();
 $baz->setLabel('baz');
-$baz->setBehavior('baz');
+$baz->setBehavior('print_out_node_label');
 
 $process->createTransition($foo, $bar);
 $process->createTransition($foo, $baz);
@@ -90,7 +86,7 @@ $token = $process->createToken($transition);
 
 (new ProcessEngine($registry))->proceed($token);
 
-// Prints "Foo Bar Baz "
+// Prints "foo bar baz "
 ```
 
 The diagram: ![Hello world graph](docs/images/fork_example.png)
