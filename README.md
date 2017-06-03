@@ -1,6 +1,6 @@
 # Process virtual machine
 
-The library provides us with a frame to build a [workflow](https://en.wikipedia.org/wiki/Workflow), business processes such as [BPMN](http://www.bpmn.org/). 
+The library provides us with a frame to build a [workflow](https://en.wikipedia.org/wiki/Workflow) or business processes such as [BPMN](http://www.bpmn.org/). 
 It works like this: you build a process, create nodes and transitions, link them up. Than you can do:
 
 * Save process and execute later.
@@ -9,7 +9,9 @@ It works like this: you build a process, create nodes and transitions, link them
 * Supports async transition. Execute tasks in parallel.
 * Supports fork-join, conditions, cycles 
 
-It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories. Here's a good [post on how Petri Nets works](https://www.techfak.uni-bielefeld.de/~mchen/BioPNML/Intro/pnfaq.html)
+It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories. . Here's a good [post on how Petri Nets works](https://www.techfak.uni-bielefeld.de/~mchen/BioPNML/Intro/pnfaq.html)
+
+![Example](docs/images/pizza-process.png)
         
 ## Examples
 
