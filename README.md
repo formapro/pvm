@@ -17,8 +17,11 @@ It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri
 * [Fork](docs/fork-example.md)
 * [Conditions](docs/conditions-example.md)
 * [Synchronization](docs/synchronization-example.md)
+* [Pause and continue](docs/pause-and-continue-example.md)
 * [Parallel execution](docs/parallel-execution-with-enqueue.md)
 * [Mongo storage](docs/mongo-storage-example.md)
+* [Gallery](docs/gallery.md)
+* [Online demo](https://pvm-demo.forma-pro.com)
 
 ## Developed by Forma-Pro
 

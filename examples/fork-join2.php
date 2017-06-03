@@ -96,14 +96,9 @@ $behaviorRegistry->register('join', new CallbackBehavior(function (Token $token)
     throw new InterruptExecutionException();
 }));
 
-$client = new \MongoDB\Client();
-$collection = $client->selectCollection('pvm', 'process');
-$mongoStorage = new \Makasim\Yadm\Storage($collection, new \Makasim\Yadm\Hydrator(Process::class));
-$processStorage = new MongoProcessStorage($mongoStorage);
-
 $logger = new ConsoleLogger(new ConsoleOutput(ConsoleOutput::VERBOSITY_DEBUG));
 
-$engine = new ProcessEngine($behaviorRegistry, $processStorage);
+$engine = new ProcessEngine($behaviorRegistry);
 $engine->proceed($process->createToken($start), $logger);
 
 $graphViz = new GraphVizVisual();
