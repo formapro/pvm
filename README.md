@@ -45,7 +45,7 @@ $token = $process->createToken($transition);
 
 The diagram: 
 
-![Hello world graph](docs/images/hello_world_example.png)
+![Example](docs/images/hello_world_example.png)
 
 ## Fork process example
 
@@ -93,12 +93,12 @@ $token = $process->createToken($transition);
 
 The diagram: 
 
-![Hello world graph](docs/images/fork_example.png)
+![Example](docs/images/fork_example.png)
         
-## Resources
+## Other examples
 
-* [Documentation](https://github.com/formapro/pvm/blob/master/docs/index.md)
-* [Issue Tracker](https://github.com/formapro/pvm/issues)
+* [Conditions](docs/conditions-example.md)
+* [Synchronization](docs/synchronization-example)
 
 ## Developed by Forma-Pro
 
