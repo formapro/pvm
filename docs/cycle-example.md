@@ -49,7 +49,7 @@ $token = $process->createToken($transition);
 
 (new ProcessEngine($registry))->proceed($token);
 
-// Prints "bar "
+// Prints "foo foo foo baz "
 ```
 
 The diagram: 
