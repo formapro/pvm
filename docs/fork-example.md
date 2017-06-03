@@ -1,6 +1,7 @@
-# Conditions Example
+## Fork process example
 
-The example shows how you can do "if-else" logic".
+The example shows how to fork execution. It is still done synchronously internally so the first will be executed `bar` and after `baz`.
+The async execution is supported and covered in this tutorial.
 
 ```php
 <?php
@@ -16,14 +17,11 @@ $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {
     echo $token->getTransition()->getTo()->getLabel().' ';
 }));
-$registry->register('condition', new CallbackBehavior(function(Token $token) {
-    return ['first'];
-}));
 
 $process = new Process();
 $foo = $process->createNode();
 $foo->setLabel('foo');
-$foo->setBehavior('condition');
+$foo->setBehavior('print_label');
 
 $bar = $process->createNode();
 $bar->setLabel('bar');
@@ -33,19 +31,19 @@ $baz = $process->createNode();
 $baz->setLabel('baz');
 $baz->setBehavior('print_label');
 
-$process->createTransition($foo, $bar, 'first');
-$process->createTransition($foo, $baz, 'second');
+$process->createTransition($foo, $bar);
+$process->createTransition($foo, $baz);
 $transition = $process->createTransition(null, $foo);
 
 $token = $process->createToken($transition);
 
 (new ProcessEngine($registry))->proceed($token);
 
-// Prints "bar "
+// Prints "foo bar baz "
 ```
 
 The diagram: 
 
-![Example](images/conditions-example.png)
+![Example](images/fork_example.png)
 
 [Back](../README.md)

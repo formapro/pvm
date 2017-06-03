@@ -14,7 +14,7 @@ use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
 
 $registry = new DefaultBehaviorRegistry();
-$registry->register('print_out_node_label', new CallbackBehavior(function(Token $token) {
+$registry->register('print_label', new CallbackBehavior(function(Token $token) {
     echo $token->getTransition()->getTo()->getLabel().' ';
 }));
 $registry->register('fork', new CallbackBehavior(function (Token $token) {
@@ -46,17 +46,17 @@ $fork->setBehavior('fork');
 
 $task1 = $process->createNode();
 $task1->setLabel('task 1');
-$task1->setBehavior('print_out_node_label');
+$task1->setBehavior('print_label');
 $task1->setOption('text', 'task 1');
 
 $task2 = $process->createNode();
 $task2->setLabel('task 2');
-$task2->setBehavior('print_out_node_label');
+$task2->setBehavior('print_label');
 $task2->setOption('text', 'task 2');
 
 $task3 = $process->createNode();
 $task3->setLabel('task 3');
-$task3->setBehavior('print_out_node_label');
+$task3->setBehavior('print_label');
 $task3->setOption('text', 'task 3');
 
 $join = $process->createNode();
@@ -65,7 +65,7 @@ $join->setBehavior('join');
 
 $task4 = $process->createNode();
 $task4->setLabel('task 4');
-$task4->setBehavior('print_out_node_label');
+$task4->setBehavior('print_label');
 $task4->setOption('text', 'task 4');
 
 $start = $process->createTransition(null, $fork);
