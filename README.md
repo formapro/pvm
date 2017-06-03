@@ -7,8 +7,7 @@ It works like this: you build a process, create nodes and transitions, link them
 * Clone and execute several processes.
 * Pause & continue execution. 
 * Supports async transition. Execute tasks in parallel.
-* Supports fork-join, conditions, cycles
-* 
+* Supports fork-join, conditions, cycles 
 
 It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories.
  
@@ -98,7 +97,7 @@ The diagram:
 ## Other examples
 
 * [Conditions](docs/conditions-example.md)
-* [Synchronization](docs/synchronization-example)
+* [Synchronization](docs/synchronization-example.md)
 
 ## Developed by Forma-Pro
 
