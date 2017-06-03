@@ -16,6 +16,7 @@ It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri
 * [Sequence](docs/sequence-example.md)
 * [Fork](docs/fork-example.md)
 * [Conditions](docs/conditions-example.md)
+* [Cycles](docs/cycle-example.md)
 * [Synchronization](docs/synchronization-example.md)
 * [Pause and continue](docs/pause-and-continue-example.md)
 * [Parallel execution](docs/parallel-execution-with-enqueue.md)
