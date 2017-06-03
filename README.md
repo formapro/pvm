@@ -18,6 +18,7 @@ It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri
 * [Conditions](docs/conditions-example.md)
 * [Synchronization](docs/synchronization-example.md)
 * [Parallel execution](docs/parallel-execution-with-enqueue.md)
+* [Mongo storage](docs/mongo-storage-example.md)
 
 ## Developed by Forma-Pro
 
