@@ -17,6 +17,7 @@ It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri
 * [Fork](docs/fork-example.md)
 * [Conditions](docs/conditions-example.md)
 * [Synchronization](docs/synchronization-example.md)
+* [Parallel execution](docs/parallel-execution-with-enqueue.md)
 
 ## Developed by Forma-Pro
 
