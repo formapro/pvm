@@ -12,4 +12,8 @@
 
 ![Example](images/job_retry_on_failed_if_permanently_failed.png)
 
+4. Jobs run in parallel and then synchronized
+
+![Example](images/jobs-run-in-parallel-and-synchronized.png)
+
 [Back](../README.md)
