@@ -101,7 +101,8 @@ class GraphVizVisual
 
         /** @var Options $options */
         $options = $node->getObject('visual', Options::class) ?: new Options();
-        $vertext = $graph->createVertex($node->getLabel());
+        $vertext = $graph->createVertex($node->getId());
+        $vertext->setAttribute('graphviz.label', $node->getLabel());
 
         switch ($options->getType()) {
             case 'gateway':
