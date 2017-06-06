@@ -13,19 +13,20 @@ class Process
 
     use ObjectsTrait;
 
+    /**
+     * @var Node[]
+     */
     protected $_nodes;
 
+    /**
+     * @var Transition[]
+     */
     protected $_transitions;
 
     /**
      * @var Token[]
      */
     private $_tokens;
-
-    public function getHash()
-    {
-        return $this->hash;
-    }
 
     public function setId($id)
     {
@@ -103,6 +104,23 @@ class Process
      *
      * @return Transition[]
      */
+    public function getInTransitions(Node $node)
+    {
+        $inTransitions = $this->getValue('inTransitions.'.$node->getId(), []);
+
+        $transitions = [];
+        foreach ($inTransitions as $id) {
+            $transitions[] = $this->getTransition($id);
+        }
+
+        return $transitions;
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return Transition[]
+     */
     public function getOutTransitions(Node $node)
     {
         $outTransitions = $this->getValue('outTransitions.'.$node->getId(), []);
@@ -117,6 +135,7 @@ class Process
 
     /**
      * @param Node $node
+     * @param string $name
      *
      * @return Transition
      */
