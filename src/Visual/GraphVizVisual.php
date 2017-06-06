@@ -37,9 +37,11 @@ class GraphVizVisual
     {
         $graph = new Graph();
         $graph->setAttribute('graphviz.graph.rankdir', 'TB');
+        $graph->setAttribute('graphviz.graph.ranksep', 1);
 //        $graph->setAttribute('graphviz.graph.constraint', false);
 //        $graph->setAttribute('graphviz.graph.splines', 'ortho');
 
+        $lastNodes = [];
         foreach ($process->getTransitions() as $transition) {
             // from
             if (false == $transition->getFrom()) {
@@ -55,7 +57,11 @@ class GraphVizVisual
             $this->createTransition($from, $to, $transition);
 
             //  end
-            if (false == $process->getOutTransitions($transition->getTo())) {
+            if (false == $process->getOutTransitions($transition->getTo()) &&
+            false == array_key_exists($transition->getTo()->getId(), $lastNodes)
+            ) {
+                $lastNodes[$transition->getTo()->getId()] = true;
+
                 $this->createEndNode($graph, $to);
             }
         }
