@@ -2,7 +2,14 @@
     "name": "formapro/pvm",
     "license": "MIT",
     "type": "lib",
-    "description": "FormaPro PVM",
+    "description": "The library provides us with a frame to build a workflow or a business process such as BPMN. Could execute tasks in parallel or delayed tasks",
+    "keywords": [
+        "process",
+        "business process",
+        "workflow",
+        "petri net",
+        "bpmn"
+    ],
     "autoload": {
         "psr-4": { "Formapro\\Pvm\\": "src/" }
     },
