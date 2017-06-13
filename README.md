@@ -25,7 +25,7 @@ It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri
 * [Delayed transtions](#TODO) (require formapro/php-quarts)
 * [Mongo storage](docs/mongo-storage-example.md)
 * [Gallery](docs/gallery.md)
-* [Online demo](https://pvm-demo.forma-pro.com) (code)[https://github.com/formapro/pvm-demo]
+* [Online demo](https://pvm-demo.forma-pro.com), [code](https://github.com/formapro/pvm-demo)
 
 ## Developed by Forma-Pro
 
