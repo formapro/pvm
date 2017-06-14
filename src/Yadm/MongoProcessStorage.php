@@ -40,4 +40,12 @@ class MongoProcessStorage implements ProcessStorage
 
         return$process;
     }
+
+    /**
+     * @return Storage
+     */
+    public function getStorage(): Storage
+    {
+        return $this->storage;
+    }
 }
