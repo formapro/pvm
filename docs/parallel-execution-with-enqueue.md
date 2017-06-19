@@ -85,6 +85,7 @@ $engine->proceed($token);
 ```
 
 In the example above the `bar` task is executed in same process where `baz` is not, instead, the message is sent to the queue.
+Then the message is picked up by a conusmer and gets processed.
 Now, we have to configure a processor for the queue.
  
 ```php
@@ -99,6 +100,7 @@ use Enqueue\SimpleClient\SimpleClient;
 use Formapro\Pvm\Enqueue\HandleAsyncTransitionProcessor;
 use Enqueue\Psr\PsrMessage;
 use Enqueue\Psr\PsrContext;
+use Enqueue\Client\Config;
 
 include __DIR__.'/config.php';
 
@@ -110,13 +112,7 @@ include __DIR__.'/config.php';
 
 $processor = new HandleAsyncTransitionProcessor($engine, $persistentStorage);
 
-$client->bind(
-    HandleAsyncTransitionProcessor::TOPIC, 
-    'pvm_handle_async_transition',
-    function(PsrMessage $message, PsrContext $context) use ($processor) {
-        return $processor->process($message, $context);
-    }
-);
+$client->bind(Config::COMMAND_TOPIC, HandleAsyncTransitionProcessor::COMMAND, $processor);
 
 $client->consume();
 ```

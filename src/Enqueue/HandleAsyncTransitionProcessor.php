@@ -1,7 +1,7 @@
 <?php
 namespace Formapro\Pvm\Enqueue;
 
-use Enqueue\Client\TopicSubscriberInterface;
+use Enqueue\Client\CommandSubscriberInterface;
 use Enqueue\Consumption\Result;
 use Enqueue\Psr\PsrContext;
 use Enqueue\Psr\PsrMessage;
@@ -12,8 +12,10 @@ use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\ProcessStorage;
 use Psr\Log\NullLogger;
 
-class HandleAsyncTransitionProcessor implements PsrProcessor, TopicSubscriberInterface
+class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberInterface
 {
+    const COMMAND = 'pvm_handle_async_transition';
+
     const TOPIC = 'pvm_handle_async_transition';
 
     /**
@@ -68,8 +70,8 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, TopicSubscriberInt
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedTopics()
+    public static function getSubscribedCommand()
     {
-        return [static::TOPIC];
+        return static::COMMAND;
     }
 }
