@@ -1,4 +1,4 @@
-# Delayed execution with quartz
+# Delayed execution with php-quartz
   
 The tasks could be paused and reused in future. 
 For example you may want to do some activitis in two days. 
