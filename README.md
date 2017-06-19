@@ -22,7 +22,7 @@ It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri
 * [Synchronization](docs/synchronization-example.md)
 * [Pause and continue](docs/pause-and-continue-example.md)
 * [Parallel execution](docs/parallel-execution-with-enqueue.md) (require enqueue/simple-client)
-* [Delayed transtions](#TODO) (require formapro/php-quarts)
+* [Delayed transtions](docs/delayed-execution-with-quartz.md) (require formapro/php-quarts)
 * [Mongo storage](docs/mongo-storage-example.md)
 * [Gallery](docs/gallery.md)
 * [Online demo](https://pvm-demo.forma-pro.com), [code](https://github.com/formapro/pvm-demo)
