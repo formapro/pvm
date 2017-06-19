@@ -17,13 +17,8 @@ The signal is execute when the quarzt deicideds the time has come.
 <?php
 namespace App\Pvm\Behavior;
 
-use App\Async\Topics;
-use App\JobStatus;
-use App\Model\Job;
-use App\Model\JobResult;
-use App\Model\Process;
 use Formapro\Pvm\Behavior;
-use Formapro\Pvm\Exception\InterruptExecutionException;
+use Formapro\Pvm\Enqueue\HandleAsyncTransitionProcessor;
 use Formapro\Pvm\Exception\WaitExecutionException;
 use Formapro\Pvm\SignalBehavior;
 use Formapro\Pvm\Token;
@@ -32,7 +27,6 @@ use Quartz\App\RemoteScheduler;
 use Quartz\Core\JobBuilder;
 use Quartz\Core\SimpleScheduleBuilder;
 use Quartz\Core\TriggerBuilder;
-use Formapro\Pvm\Enqueue\HandleAsyncTransitionProcessor;
 
 class TwoDaysDelayBehavior implements Behavior, SignalBehavior
 {
@@ -60,7 +54,7 @@ class TwoDaysDelayBehavior implements Behavior, SignalBehavior
             ->forJobDetail($job)
             ->withSchedule(SimpleScheduleBuilder::simpleSchedule()->repeatForever())
             ->setJobData([
-                'topic' => Topics::PVM_HANDLE_ASYNC_TRANSITION,
+                'command' => HandleAsyncTransitionProcessor::COMMAND,
                 'process' => $token->getProcess()->getId(),
                 'token' => $token->getId(),
             ])
