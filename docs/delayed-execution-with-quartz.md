@@ -7,7 +7,7 @@ Here I suppose you have installed quartz as a library or as a service.
 You have remote scheduler setup and working.
  
 
-## Process engine configuration
+## The delayed behavior
 
 Here's how your behavior could look like. 
 At execution time it creates a trigger and sends it to quartz. Once it is done it tells the process engigne to wait.
@@ -58,7 +58,7 @@ class TwoDaysDelayBehavior implements Behavior, SignalBehavior
                 'process' => $token->getProcess()->getId(),
                 'token' => $token->getId(),
             ])
-            ->startAt(new \DateTime('now + 30 seconds'))
+            ->startAt(new \DateTime('now + 2 days'))
             ->build();
 
         $this->remoteScheduler->scheduleJob($trigger, $job);
