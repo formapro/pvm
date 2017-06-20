@@ -72,6 +72,11 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberI
      */
     public static function getSubscribedCommand()
     {
-        return static::COMMAND;
+        return [
+            'processorName' => static::COMMAND,
+            'queueName' => static::COMMAND,
+            'queueNameHardcoded' => true,
+            'exclusive' => true,
+        ];
     }
 }
