@@ -2,6 +2,7 @@
 namespace Formapro\Pvm\Enqueue;
 
 use Enqueue\Client\CommandSubscriberInterface;
+use Enqueue\Consumption\QueueSubscriberInterface;
 use Enqueue\Consumption\Result;
 use Enqueue\Psr\PsrContext;
 use Enqueue\Psr\PsrMessage;
@@ -12,7 +13,7 @@ use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\ProcessStorage;
 use Psr\Log\NullLogger;
 
-class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberInterface
+class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberInterface, QueueSubscriberInterface
 {
     const COMMAND = 'pvm_handle_async_transition';
 
@@ -78,5 +79,13 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberI
             'queueNameHardcoded' => true,
             'exclusive' => true,
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedQueues()
+    {
+        return [static::COMMAND];
     }
 }
