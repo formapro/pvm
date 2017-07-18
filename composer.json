@@ -17,7 +17,7 @@
         "psr-4": { "Tests\\": "tests/" }
     },
     "require": {
-        "php": "^5.5.0|^7.0",
+        "php": "^7",
         "makasim/values": "@dev",
         "symfony/console": "^3.1",
         "graphp/graphviz": "^0.2.1",
