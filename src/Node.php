@@ -85,7 +85,7 @@ class Node
     /**
      * @param string $behavior
      */
-    public function setBehavior(string $behavior)
+    public function setBehavior($behavior)
     {
         $this->setValue('behavior', $behavior);
     }
