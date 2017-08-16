@@ -20,11 +20,11 @@
         "php": "^7",
         "makasim/values": "@dev",
         "symfony/console": "^3.1",
-        "graphp/graphviz": "^0.2.1",
         "ramsey/uuid": "^3"
     },
     "suggest": {
-        "enqueue/enqueue": "Install the Enqueue library to be able to process tasks async (by using MQ).",
+        "enqueue/enqueue": "^0.7 Install the Enqueue library to be able to process tasks async (by using MQ).",
+        "graphp/graphviz": "^0.2 If you want to visualize graphs",
         "makasim/yadm": "Install the Yadm library to be able to persist store in MongoDB"
     },
     "extra": {

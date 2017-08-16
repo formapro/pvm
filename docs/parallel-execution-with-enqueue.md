@@ -98,8 +98,8 @@ use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\ProcessStorage;
 use Enqueue\SimpleClient\SimpleClient;
 use Formapro\Pvm\Enqueue\HandleAsyncTransitionProcessor;
-use Enqueue\Psr\PsrMessage;
-use Enqueue\Psr\PsrContext;
+use Interop\Queue\PsrMessage;
+use Interop\Queue\PsrContext;
 use Enqueue\Client\Config;
 
 include __DIR__.'/config.php';
