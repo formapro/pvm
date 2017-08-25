@@ -17,8 +17,6 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberI
 {
     const COMMAND = 'pvm_handle_async_transition';
 
-    const TOPIC = 'pvm_handle_async_transition';
-
     /**
      * @var ProcessEngine
      */
