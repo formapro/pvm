@@ -42,10 +42,6 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberI
      */
     public function process(PsrMessage $psrMessage, PsrContext $psrContext)
     {
-        if ($psrMessage->isRedelivered()) {
-            return Result::reject('The message failed. Remove it');
-        }
-
         $data = JSON::decode($psrMessage->getBody());
 
         /** @var Process $process */
