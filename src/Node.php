@@ -1,6 +1,7 @@
 <?php
 namespace Formapro\Pvm;
 
+use Formapro\Pvm\Yadm\CreateTrait;
 use Makasim\Values\ObjectsTrait;
 use Makasim\Values\ValuesTrait;
 
@@ -15,6 +16,8 @@ class Node
         setObject as public;
         getObject as public;
     }
+
+    use CreateTrait;
 
     /**
      * @var Process

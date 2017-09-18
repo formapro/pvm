@@ -1,6 +1,7 @@
 <?php
 namespace Formapro\Pvm;
 
+use Formapro\Pvm\Yadm\CreateTrait;
 use Makasim\Values\ValuesTrait;
 
 class Transition
@@ -9,6 +10,7 @@ class Transition
         setValue as public;
         getValue as public;
     }
+    use CreateTrait;
 
     const STATE_OPENED = 'opened';
     const STATE_PASSED = 'passed';
