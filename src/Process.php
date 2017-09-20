@@ -1,6 +1,7 @@
 <?php
 namespace Formapro\Pvm;
 
+use Formapro\Pvm\Yadm\CreateTrait;
 use Makasim\Values\ObjectsTrait;
 use Makasim\Values\ValuesTrait;
 
@@ -12,6 +13,7 @@ class Process
     }
 
     use ObjectsTrait;
+    use CreateTrait;
 
     /**
      * @var Node[]
@@ -60,7 +62,7 @@ class Process
         }
 
         /** @var Node $node */
-        if (null === $node = $this->getObject('nodes.'.$id, Node::class)) {
+        if (null === $node = $this->getObject('nodes.'.$id)) {
             throw new \LogicException('Not found');
         }
 
@@ -69,7 +71,7 @@ class Process
 
     public function getNodes()
     {
-        return $this->getObjects('nodes', Node::class);
+        return $this->getObjects('nodes');
     }
 
     /**
@@ -77,7 +79,7 @@ class Process
      */
     public function getTransitions()
     {
-        return $this->getObjects('transitions', Transition::class);
+        return $this->getObjects('transitions');
     }
 
     /**
@@ -92,7 +94,7 @@ class Process
         }
 
         /** @var Transition $transition */
-        if (null === $transition = $this->getObject('transitions.'.$id, Transition::class)) {
+        if (null === $transition = $this->getObject('transitions.'.$id)) {
             throw new \LogicException('Not found');
         }
 
@@ -187,7 +189,7 @@ class Process
      */
     public function createNode()
     {
-        $node = new Node();
+        $node = Node::create();
         $node->setProcess($this);
 
         $this->setObject('nodes.'.$node->getId(), $node);
@@ -197,7 +199,7 @@ class Process
 
     public function createTransition(Node $from = null, Node $to = null, $name = null)
     {
-        $transition = new Transition();
+        $transition = Transition::create();
         $transition->setName($name);
         $transition->setProcess($this);
         $from && $transition->setFrom($from);
@@ -234,7 +236,7 @@ class Process
      */
     public function createToken(Transition $transition)
     {
-        $token = new Token();
+        $token = Token::create();
         $token->setProcess($this);
         $token->setTransition($transition);
 
@@ -246,7 +248,7 @@ class Process
     public function getToken($id)
     {
         /** @var Token $token */
-        foreach ($this->getObjects('tokens', Token::class) as $token) {
+        foreach ($this->getObjects('tokens') as $token) {
             if ($token->getId() === $id) {
 
                 return $token;
