@@ -245,10 +245,18 @@ class Process
         return $token;
     }
 
+    /**
+     * @return Token[]
+     */
+    public function getTokens()
+    {
+        return $this->getObjects('tokens');
+    }
+
     public function getToken($id)
     {
         /** @var Token $token */
-        foreach ($this->getObjects('tokens') as $token) {
+        foreach ($this->getTokens() as $token) {
             if ($token->getId() === $id) {
 
                 return $token;
