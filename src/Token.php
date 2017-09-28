@@ -6,6 +6,8 @@ use Makasim\Values\ValuesTrait;
 
 class Token
 {
+    const SCHEMA = 'http://pvm.forma-pro.com/schemas/Token.json';
+
     use ValuesTrait;
     use CreateTrait;
 

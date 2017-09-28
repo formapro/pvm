@@ -7,6 +7,8 @@ use Makasim\Values\ValuesTrait;
 
 class Process
 {
+    const SCHEMA = 'http://pvm.forma-pro.com/schemas/Process.json';
+
     use ValuesTrait {
         getValue as public;
         setValue as public;

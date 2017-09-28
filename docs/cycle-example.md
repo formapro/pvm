@@ -13,6 +13,9 @@ use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
 use function Makasim\Values\get_value;
 use function Makasim\Values\set_value;
+use Formapro\Pvm\ObjectBuilderHook;
+
+(new ObjectBuilderHook())->register();
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {
@@ -27,7 +30,7 @@ $registry->register('go_back_first_three_times', new CallbackBehavior(function(T
     return $counter < 3 ? ['back'] : ['forth'];
 }));
 
-$process = new Process();
+$process = Process::create();
 $foo = $process->createNode();
 $foo->setLabel('foo');
 $foo->setBehavior('print_label');

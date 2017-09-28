@@ -7,6 +7,8 @@ use Makasim\Values\ValuesTrait;
 
 class Node
 {
+    const SCHEMA = 'http://pvm.forma-pro.com/schemas/Node.json';
+
     use ValuesTrait {
         setValue as public;
         getValue as public;
