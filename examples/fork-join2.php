@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 include_once __DIR__.'/../vendor/autoload.php';
 
-$process = new Process();
+$process = Process::create();
 
 $fork1 = $process->createNode();
 $fork1->setLabel('fork1');
