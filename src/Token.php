@@ -1,7 +1,6 @@
 <?php
 namespace Formapro\Pvm;
 
-use Formapro\Pvm\Yadm\CreateTrait;
 use Makasim\Values\ValuesTrait;
 
 class Token

@@ -1,5 +1,5 @@
 <?php
-namespace Formapro\Pvm\Yadm;
+namespace Formapro\Pvm;
 
 use function Makasim\Values\build_object;
 
