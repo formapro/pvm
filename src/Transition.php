@@ -6,6 +6,8 @@ use Makasim\Values\ValuesTrait;
 
 class Transition
 {
+    const SCHEMA = 'http://pvm.forma-pro.com/schemas/Transition.json';
+
     use ValuesTrait {
         setValue as public;
         getValue as public;

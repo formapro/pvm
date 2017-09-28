@@ -14,6 +14,9 @@ use Formapro\Pvm\Token;
 use Formapro\Pvm\Exception\WaitExecutionException;
 use function Makasim\Values\set_value;
 use function Makasim\Values\get_value;
+use Formapro\Pvm\ObjectBuilderHook;
+
+(new ObjectBuilderHook())->register();
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('pause_and_continue', new CallbackBehavior(function(Token $token) {
@@ -25,7 +28,7 @@ $registry->register('pause_and_continue', new CallbackBehavior(function(Token $t
     echo 'purchased. ';
 }));
 
-$process = new Process();
+$process = Process::create();
 $fooNode = $process->createNode();
 $fooNode->setLabel('foo');
 $fooNode->setBehavior('pause_and_continue');

@@ -12,6 +12,9 @@ use Formapro\Pvm\CallbackBehavior;
 use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
+use Formapro\Pvm\ObjectBuilderHook;
+
+(new ObjectBuilderHook())->register();
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {
@@ -38,7 +41,7 @@ $registry->register('join', new CallbackBehavior(function (Token $token) {
     throw new InterruptExecutionException();
 }));
 
-$process = new Process();
+$process = Process::create();
 
 $fork = $process->createNode();
 $fork->setLabel('fork');

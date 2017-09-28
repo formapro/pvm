@@ -14,8 +14,11 @@ namespace Acme;
 
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Yadm\MongoProcessStorage;
+use Formapro\Pvm\ObjectBuilderHook;
 
-$process = new Process();
+(new ObjectBuilderHook())->register();
+
+$process = Process::create();
 $fooNode = $process->createNode();
 $fooNode->setLabel('foo');
 $fooNode->setBehavior('print_label');
