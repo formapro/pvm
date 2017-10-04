@@ -146,7 +146,7 @@ class GraphVizVisual
         $edge->setAttribute('graphviz.color', $transitionColor);
         $edge->setAttribute(
             'graphviz.label',
-            $transition->getState()
+            $transition->getName()
         );
     }
 }

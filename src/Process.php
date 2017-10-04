@@ -198,6 +198,13 @@ class Process
         return $node;
     }
 
+    /**
+     * @param Node|null $from
+     * @param Node|null $to
+     * @param string|null $name
+     *
+     * @return Transition
+     */
     public function createTransition(Node $from = null, Node $to = null, $name = null)
     {
         $transition = Transition::create();
