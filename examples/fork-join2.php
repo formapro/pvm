@@ -8,7 +8,7 @@ use Formapro\Pvm\Yadm\MongoProcessStorage;
 use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\Process;
-use Formapro\Pvm\Visual\GraphVizVisual;
+use Formapro\Pvm\Visual\VisualizeFlow;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -101,5 +101,5 @@ $logger = new ConsoleLogger(new ConsoleOutput(ConsoleOutput::VERBOSITY_DEBUG));
 $engine = new ProcessEngine($behaviorRegistry);
 $engine->proceed($process->createToken($start), $logger);
 
-$graphViz = new GraphVizVisual();
+$graphViz = new VisualizeFlow();
 $graphViz->display($process);

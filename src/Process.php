@@ -138,26 +138,6 @@ class Process
 
     /**
      * @param Node $node
-     * @param string $name
-     *
-     * @return Transition
-     */
-    public function getOutTransitionWithName(Node $node, $name)
-    {
-        $outTransitions = $this->getValue('outTransitions.'.$node->getId(), []);
-
-        foreach ($outTransitions as $id) {
-            $transition = $this->getTransition($id);
-            if ($transition->getName() == $name) {
-                return $transition;
-            }
-        }
-
-        throw new \LogicException(sprintf('The transition with name %s could not be found', $name));
-    }
-
-    /**
-     * @param Node $node
      *
      * @return Transition[]
      */
@@ -165,15 +145,15 @@ class Process
     {
         $outTransitions = $this->getValue('outTransitions.'.$node->getId(), []);
 
-        $outTransitionsWithName = [];
+        $transitions = [];
         foreach ($outTransitions as $id) {
             $transition = $this->getTransition($id);
             if ($transition->getName() == $name) {
-                $outTransitionsWithName[] = $transition;
+                $transitions[] = $transition;
             }
         }
 
-        return $outTransitionsWithName;
+        return $transitions;
     }
 
     /**
