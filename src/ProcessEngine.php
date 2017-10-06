@@ -117,36 +117,53 @@ class ProcessEngine
                 }
 
                 $this->log('Signal behavior: %s', $node->getBehavior());
-                $transitions = $behavior->signal($token);
+                $behaviorResult = $behavior->signal($token);
             } else {
                 $this->log('Execute behavior: %s', $node->getBehavior());
-                $transitions = $behavior->execute($token);
+                $behaviorResult = $behavior->execute($token);
             }
 
             $token->getTransition()->setPassed();
 
-            if (false == $transitions) {
-                $tmpTransitions = $token->getProcess()->getOutTransitions($node);
-
-                $transitions = [];
-                foreach ($tmpTransitions as $transition) {
+            if (false == $behaviorResult) {
+                $tmpTransitions = [];
+                foreach ($token->getProcess()->getOutTransitions($node) as $transition) {
                     if (empty($transition->getName())) {
-                        $transition->setWeight($token->getTransition()->getWeight());
-
-                        $transitions[] = $transition;
+                        $tmpTransitions[] = $transition;
                     }
-
                 }
+            } elseif (is_string($behaviorResult)) {
+                $tmpTransitions = $token->getProcess()->getOutTransitionsWithName($node, $behaviorResult);
+                if (empty($tmpTransitions)) {
+                    throw new \LogicException(sprintf('The transitions with the name %s could not be found', $behaviorResult));
+                }
+            } elseif ($behaviorResult instanceof Transition) {
+                $tmpTransitions = [$behaviorResult];
+            } elseif (is_array($behaviorResult)) {
+                $tmpTransitions = [];
+                foreach ($behaviorResult as $transition) {
+                    if (is_string($transition)) {
+                        $transitionsWithName = $token->getProcess()->getOutTransitionsWithName($node, $transition);
+                        if (empty($transitionsWithName)) {
+                            throw new \LogicException(sprintf('The transitions with the name %s could not be found', $transition));
+                        }
+
+                        $tmpTransitions = array_merge($tmpTransitions, $transitionsWithName);
+                    } elseif ($transition instanceof Transition) {
+                        $tmpTransitions[] = $tmpTransitions;
+                    } else {
+                        throw new \LogicException('Unsupported element of array. Could be either instance of Transition or its name (string).');
+                    }
+                }
+            } else {
+                throw new \LogicException('Unsupported behavior result. Could be either instance of Transition, an array of Transitions, null or transition name (string).');
             }
 
-            $tmpTransitions = $transitions;
             $transitions = [];
             foreach ($tmpTransitions as $transition) {
-                if (is_string($transition)) {
-                    $transitions = array_merge($transitions, $token->getProcess()->getOutTransitionsWithName($node, $transition));
-                } else {
-                    $transitions[] = $transition;
-                }
+                $transition->setWeight($token->getTransition()->getWeight());
+
+                $transitions[] = $transition;
             }
 
             if (false == $transitions) {
