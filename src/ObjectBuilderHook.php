@@ -23,7 +23,7 @@ class ObjectBuilderHook
         register_global_hook('get_object_class', function(array $values) {
             if (isset($values['schema'])) {
                 if (false == array_key_exists($values['schema'], $this->classMap)) {
-                    throw new \LogicException(sprintf('An object has class set "%s" but there is no class for it', $values['class']));
+                    throw new \LogicException(sprintf('An object has schema set "%s" but there is no class for it', $values['schema']));
                 }
 
                 return $this->classMap[$values['schema']];
