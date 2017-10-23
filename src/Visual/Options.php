@@ -1,18 +1,19 @@
 <?php
 namespace Formapro\Pvm\Visual;
 
-use Makasim\Values\ValuesTrait;
+use function Makasim\Values\get_value;
+use function Makasim\Values\set_value;
 
 class Options
 {
-    use ValuesTrait;
+    protected $values = [];
 
     /**
      * @return string
      */
     public function getType()
     {
-        return $this->getValue('type');
+        return get_value($this, 'type');
     }
 
     /**
@@ -20,6 +21,6 @@ class Options
      */
     public function setType($type)
     {
-        $this->setValue('type', $type);
+        set_value($this, 'type', $type);
     }
 }

@@ -6,6 +6,7 @@ use Formapro\Pvm\Node;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Transition;
 use Graphp\GraphViz\GraphViz;
+use function Makasim\Values\get_object;
 
 class VisualizeStateMachine
 {
@@ -43,7 +44,7 @@ class VisualizeStateMachine
     private function createVertex(Graph $graph, Node $node, $currentState)
     {
         /** @var Options $options */
-        $options = $node->getObject('visual', Options::class) ?: new Options();
+        $options = get_object($node, 'visual', Options::class) ?: new Options();
         $vertex = $graph->createVertex($node->getId());
         $vertex->setAttribute('graphviz.label', $node->getLabel());
 

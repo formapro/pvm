@@ -13,9 +13,6 @@ use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
 use function Makasim\Values\get_value;
 use function Makasim\Values\set_value;
-use Formapro\Pvm\ObjectBuilderHook;
-
-(new ObjectBuilderHook())->register();
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {

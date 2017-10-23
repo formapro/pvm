@@ -1,22 +1,14 @@
 <?php
 namespace Formapro\Pvm;
 
-use Makasim\Values\ObjectsTrait;
-use Makasim\Values\ValuesTrait;
+use function Makasim\Values\get_value;
+use function Makasim\Values\set_value;
 
 class Node
 {
     const SCHEMA = 'http://pvm.forma-pro.com/schemas/Node.json';
 
-    use ValuesTrait {
-        setValue as public;
-        getValue as public;
-    }
-
-    use ObjectsTrait {
-        setObject as public;
-        getObject as public;
-    }
+    protected $values = [];
 
     use CreateTrait;
 
@@ -33,7 +25,7 @@ class Node
     /**
      * @return Process
      */
-    public function getProcess()
+    public function getProcess(): Process
     {
         return $this->_process;
     }
@@ -41,7 +33,7 @@ class Node
     /**
      * @param Process $process
      */
-    public function setProcess(Process $process)
+    public function setProcess(Process $process): void
     {
         $this->_process = $process;
     }
@@ -49,58 +41,58 @@ class Node
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
-        return $this->getValue('id');
+        return get_value($this, 'id');
     }
 
     /**
      * @param string $id
      */
-    public function setId($id)
+    public function setId(string $id)
     {
-        $this->setValue('id', $id);
+        set_value($this, 'id', $id);
     }
 
     /**
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
-        return $this->getValue('label', '');
+        return get_value($this, 'label', '');
     }
 
     /**
      * @param string $label
      */
-    public function setLabel($label)
+    public function setLabel(string $label): void
     {
-        $this->setValue('label', $label);
+        set_value($this, 'label', $label);
     }
 
     /**
      * @return string
      */
-    public function getBehavior()
+    public function getBehavior(): ?string
     {
-        return $this->getValue('behavior');
+        return get_value($this, 'behavior');
     }
 
     /**
-     * @param string $behavior
+     * @param string|null $behavior
      */
-    public function setBehavior($behavior)
+    public function setBehavior(string $behavior = null): void
     {
-        $this->setValue('behavior', $behavior);
+        set_value($this, 'behavior', $behavior);
     }
 
     /**
      * @param string $key
      * @param mixed  $value
      */
-    public function setOption($key, $value)
+    public function setOption(string $key, $value): void
     {
-        $this->setValue('option.'.$key, $value);
+        set_value($this, 'option.'.$key, $value);
     }
 
     /**
@@ -108,8 +100,8 @@ class Node
      *
      * @return mixed
      */
-    public function getOption($key)
+    public function getOption(string $key)
     {
-        return $this->getValue('option.'.$key);
+        return get_value($this, 'option.'.$key);
     }
 }
