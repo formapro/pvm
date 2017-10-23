@@ -18,7 +18,7 @@
     },
     "require": {
         "php": "^7.1",
-        "makasim/values": "^0.2.2|^0.3",
+        "makasim/values": "^0.3.1",
         "symfony/console": "^3.1",
         "ramsey/uuid": "^3"
     },
