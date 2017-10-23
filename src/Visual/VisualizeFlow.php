@@ -8,6 +8,7 @@ use Formapro\Pvm\Process;
 use Formapro\Pvm\Transition;
 use Formapro\Pvm\Uuid;
 use Graphp\GraphViz\GraphViz;
+use function Makasim\Values\get_object;
 
 class VisualizeFlow
 {
@@ -56,7 +57,7 @@ class VisualizeFlow
     private function createVertex(Graph $graph, Node $node)
     {
         /** @var Options $options */
-        $options = $node->getObject('visual', Options::class) ?: new Options();
+        $options = get_object($node, 'visual', Options::class) ?: new Options();
         $vertex = $graph->createVertex($node->getId());
         $vertex->setAttribute('graphviz.label', $node->getLabel());
 

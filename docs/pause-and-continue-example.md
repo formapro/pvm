@@ -14,9 +14,6 @@ use Formapro\Pvm\Token;
 use Formapro\Pvm\Exception\WaitExecutionException;
 use function Makasim\Values\set_value;
 use function Makasim\Values\get_value;
-use Formapro\Pvm\ObjectBuilderHook;
-
-(new ObjectBuilderHook())->register();
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('pause_and_continue', new CallbackBehavior(function(Token $token) {

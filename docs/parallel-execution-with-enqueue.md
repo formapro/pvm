@@ -25,9 +25,6 @@ use Formapro\Pvm\ProcessStorage;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\Enqueue\AsyncTransition;
-use Formapro\Pvm\ObjectBuilderHook;
-
-(new ObjectBuilderHook())->register();
 
 $client = new SimpleClient('amqp://');
 $asyncTransition = new AsyncTransition($client->getProducer());

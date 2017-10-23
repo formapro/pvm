@@ -1,7 +1,12 @@
 <?php
 namespace Formapro\Pvm;
 
-use Makasim\Values\ObjectsTrait;
+use function Makasim\Values\add_value;
+use function Makasim\Values\get_object;
+use function Makasim\Values\get_objects;
+use function Makasim\Values\get_value;
+use function Makasim\Values\set_object;
+use function Makasim\Values\set_value;
 use Makasim\Values\ValuesTrait;
 
 class Process
@@ -13,42 +18,28 @@ class Process
         setValue as public;
     }
 
-    use ObjectsTrait;
     use CreateTrait;
 
-    /**
-     * @var Node[]
-     */
-    protected $_nodes;
+    protected $objects = [];
 
-    /**
-     * @var Transition[]
-     */
-    protected $_transitions;
-
-    /**
-     * @var Token[]
-     */
-    private $_tokens;
-
-    public function setId($id)
+    public function setId(string $id): void
     {
-        $this->setValue('id', $id);
+        set_value($this, 'id', $id);
     }
 
-    public function getId()
+    public function getId(): string
     {
-        return $this->getValue('id');
+        return get_value($this, 'id');
     }
 
-    public function setExecutionId($id)
+    public function setExecutionId(string $id): void
     {
-        $this->setValue('executionId', $id);
+        set_value($this, 'executionId', $id);
     }
 
-    public function getExecutionId()
+    public function getExecutionId(): string
     {
-        return $this->getValue('executionId');
+        return get_value($this, 'executionId');
     }
 
     /**
@@ -56,31 +47,50 @@ class Process
      *
      * @return Node
      */
-    public function getNode($id)
+    public function getNode(string $id): Node
     {
-        if (isset($this->_nodes[$id])) {
-            return $this->_nodes[$id];
-        }
-
         /** @var Node $node */
-        if (null === $node = $this->getObject('nodes.'.$id)) {
+        if (null === $node = get_object($this, 'nodes.'.$id, ClassClosure::create())) {
             throw new \LogicException('Not found');
         }
 
-        return $this->_nodes[$id] = $node;
+        $node->setProcess($this);
+
+        return $node;
     }
 
-    public function getNodes()
+    /**
+     * @return Node[]
+     */
+    public function getNodes(): array
     {
-        return $this->getObjects('nodes');
+        $nodes = [];
+        foreach (get_objects($this, 'nodes', ClassClosure::create()) as $node) {
+            /** @var Node $node */
+
+            $node->setProcess($this);
+
+            $nodes[] = $node;
+        }
+
+        return $nodes;
     }
 
     /**
      * @return Transition[]
      */
-    public function getTransitions()
+    public function getTransitions(): array
     {
-        return $this->getObjects('transitions');
+        $transitions = [];
+        foreach (get_objects($this, 'transitions', ClassClosure::create()) as $transition) {
+            /** @var Transition $transition */
+
+            $transition->setProcess($this);
+
+            $transitions[] = $transition;
+        }
+
+        return $transitions;
     }
 
     /**
@@ -88,18 +98,16 @@ class Process
      *
      * @return Transition
      */
-    public function getTransition($id)
+    public function getTransition(string $id): Transition
     {
-        if (isset($this->_transitions[$id])) {
-            return $this->_transitions[$id];
-        }
-
         /** @var Transition $transition */
-        if (null === $transition = $this->getObject('transitions.'.$id)) {
+        if (null === $transition = get_object($this, 'transitions.'.$id, ClassClosure::create())) {
             throw new \LogicException('Not found');
         }
 
-        return $this->_transitions[$id] = $transition;
+        $transition->setProcess($this);
+
+        return $transition;
     }
 
     /**
@@ -107,9 +115,9 @@ class Process
      *
      * @return Transition[]
      */
-    public function getInTransitions(Node $node)
+    public function getInTransitions(Node $node): array
     {
-        $inTransitions = $this->getValue('inTransitions.'.$node->getId(), []);
+        $inTransitions = get_value($this, 'inTransitions.'.$node->getId(), []);
 
         $transitions = [];
         foreach ($inTransitions as $id) {
@@ -124,9 +132,9 @@ class Process
      *
      * @return Transition[]
      */
-    public function getOutTransitions(Node $node)
+    public function getOutTransitions(Node $node): array
     {
-        $outTransitions = $this->getValue('outTransitions.'.$node->getId(), []);
+        $outTransitions = get_value($this, 'outTransitions.'.$node->getId(), []);
 
         $transitions = [];
         foreach ($outTransitions as $id) {
@@ -138,12 +146,13 @@ class Process
 
     /**
      * @param Node $node
+     * @param string $name
      *
      * @return Transition[]
      */
-    public function getOutTransitionsWithName(Node $node, $name)
+    public function getOutTransitionsWithName(Node $node, string $name): array
     {
-        $outTransitions = $this->getValue('outTransitions.'.$node->getId(), []);
+        $outTransitions = get_value($this, 'outTransitions.'.$node->getId(), []);
 
         $transitions = [];
         foreach ($outTransitions as $id) {
@@ -162,7 +171,8 @@ class Process
     public function registerNode(Node $node)
     {
         $node->setProcess($this);
-        $this->setObject('nodes.'.$node->getId(), $node);
+
+        set_object($this, 'nodes.'.$node->getId(), $node);
     }
 
     /**
@@ -173,7 +183,7 @@ class Process
         $node = Node::create();
         $node->setProcess($this);
 
-        $this->setObject('nodes.'.$node->getId(), $node);
+        set_object($this, 'nodes.'.$node->getId(), $node);
 
         return $node;
     }
@@ -185,7 +195,7 @@ class Process
      *
      * @return Transition
      */
-    public function createTransition(Node $from = null, Node $to = null, $name = null)
+    public function createTransition(Node $from = null, Node $to = null, string $name = null)
     {
         $transition = Transition::create();
         $transition->setName($name);
@@ -193,26 +203,27 @@ class Process
         $from && $transition->setFrom($from);
         $to && $transition->setTo($to);
 
-        $this->setObject('transitions.'.$transition->getId(), $transition);
+        set_object($this, 'transitions.'.$transition->getId(), $transition);
 
         if ($transition->getFrom()) {
-            $this->addValue('outTransitions.'.$transition->getFrom()->getId(), $transition->getId());
+            add_value($this, 'outTransitions.'.$transition->getFrom()->getId(), $transition->getId());
         }
 
         if ($transition->getTo()) {
-            $this->addValue('inTransitions.'.$transition->getTo()->getId(), $transition->getId());
+            add_value($this, 'inTransitions.'.$transition->getTo()->getId(), $transition->getId());
         }
 
         return $transition;
     }
 
-    public function breakTransition(Transition $transition, Node $node, $newName = null)
+    public function breakTransition(Transition $transition, Node $node, string $newName = null): Transition
     {
         $oldTo = $transition->getTo();
         $transition->setTo($node);
 
         $newTransition = $this->createTransition($node, $oldTo);
         $newTransition->setName($newName);
+        $newTransition->setProcess($this);
 
         return $newTransition;
     }
@@ -222,13 +233,13 @@ class Process
      *
      * @return Token
      */
-    public function createToken(Transition $transition)
+    public function createToken(Transition $transition): Token
     {
         $token = Token::create();
         $token->setProcess($this);
         $token->setTransition($transition);
 
-        $this->setObject('tokens.'.$token->getId(), $token);
+        set_object($this, 'tokens.'.$token->getId(), $token);
 
         return $token;
     }
@@ -236,19 +247,29 @@ class Process
     /**
      * @return Token[]
      */
-    public function getTokens()
+    public function getTokens(): array
     {
-        return $this->getObjects('tokens');
+        $tokens = [];
+        foreach (get_objects($this, 'tokens', ClassClosure::create()) as $token) {
+            /** @var Token $token */
+
+            $token->setProcess($this);
+
+            $tokens[] = $token;
+        }
+
+        return $tokens;
     }
 
-    public function getToken($id)
+    public function getToken(string $id): Token
     {
         /** @var Token $token */
-        foreach ($this->getTokens() as $token) {
-            if ($token->getId() === $id) {
-
-                return $token;
-            }
+        if (null === $token = get_object($this, 'tokens.'.$id, ClassClosure::create())) {
+            throw new \LogicException('Not found');
         }
+
+        $token->setProcess($this);
+
+        return $token;
     }
 }

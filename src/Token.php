@@ -1,24 +1,21 @@
 <?php
 namespace Formapro\Pvm;
 
-use Makasim\Values\ValuesTrait;
+use function Makasim\Values\get_value;
+use function Makasim\Values\set_value;
 
 class Token
 {
     const SCHEMA = 'http://pvm.forma-pro.com/schemas/Token.json';
 
-    use ValuesTrait;
     use CreateTrait;
+
+    protected $values = [];
 
     /**
      * @var Process
      */
     private $_process;
-
-    /**
-     * @var Transition
-     */
-    private $_transition;
 
     public function __construct()
     {
@@ -28,23 +25,23 @@ class Token
     /**
      * @param string $id
      */
-    public function setId($id)
+    public function setId(string $id): void
     {
-        $this->setValue('id', $id);
+        set_value($this, 'id', $id);
     }
 
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
-        return $this->getValue('id');
+        return get_value($this, 'id');
     }
 
     /**
      * @return Process
      */
-    public function getProcess()
+    public function getProcess(): Process
     {
         return $this->_process;
     }
@@ -52,7 +49,7 @@ class Token
     /**
      * @param Process $process
      */
-    public function setProcess(Process $process)
+    public function setProcess(Process $process): void
     {
         $this->_process = $process;
     }
@@ -60,21 +57,20 @@ class Token
     /**
      * @param Transition $transition
      */
-    public function setTransition(Transition $transition)
+    public function setTransition(Transition $transition): void
     {
-        $this->_transition = $transition;
-        $this->setValue('transition', $transition->getId());
+        set_value($this, 'transition', $transition->getId());
     }
 
     /**
      * @return Transition
      */
-    public function getTransition()
+    public function getTransition(): ?Transition
     {
-        if (null === $this->_transition && ($id = $this->getValue('transition'))) {
-            $this->_transition = $this->_process->getTransition($id);
+        if ($id = get_value($this, 'transition')) {
+            return $this->_process->getTransition($id);
         }
 
-        return $this->_transition;
+        return null;
     }
 }

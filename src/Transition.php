@@ -1,6 +1,8 @@
 <?php
 namespace Formapro\Pvm;
 
+use function Makasim\Values\get_value;
+use function Makasim\Values\set_value;
 use Makasim\Values\ValuesTrait;
 
 class Transition
@@ -23,16 +25,6 @@ class Transition
      */
     private $_process;
 
-    /**
-     * @var Node
-     */
-    private $_from;
-
-    /**
-     * @var Node
-     */
-    private $_to;
-
     public function __construct()
     {
         $this->setId(Uuid::generate());
@@ -45,22 +37,22 @@ class Transition
     /**
      * @param string $id
      */
-    public function setId($id)
+    public function setId(string $id): void
     {
-        $this->setValue('id', $id);
+        set_value($this, 'id', $id);
     }
 
-    public function getName()
+    public function getName(): ?string
     {
-        return $this->getValue('name');
+        return get_value($this, 'name');
     }
 
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name = null): void
     {
-        $this->setValue('name', $name);
+        set_value($this, 'name', $name);
     }
 
     /**
@@ -68,13 +60,13 @@ class Transition
      */
     public function getId()
     {
-        return $this->getValue('id');
+        return get_value($this, 'id');
     }
 
     /**
      * @param Process $process
      */
-    public function setProcess(Process $process)
+    public function setProcess(Process $process): void
     {
         $this->_process = $process;
     }
@@ -82,7 +74,7 @@ class Transition
     /**
      * @return Process
      */
-    public function getProcess()
+    public function getProcess(): Process
     {
         return $this->_process;
     }
@@ -90,133 +82,131 @@ class Transition
     /**
      * @return Node
      */
-    public function getFrom()
+    public function getFrom(): ?Node
     {
-        if (null === $this->_from && ($id = $this->getValue('from'))) {
-            $this->_from = $this->_process->getNode($id);
+        if ($id = get_value($this, 'from')) {
+            return $this->_process->getNode($id);
         }
 
-        return $this->_from;
+        return null;
     }
 
     /**
      * @param Node $node
      */
-    public function setFrom(Node $node)
+    public function setFrom(Node $node): void
     {
-        $this->_from = $node;
-        $this->setValue('from', $node->getId());
+        set_value($this, 'from', $node->getId());
     }
 
     /**
      * @return Node
      */
-    public function getTo()
+    public function getTo(): ?Node
     {
-        if (null === $this->_to && ($id = $this->getValue('to'))) {
-            $this->_to = $this->_process->getNode($id);
+        if ($id = get_value($this, 'to')) {
+            return $this->_process->getNode($id);
         }
 
-        return $this->_to;
+        return null;
     }
 
     /**
      * @param Node $node
      */
-    public function setTo(Node $node)
+    public function setTo(Node $node): void
     {
-        $this->_to = $node;
-        $this->setValue('to', $node->getId());
+        set_value($this, 'to', $node->getId());
     }
 
     /**
      * @return int
      */
-    public function getWeight()
+    public function getWeight(): ?int
     {
-        return $this->getValue('weight');
+        return get_value($this, 'weight');
     }
 
     /**
      * @param int $weight
      */
-    public function setWeight($weight)
+    public function setWeight(int $weight = null): void
     {
-        $this->setValue('weight', $weight);
+        set_value($this, 'weight', $weight);
     }
 
     /**
      * @return boolean
      */
-    public function isAsync()
+    public function isAsync(): bool
     {
-        return $this->getValue('async');
+        return get_value($this, 'async');
     }
 
     /**
      * @param boolean $async
      */
-    public function setAsync($async)
+    public function setAsync(bool $async): void
     {
-        $this->setValue('async', (bool) $async);
+        set_value($this, 'async', $async);
     }
 
     /**
      * @return boolean
      */
-    public function isActive()
+    public function isActive(): bool
     {
-        return $this->getValue('active');
+        return get_value($this, 'active');
     }
 
     /**
      * @param boolean $active
      */
-    public function setActive($active)
+    public function setActive(bool $active): void
     {
-        $this->setValue('active', (bool) $active);
+        set_value($this, 'active', $active);
     }
 
     /**
      * @return string
      */
-    public function getState()
+    public function getState(): string
     {
-        return $this->getValue('state');
+        return get_value($this, 'state');
     }
 
-    public function setPassed()
+    public function setPassed(): void
     {
         $this->setState(self::STATE_PASSED);
     }
 
-    public function isPassed()
+    public function isPassed(): bool
     {
         return $this->getState() === self::STATE_PASSED;
     }
 
-    public function setInterrupted()
+    public function setInterrupted(): void
     {
         $this->setState(self::STATE_INTERRUPTED);
     }
 
-    public function isInterrupted()
+    public function isInterrupted(): bool
     {
         return $this->getState() === self::STATE_INTERRUPTED;
     }
 
-    public function setWaiting()
+    public function setWaiting(): void
     {
         $this->setState(self::STATE_WAITING);
     }
 
-    public function isWaiting()
+    public function isWaiting(): bool
     {
         return $this->getState() === self::STATE_WAITING;
     }
 
-    private function setState($state)
+    private function setState($state): void
     {
-        $this->setValue('state', $state);
+        set_value($this, 'state', $state);
     }
 }
