@@ -55,7 +55,6 @@ class TwoDaysDelayBehavior implements Behavior, SignalBehavior
             ->withSchedule(SimpleScheduleBuilder::simpleSchedule()->repeatForever())
             ->setJobData([
                 'command' => HandleAsyncTransitionProcessor::COMMAND,
-                'process' => $token->getProcess()->getId(),
                 'token' => $token->getId(),
             ])
             ->startAt(new \DateTime('now + 2 days'))

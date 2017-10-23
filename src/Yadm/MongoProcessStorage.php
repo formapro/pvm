@@ -24,7 +24,7 @@ class MongoProcessStorage implements ProcessStorage
     /**
      * {@inheritdoc}
      */
-    public function persist(Process $process)
+    public function persist(Process $process): void
     {
         get_object_id($process) ? $this->storage->update($process) : $this->storage->insert($process);
     }
@@ -32,13 +32,14 @@ class MongoProcessStorage implements ProcessStorage
     /**
      * {@inheritdoc}
      */
-    public function get($id)
+    public function get(string $id): Process
     {
+        /** @var Process $process */
         if(false == $process = $this->storage->findOne(['id' => $id])) {
             throw new \LogicException(sprintf('The process with id "%s" could not be found', $id));
         }
 
-        return$process;
+        return $process;
     }
 
     /**
@@ -47,5 +48,18 @@ class MongoProcessStorage implements ProcessStorage
     public function getStorage(): Storage
     {
         return $this->storage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByToken(string $token): Process
+    {
+        /** @var Process $process */
+        if (false == $process = $this->storage->findOne(['tokens.'.$token => ['$exists' => true]])) {
+            throw new \LogicException(sprintf('The process with token "%s" could not be found', $token));
+        }
+
+        return $process;
     }
 }

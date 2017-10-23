@@ -3,26 +3,22 @@ namespace Formapro\Pvm;
 
 final class ClassClosure
 {
+    const CLASS_MAP = [
+        Process::SCHEMA => Process::class,
+        Node::SCHEMA => Node::class,
+        Token::SCHEMA => Token::class,
+        Transition::SCHEMA => Transition::class,
+    ];
+
     /**
      * @var ClassClosure
      */
     private static $instance;
 
-    /**
-     * @var PvmClassMap
-     */
-    private $classMap;
-
-    private function __construct(PvmClassMap $classMap)
-    {
-        $this->classMap = $classMap;
-    }
-
     public function __invoke(array $values): ?string
     {
-        $classMap = $this->classMap->get();
-        if (array_key_exists('schema', $values) && array_key_exists($values['schema'], $classMap)) {
-            return $classMap[$values['schema']];
+        if (array_key_exists('schema', $values) && array_key_exists($values['schema'], self::CLASS_MAP)) {
+            return self::CLASS_MAP[$values['schema']];
         }
 
         return null;
@@ -31,7 +27,7 @@ final class ClassClosure
     public static function create(): ClassClosure
     {
         if (false == self::$instance) {
-            self::$instance = new ClassClosure(new PvmClassMap());
+            self::$instance = new self();
         }
 
         return self::$instance;

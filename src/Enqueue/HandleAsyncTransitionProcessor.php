@@ -4,13 +4,14 @@ namespace Formapro\Pvm\Enqueue;
 use Enqueue\Client\CommandSubscriberInterface;
 use Enqueue\Consumption\QueueSubscriberInterface;
 use Enqueue\Consumption\Result;
+use Enqueue\Util\JSON;
 use Interop\Queue\PsrContext;
 use Interop\Queue\PsrMessage;
 use Interop\Queue\PsrProcessor;
-use Enqueue\Util\JSON;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\ProcessStorage;
+use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberInterface, QueueSubscriberInterface
@@ -28,13 +29,15 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberI
     private $processExecutionStorage;
 
     /**
-     * @param ProcessEngine $processEngine
-     * @param ProcessStorage $processExecutionStorage
+     * @var LoggerInterface
      */
-    public function __construct(ProcessEngine $processEngine, ProcessStorage $processExecutionStorage)
+    private $logger;
+
+    public function __construct(ProcessEngine $processEngine, ProcessStorage $processExecutionStorage, LoggerInterface $logger = null)
     {
         $this->processEngine = $processEngine;
         $this->processExecutionStorage = $processExecutionStorage;
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
@@ -42,19 +45,23 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberI
      */
     public function process(PsrMessage $psrMessage, PsrContext $psrContext)
     {
-        $data = JSON::decode($psrMessage->getBody());
+        try {
+            $data = JSON::decode($psrMessage->getBody());
+        } catch (\Exception $e) {
+            return Result::reject($e->getMessage());
+        }
+
+        if (false == array_key_exists('token', $data)) {
+            return Result::reject('Message miss required token field.');
+        }
 
         /** @var Process $process */
-        if (false == $process = $this->processExecutionStorage->get($data['process'])) {
+        if (false == $process = $this->processExecutionStorage->getByToken($data['token'])) {
             return Result::reject('Process was not found');
         }
 
-        if (false == $token = $process->getToken($data['token'])) {
-            return Result::reject('No such token');
-        }
-
         try {
-            $this->processEngine->proceed($token, new NullLogger());
+            $this->processEngine->proceed($process->getToken($data['token']), $this->logger);
         } finally {
             $this->processExecutionStorage->persist($process);
         }

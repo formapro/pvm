@@ -49,7 +49,7 @@ class Node
     /**
      * @param string $id
      */
-    public function setId(string $id)
+    public function setId(string $id): void
     {
         set_value($this, 'id', $id);
     }
