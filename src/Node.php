@@ -17,11 +17,6 @@ class Node
      */
     private $_process;
 
-    public function __construct()
-    {
-        $this->setId(Uuid::generate());
-    }
-
     /**
      * @return Process
      */
