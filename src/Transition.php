@@ -31,7 +31,6 @@ class Transition
         $this->setWeight(1);
         $this->setAsync(false);
         $this->setActive(true);
-        $this->setState(self::STATE_OPENED);
     }
 
     /**
@@ -40,6 +39,14 @@ class Transition
     public function setId(string $id): void
     {
         set_value($this, 'id', $id);
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return get_value($this, 'id');
     }
 
     public function getName(): ?string
@@ -53,14 +60,6 @@ class Transition
     public function setName(string $name = null): void
     {
         set_value($this, 'name', $name);
-    }
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return get_value($this, 'id');
     }
 
     /**
@@ -168,45 +167,12 @@ class Transition
     }
 
     /**
+     * @deprecated
+     *
      * @return string
      */
     public function getState(): string
     {
         return get_value($this, 'state');
-    }
-
-    public function setPassed(): void
-    {
-        $this->setState(self::STATE_PASSED);
-    }
-
-    public function isPassed(): bool
-    {
-        return $this->getState() === self::STATE_PASSED;
-    }
-
-    public function setInterrupted(): void
-    {
-        $this->setState(self::STATE_INTERRUPTED);
-    }
-
-    public function isInterrupted(): bool
-    {
-        return $this->getState() === self::STATE_INTERRUPTED;
-    }
-
-    public function setWaiting(): void
-    {
-        $this->setState(self::STATE_WAITING);
-    }
-
-    public function isWaiting(): bool
-    {
-        return $this->getState() === self::STATE_WAITING;
-    }
-
-    private function setState($state): void
-    {
-        set_value($this, 'state', $state);
     }
 }

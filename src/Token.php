@@ -1,7 +1,12 @@
 <?php
 namespace Formapro\Pvm;
 
+use function Makasim\Values\add_object;
+use function Makasim\Values\add_value;
+use function Makasim\Values\get_object;
+use function Makasim\Values\get_objects;
 use function Makasim\Values\get_value;
+use function Makasim\Values\set_object;
 use function Makasim\Values\set_value;
 
 class Token
@@ -49,23 +54,31 @@ class Token
         $this->_process = $process;
     }
 
-    /**
-     * @param Transition $transition
-     */
-    public function setTransition(Transition $transition): void
+    public function addTransition(TokenTransition $transition): void
     {
-        set_value($this, 'transition', $transition->getId());
+        add_object($this, 'transitions', $transition);
+    }
+
+    public function getCurrentTransition(): TokenTransition
+    {
+        $transitions = $this->getTransitions();
+
+        return array_pop($transitions);
     }
 
     /**
-     * @return Transition
+     * @return TokenTransition[]
      */
-    public function getTransition(): ?Transition
+    public function getTransitions(): array
     {
-        if ($id = get_value($this, 'transition')) {
-            return $this->_process->getTransition($id);
+        $transitions = [];
+        foreach (get_objects($this, 'transitions', ClassClosure::create()) as $transition) {
+            /** @var TokenTransition $transition */
+
+            $transition->setProcess($this->getProcess());
+            $transitions[] = $transition;
         }
 
-        return null;
+        return $transitions;
     }
 }

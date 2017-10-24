@@ -8,6 +8,7 @@ final class ClassClosure
         Node::SCHEMA => Node::class,
         Token::SCHEMA => Token::class,
         Transition::SCHEMA => Transition::class,
+        TokenTransition::SCHEMA => TokenTransition::class,
     ];
 
     /**

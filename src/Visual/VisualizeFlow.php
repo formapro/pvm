@@ -1,14 +1,17 @@
 <?php
 namespace Formapro\Pvm\Visual;
 
+use Fhaculty\Graph\Edge\Directed;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Formapro\Pvm\Node;
 use Formapro\Pvm\Process;
+use Formapro\Pvm\TokenTransition;
 use Formapro\Pvm\Transition;
 use Formapro\Pvm\Uuid;
 use Graphp\GraphViz\GraphViz;
 use function Makasim\Values\get_object;
+use function Makasim\Values\get_value;
 
 class VisualizeFlow
 {
@@ -51,6 +54,30 @@ class VisualizeFlow
             }
         }
 
+        foreach ($process->getTokens() as $token) {
+            foreach ($token->getTransitions() as $tokenTransition) {
+                $transition = $tokenTransition->getTransition();
+                $edge = $this->findTransitionEdge($graph, $transition);
+
+                if ($edge->getAttribute('pvm.state') === TokenTransition::STATE_PASSED) {
+                    continue;
+                }
+
+                $edge->setAttribute('pvm.state', $tokenTransition->getState());
+                $edge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
+
+                if (empty($process->getOutTransitions($transition->getTo()))) {
+                    $from = $graph->getVertex($transition->getTo()->getId());
+                    $edge = $from->getEdgesTo($endVertex)->getEdgeFirst();
+
+                    if ($edge->getAttribute('pvm.state') !== TokenTransition::STATE_PASSED) {
+                        $edge->setAttribute('pvm.state', $tokenTransition->getState());
+                        $edge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
+                    }
+                }
+            }
+        }
+
         return $graph;
     }
 
@@ -79,8 +106,7 @@ class VisualizeFlow
         $to = $graph->getVertex($transition->getTo()->getId());
 
         $edge = $from->createEdgeTo($to);
-
-        $edge->setAttribute('graphviz.color', $this->guessTransitionColor($transition));
+        $edge->setAttribute('pvm.transition_id', $transition->getId());
         $edge->setAttribute(
             'graphviz.label',
             $transition->getName()
@@ -97,20 +123,6 @@ class VisualizeFlow
             $edge = $from->createEdgeTo($to);
         }
 
-        if (false == $edge->getAttribute('pvm.passed')) {
-            switch ($transition->getState()) {
-                case Transition::STATE_PASSED:
-                    $transitionColor = 'blue';
-                    $edge->setAttribute('pvm.passed', true);
-
-                    break;
-                default:
-                    $transitionColor = 'black';
-            }
-
-            $edge->setAttribute('graphviz.color', $transitionColor);
-        }
-
         $edge->setAttribute('graphviz.label', $transition->getName());
     }
 
@@ -120,8 +132,7 @@ class VisualizeFlow
         $to = $graph->getVertex($transition->getTo()->getId());
 
         $edge = $from->createEdgeTo($to);
-
-        $edge->setAttribute('graphviz.color', $this->guessTransitionColor($transition));
+        $edge->setAttribute('pvm.transition_id', $transition->getId());
         $edge->setAttribute(
             'graphviz.label',
             $transition->getName()
@@ -158,16 +169,16 @@ class VisualizeFlow
         return $vertex;
     }
 
-    private function guessTransitionColor(Transition $transition)
+    private function guessTransitionColor(TokenTransition $transition): string
     {
         switch ($transition->getState()) {
-            case Transition::STATE_INTERRUPTED:
+            case TokenTransition::STATE_INTERRUPTED:
                 $transitionColor = 'red';
                 break;
-            case Transition::STATE_PASSED:
+            case TokenTransition::STATE_PASSED:
                 $transitionColor = 'blue';
                 break;
-            case Transition::STATE_WAITING:
+            case TokenTransition::STATE_WAITING:
                 $transitionColor = 'orange';
                 break;
             default:
@@ -177,4 +188,16 @@ class VisualizeFlow
         return $transitionColor;
     }
 
+    private function findTransitionEdge(Graph $graph, Transition $transition): Directed
+    {
+        foreach ($graph->getEdges() as $edge) {
+            /** @var Directed $edge */
+
+            if ($edge->getAttribute('pvm.transition_id') === $transition->getId()) {
+                return $edge;
+            }
+        }
+
+        throw new \LogicException(sprintf('The edge for transition "%s" could not be found.', $transition->getId()));
+    }
 }
