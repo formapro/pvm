@@ -176,11 +176,14 @@ class Process
     }
 
     /**
+     * @param string $id
+     *
      * @return Node
      */
-    public function createNode()
+    public function createNode(string $id = null)
     {
         $node = Node::create();
+        $node->setId($id ?: Uuid::generate());
         $node->setProcess($this);
 
         set_object($this, 'nodes.'.$node->getId(), $node);
@@ -230,12 +233,14 @@ class Process
 
     /**
      * @param Transition $transition
+     * @param string     $id
      *
      * @return Token
      */
-    public function createToken(Transition $transition): Token
+    public function createToken(Transition $transition, string $id = null): Token
     {
         $token = Token::create();
+        $token->setId($id ?: Uuid::generate());
         $token->setProcess($this);
         $token->setTransition($transition);
 

@@ -17,11 +17,6 @@ class Token
      */
     private $_process;
 
-    public function __construct()
-    {
-        $this->setId(Uuid::generate());
-    }
-
     /**
      * @param string $id
      */
