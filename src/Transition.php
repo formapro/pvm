@@ -15,11 +15,6 @@ class Transition
     }
     use CreateTrait;
 
-    const STATE_OPENED = 'opened';
-    const STATE_PASSED = 'passed';
-    const STATE_WAITING = 'waiting';
-    const STATE_INTERRUPTED = 'interrupted';
-
     /**
      * @var Process
      */

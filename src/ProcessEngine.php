@@ -24,6 +24,11 @@ class ProcessEngine
     private $asyncTransition;
 
     /**
+     * @var TokenLockerInterface
+     */
+    private $tokenLocker;
+
+    /**
      * @var Transition[]
      */
     private $asyncTokens;
@@ -38,19 +43,17 @@ class ProcessEngine
      */
     private $logger;
 
-    /**
-     * @param BehaviorRegistry $behaviorRegistry
-     * @param ProcessStorage $processExecutionStorage
-     * @param AsyncTransition $asyncTransition
-     */
     public function __construct(
         BehaviorRegistry $behaviorRegistry,
         ProcessStorage $processExecutionStorage = null,
-        AsyncTransition $asyncTransition = null
+        AsyncTransition $asyncTransition = null,
+        TokenLockerInterface $tokenLocker = null
     ) {
         $this->behaviorRegistry = $behaviorRegistry;
         $this->processExecutionStorage = $processExecutionStorage ?: new NullProcessStorage();
         $this->asyncTransition = $asyncTransition ?: new AsyncTransitionIsNotConfigured();
+        $this->tokenLocker = $tokenLocker ?: new NullTokenLocker();
+
         $this->asyncTokens = [];
         $this->waitTokens = [];
     }
@@ -71,6 +74,8 @@ class ProcessEngine
         $this->logger = $logger ?: new NullLogger();
 
         try {
+            $this->tokenLocker->lock($token);
+
             $this->log('Start execution: process: %s, token: %s', $token->getProcess()->getId(), $token->getId());
             $this->doProceed($token);
             $this->processExecutionStorage->persist($token->getProcess());
@@ -87,6 +92,8 @@ class ProcessEngine
             // handle error
             throw $e;
         } finally {
+            $this->tokenLocker->unlock($token);
+
             $this->asyncTokens = [];
             $this->waitTokens = [];
             $this->logger = null;
@@ -184,11 +191,12 @@ class ProcessEngine
                 if ($first) {
                     $first = false;
                     $token->addTransition(TokenTransition::createFor($transition, $tokenTransition->getWeight()));
+                    $this->processExecutionStorage->persist($token->getProcess());
                     $this->transition($token);
                 } else {
                     $newToken = $token->getProcess()->createToken($transition);
                     $newToken->getCurrentTransition()->setWeight($tokenTransition->getWeight());
-
+                    $this->processExecutionStorage->persist($token->getProcess());
                     $this->transition($newToken);
                 }
             }

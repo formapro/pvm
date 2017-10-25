@@ -23,6 +23,11 @@ class Token
     private $_process;
 
     /**
+     * @var TokenTransition
+     */
+    private $_currentTokenTransition;
+
+    /**
      * @param string $id
      */
     public function setId(string $id): void
@@ -56,14 +61,22 @@ class Token
 
     public function addTransition(TokenTransition $transition): void
     {
+        $transition->setProcess($this->getProcess());
+
         add_object($this, 'transitions', $transition);
+
+        $this->_currentTokenTransition = $transition;
     }
 
     public function getCurrentTransition(): TokenTransition
     {
-        $transitions = $this->getTransitions();
+        if (false == $this->_currentTokenTransition) {
+            $transitions = $this->getTransitions();
 
-        return array_pop($transitions);
+            $this->_currentTokenTransition = array_pop($transitions);
+        }
+
+        return $this->_currentTokenTransition;
     }
 
     /**
