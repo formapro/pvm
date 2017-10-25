@@ -191,12 +191,12 @@ class ProcessEngine
                 if ($first) {
                     $first = false;
                     $token->addTransition(TokenTransition::createFor($transition, $tokenTransition->getWeight()));
-                    $this->processExecutionStorage->persist($token->getProcess());
+
                     $this->transition($token);
                 } else {
                     $newToken = $token->getProcess()->createToken($transition);
                     $newToken->getCurrentTransition()->setWeight($tokenTransition->getWeight());
-                    $this->processExecutionStorage->persist($token->getProcess());
+
                     $this->transition($newToken);
                 }
             }
