@@ -6,6 +6,6 @@ class EchoBehavior implements Behavior
 {
     public function execute(Token $token)
     {
-        echo $token->getTransition()->getTo()->getOption('text') . PHP_EOL;
+        echo $token->getCurrentTransition()->getTransition()->getTo()->getOption('text') . PHP_EOL;
     }
 }

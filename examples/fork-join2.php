@@ -70,7 +70,7 @@ $process->createTransition($join, $task5);
 $behaviorRegistry = new DefaultBehaviorRegistry();
 $behaviorRegistry->register('echo', new EchoBehavior());
 $behaviorRegistry->register('fork1', new CallbackBehavior(function (Token $token) {
-    $transitions = $token->getProcess()->getOutTransitions($token->getTransition()->getTo());
+    $transitions = $token->getProcess()->getOutTransitions($token->getCurrentTransition()->getTransition()->getTo());
 
     $transitions[0]->setWeight(1);
     $transitions[1]->setWeight(1);
@@ -78,7 +78,7 @@ $behaviorRegistry->register('fork1', new CallbackBehavior(function (Token $token
     return $transitions;
 }));
 $behaviorRegistry->register('fork2', new CallbackBehavior(function (Token $token) {
-    $transitions = $token->getProcess()->getOutTransitions($token->getTransition()->getTo());
+    $transitions = $token->getProcess()->getOutTransitions($token->getCurrentTransition()->getTransition()->getTo());
 
     $transitions[0]->setWeight(2);
 //    $transitions[1]->setWeight(1);
@@ -87,7 +87,7 @@ $behaviorRegistry->register('fork2', new CallbackBehavior(function (Token $token
 }));
 $behaviorRegistry->register('join', new CallbackBehavior(function (Token $token) {
     static $weight = 0;
-    $weight += $token->getTransition()->getWeight();
+    $weight += $token->getCurrentTransition()->getWeight();
 
     if ($weight === 3) {
         return;

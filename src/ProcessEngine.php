@@ -24,6 +24,11 @@ class ProcessEngine
     private $asyncTransition;
 
     /**
+     * @var TokenLockerInterface
+     */
+    private $tokenLocker;
+
+    /**
      * @var Transition[]
      */
     private $asyncTokens;
@@ -38,19 +43,17 @@ class ProcessEngine
      */
     private $logger;
 
-    /**
-     * @param BehaviorRegistry $behaviorRegistry
-     * @param ProcessStorage $processExecutionStorage
-     * @param AsyncTransition $asyncTransition
-     */
     public function __construct(
         BehaviorRegistry $behaviorRegistry,
         ProcessStorage $processExecutionStorage = null,
-        AsyncTransition $asyncTransition = null
+        AsyncTransition $asyncTransition = null,
+        TokenLockerInterface $tokenLocker = null
     ) {
         $this->behaviorRegistry = $behaviorRegistry;
         $this->processExecutionStorage = $processExecutionStorage ?: new NullProcessStorage();
         $this->asyncTransition = $asyncTransition ?: new AsyncTransitionIsNotConfigured();
+        $this->tokenLocker = $tokenLocker ?: new NullTokenLocker();
+
         $this->asyncTokens = [];
         $this->waitTokens = [];
     }
@@ -71,6 +74,8 @@ class ProcessEngine
         $this->logger = $logger ?: new NullLogger();
 
         try {
+            $this->tokenLocker->lock($token);
+
             $this->log('Start execution: process: %s, token: %s', $token->getProcess()->getId(), $token->getId());
             $this->doProceed($token);
             $this->processExecutionStorage->persist($token->getProcess());
@@ -87,6 +92,8 @@ class ProcessEngine
             // handle error
             throw $e;
         } finally {
+            $this->tokenLocker->unlock($token);
+
             $this->asyncTokens = [];
             $this->waitTokens = [];
             $this->logger = null;
@@ -95,23 +102,28 @@ class ProcessEngine
 
     private function doProceed(Token $token)
     {
+        $tokenTransition = $token->getCurrentTransition();
+        $currentTransition = $tokenTransition->getTransition();
+
         try {
-            if (false == $node = $token->getTransition()->getTo()) {
+
+
+            if (false == $node = $currentTransition->getTo()) {
                 throw new \LogicException(sprintf(
                     'Out node is missing. process: %s, transitions: %s',
                     $token->getProcess()->getId(),
-                    $token->getTransition()->getId()
+                    $tokenTransition->getId()
                 ));
             }
 
             $this->log('On transition: %s -> %s',
-                $token->getTransition()->getFrom() ? $token->getTransition()->getFrom()->getLabel() : 'start',
-                $token->getTransition()->getTo() ? $token->getTransition()->getTo()->getLabel() : 'end'
+                $currentTransition->getFrom() ? $currentTransition->getFrom()->getLabel() : 'start',
+                $currentTransition->getTo() ? $currentTransition->getTo()->getLabel() : 'end'
             );
 
             $behavior = $this->behaviorRegistry->get($node->getBehavior());
 
-            if ($token->getTransition()->isWaiting()) {
+            if ($tokenTransition->isWaiting()) {
                 if (false === $behavior instanceof SignalBehavior) {
                     throw new \LogicException(sprintf('Expected SignalBehavior'));
                 }
@@ -123,7 +135,7 @@ class ProcessEngine
                 $behaviorResult = $behavior->execute($token);
             }
 
-            $token->getTransition()->setPassed();
+            $tokenTransition->setPassed();
 
             if (false == $behaviorResult) {
                 $tmpTransitions = [];
@@ -161,8 +173,6 @@ class ProcessEngine
 
             $transitions = [];
             foreach ($tmpTransitions as $transition) {
-                $transition->setWeight($token->getTransition()->getWeight());
-
                 $transitions[] = $transition;
             }
 
@@ -180,18 +190,22 @@ class ProcessEngine
 
                 if ($first) {
                     $first = false;
-                    $token->setTransition($transition);
+                    $token->addTransition(TokenTransition::createFor($transition, $tokenTransition->getWeight()));
+
                     $this->transition($token);
                 } else {
-                    $this->transition($token->getProcess()->createToken($transition));
+                    $newToken = $token->getProcess()->createToken($transition);
+                    $newToken->getCurrentTransition()->setWeight($tokenTransition->getWeight());
+
+                    $this->transition($newToken);
                 }
             }
         } catch (InterruptExecutionException $e) {
-            $token->getTransition()->setInterrupted();
+            $tokenTransition->setInterrupted();
 
             return;
         } catch (WaitExecutionException $e) {
-            $token->getTransition()->setWaiting();
+            $tokenTransition->setWaiting();
             $this->waitTokens[] = $token;
 
             return;
@@ -200,10 +214,10 @@ class ProcessEngine
 
     private function transition(Token $token)
     {
-        $transition = $token->getTransition();
+        $transition = $token->getCurrentTransition()->getTransition();
 
         if (false == $transition->isActive()) {
-            $token->getTransition()->setInterrupted();
+            $token->getCurrentTransition()->setInterrupted();
 
             return;
         }

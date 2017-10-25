@@ -242,7 +242,7 @@ class Process
         $token = Token::create();
         $token->setId($id ?: Uuid::generate());
         $token->setProcess($this);
-        $token->setTransition($transition);
+        $token->addTransition(TokenTransition::createFor($transition, $transition->getWeight()));
 
         set_object($this, 'tokens.'.$token->getId(), $token);
 
