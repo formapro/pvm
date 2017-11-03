@@ -3,6 +3,7 @@ namespace Formapro\Pvm;
 
 use function Makasim\Values\add_object;
 use function Makasim\Values\add_value;
+use function Makasim\Values\clone_object;
 use function Makasim\Values\get_object;
 use function Makasim\Values\get_objects;
 use function Makasim\Values\get_value;
@@ -91,6 +92,10 @@ class Token
             $transition->setProcess($this->getProcess());
             $transitions[] = $transition;
         }
+
+        usort($transitions, function(TokenTransition $left, TokenTransition $right) {
+            return $left->getTime() <=> $right->getTime();
+        });
 
         return $transitions;
     }

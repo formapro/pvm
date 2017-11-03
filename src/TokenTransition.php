@@ -126,6 +126,16 @@ class TokenTransition
         return $this->getState() === self::STATE_OPENED;
     }
 
+    public function setTime(int $time): void
+    {
+        set_value($this, 'time', $time);
+    }
+
+    public function getTime(): int
+    {
+        return get_value($this, 'time');
+    }
+
     private function setState($state): void
     {
         set_value($this, 'state', $state);
@@ -137,6 +147,7 @@ class TokenTransition
         $tokenTransition->setId($transition->getId());
         $tokenTransition->setWeight($weight);
         $tokenTransition->setOpened();
+        $tokenTransition->setTime((int) (microtime(true) * 10000));
 
         return $tokenTransition;
     }
