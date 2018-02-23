@@ -1,6 +1,6 @@
 # Synchronization example
 
-The example shows how task exection could be synced. The task4 is execute only when all the rest are done.
+The example shows how task execution could be synced. The task4 is execute only when all the rest are done.
 
 ```php
 <?php
@@ -12,13 +12,14 @@ use Formapro\Pvm\CallbackBehavior;
 use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
+use Formapro\Pvm\Uuid;
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {
-    echo $token->getTransition()->getTo()->getLabel().' ';
+    echo $token->getCurrentTransition()->getTransition()->getTo()->getLabel().' ';
 }));
 $registry->register('fork', new CallbackBehavior(function (Token $token) {
-    $transitions = $token->getProcess()->getOutTransitions($token->getTransition()->getTo());
+    $transitions = $token->getProcess()->getOutTransitions($token->getCurrentTransition()->getTransition()->getTo());
 
     $transitions[0]->setWeight(1);
     $transitions[1]->setWeight(1);
@@ -28,7 +29,7 @@ $registry->register('fork', new CallbackBehavior(function (Token $token) {
 }));
 $registry->register('join', new CallbackBehavior(function (Token $token) {
     static $weight = 0;
-    $weight += $token->getTransition()->getWeight();
+    $weight += $token->getCurrentTransition()->getWeight();
 
     if ($weight === 3) {
         return;
@@ -39,6 +40,7 @@ $registry->register('join', new CallbackBehavior(function (Token $token) {
 }));
 
 $process = Process::create();
+$process->setId(Uuid::generate());
 
 $fork = $process->createNode();
 $fork->setLabel('fork');

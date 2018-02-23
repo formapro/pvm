@@ -25,6 +25,7 @@ use Formapro\Pvm\ProcessStorage;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\Enqueue\AsyncTransition;
+use Formapro\Pvm\Uuid;
 
 $client = new SimpleClient('amqp://');
 $asyncTransition = new AsyncTransition($client->getProducer());
@@ -33,10 +34,12 @@ $asyncTransition = new AsyncTransition($client->getProducer());
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {
-    echo $token->getTransition()->getTo()->getLabel().' ';
+    echo $token->getCurrentTransition()->getTransition()->getTo()->getLabel().' ';
 }));
 
 $process = Process::create();
+$process->setId(Uuid::generate());
+
 $foo = $process->createNode();
 $foo->setLabel('foo');
 $foo->setBehavior('print_label');

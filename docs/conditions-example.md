@@ -11,16 +11,19 @@ use Formapro\Pvm\CallbackBehavior;
 use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
+use Formapro\Pvm\Uuid;
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {
-    echo $token->getTransition()->getTo()->getLabel().' ';
+    echo $token->getCurrentTransition()->getTransition()->getTo()->getLabel().' ';
 }));
 $registry->register('condition', new CallbackBehavior(function(Token $token) {
     return ['first'];
 }));
 
 $process = Process::create();
+$process->setId(Uuid::generate());
+
 $foo = $process->createNode();
 $foo->setLabel('foo');
 $foo->setBehavior('condition');

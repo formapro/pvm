@@ -11,12 +11,13 @@ use Formapro\Pvm\CallbackBehavior;
 use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
+use Formapro\Pvm\Uuid;
 use function Makasim\Values\get_value;
 use function Makasim\Values\set_value;
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {
-    echo $token->getTransition()->getTo()->getLabel().' ';
+    echo $token->getCurrentTransition()->getTransition()->getTo()->getLabel().' ';
 }));
 $registry->register('go_back_first_three_times', new CallbackBehavior(function(Token $token) {
 
@@ -28,6 +29,8 @@ $registry->register('go_back_first_three_times', new CallbackBehavior(function(T
 }));
 
 $process = Process::create();
+$process->setId(Uuid::generate());
+
 $foo = $process->createNode();
 $foo->setLabel('foo');
 $foo->setBehavior('print_label');

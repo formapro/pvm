@@ -12,6 +12,7 @@ use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\Exception\WaitExecutionException;
+use Formapro\Pvm\Uuid;
 use function Makasim\Values\set_value;
 use function Makasim\Values\get_value;
 
@@ -26,6 +27,8 @@ $registry->register('pause_and_continue', new CallbackBehavior(function(Token $t
 }));
 
 $process = Process::create();
+$process->setId(Uuid::generate());
+
 $fooNode = $process->createNode();
 $fooNode->setLabel('foo');
 $fooNode->setBehavior('pause_and_continue');

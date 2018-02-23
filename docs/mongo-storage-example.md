@@ -14,8 +14,11 @@ namespace Acme;
 
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Yadm\MongoProcessStorage;
+use Formapro\Pvm\Uuid;
 
 $process = Process::create();
+$process->setId(Uuid::generate());
+
 $fooNode = $process->createNode();
 $fooNode->setLabel('foo');
 $fooNode->setBehavior('print_label');
