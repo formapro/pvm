@@ -14,6 +14,9 @@ use Formapro\Pvm\Token;
 use Formapro\Pvm\Uuid;
 use function Makasim\Values\get_value;
 use function Makasim\Values\set_value;
+use function Makasim\Values\register_object_hooks;
+
+register_object_hooks();
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {

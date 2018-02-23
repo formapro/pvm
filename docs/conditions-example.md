@@ -12,6 +12,9 @@ use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\Uuid;
+use function Makasim\Values\register_object_hooks;
+
+register_object_hooks();
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {

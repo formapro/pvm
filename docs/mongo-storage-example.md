@@ -15,6 +15,9 @@ namespace Acme;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Yadm\MongoProcessStorage;
 use Formapro\Pvm\Uuid;
+use function Makasim\Values\register_object_hooks;
+
+register_object_hooks();
 
 $process = Process::create();
 $process->setId(Uuid::generate());
