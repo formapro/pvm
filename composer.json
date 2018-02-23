@@ -20,7 +20,8 @@
         "php": "^7.1",
         "makasim/values": "^0.3.1",
         "symfony/console": "^3.1|^4",
-        "ramsey/uuid": "^3"
+        "ramsey/uuid": "^3",
+        "psr/log": "^1"
     },
     "suggest": {
         "enqueue/enqueue": "^0.7 Install the Enqueue library to be able to process tasks async (by using MQ).",
