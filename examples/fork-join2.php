@@ -99,7 +99,10 @@ $behaviorRegistry->register('join', new CallbackBehavior(function (Token $token)
 $logger = new ConsoleLogger(new ConsoleOutput(ConsoleOutput::VERBOSITY_DEBUG));
 
 $engine = new ProcessEngine($behaviorRegistry);
-$engine->proceed($process->createToken($start), $logger);
+$engine->proceed(
+    $engine->createToken($process, $start),
+    $logger
+);
 
 $graphViz = new VisualizeFlow();
 $graphViz->display($process);

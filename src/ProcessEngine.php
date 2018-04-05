@@ -6,7 +6,7 @@ use Formapro\Pvm\Exception\WaitExecutionException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-final class ProcessEngine
+final class ProcessEngine implements TokenContext
 {
     /**
      * @var BehaviorRegistry
@@ -236,5 +236,25 @@ final class ProcessEngine
         }
 
         $this->doProceed($token);
+    }
+
+    public function createProcessToken(Process $process, Transition $transition, string $id = null): Token
+    {
+        return $this->tokenContext->createProcessToken($process, $transition, $id);
+    }
+
+    public function getProcessTokens(Process $process): \Traversable
+    {
+        return $this->tokenContext->getProcessTokens($process);
+    }
+
+    public function getProcessToken(Process $process, string $id): Token
+    {
+        return $this->tokenContext->getProcessToken($process, $id);
+    }
+
+    public function persist(Token $token): void
+    {
+        $this->tokenContext->persist($token);
     }
 }
