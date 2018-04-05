@@ -60,16 +60,20 @@ class VisualizeFlow
                 $transition = $tokenTransition->getTransition();
                 $edge = $this->findTransitionEdge($graph, $transition);
 
+                if ($edge->getAttribute('pvm.state') === TokenTransition::STATE_PASSED) {
+                    continue;
+                }
+
                 $edge->setAttribute('pvm.state', $tokenTransition->getState());
                 $edge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
 
                 if (empty($process->getOutTransitions($transition->getTo()))) {
                     $from = $graph->getVertex($transition->getTo()->getId());
-                    $edge = $from->getEdgesTo($endVertex)->getEdgeFirst();
+                    $endEdge = $from->getEdgesTo($endVertex)->getEdgeFirst();
 
                     if ($edge->getAttribute('pvm.state') === TokenTransition::STATE_PASSED) {
-                        $edge->setAttribute('pvm.state', $tokenTransition->getState());
-                        $edge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
+                        $endEdge->setAttribute('pvm.state', $tokenTransition->getState());
+                        $endEdge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
                     }
                 }
             }
