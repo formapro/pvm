@@ -6,25 +6,14 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Formapro\Pvm\Node;
 use Formapro\Pvm\Process;
+use Formapro\Pvm\Token;
 use Formapro\Pvm\TokenTransition;
 use Formapro\Pvm\Transition;
-use Formapro\Pvm\Uuid;
 use Graphp\GraphViz\GraphViz;
 use function Makasim\Values\get_object;
-use function Makasim\Values\get_value;
 
 class VisualizeFlow
 {
-    public function createImageSrc(Process $process)
-    {
-        return (new GraphViz())->createImageSrc($this->createGraph($process));
-    }
-
-    public function display(Process $process)
-    {
-        (new GraphViz())->display($this->createGraph($process));
-    }
-
     public function createGraph(Process $process)
     {
         $graph = new Graph();
@@ -39,7 +28,7 @@ class VisualizeFlow
         foreach ($process->getNodes() as $node) {
             $this->createVertex($graph, $node);
         }
-        
+
         foreach ($process->getTransitions() as $transition) {
             if (false == $transition->getFrom() && $transition->getTo()) {
                 $this->createStartTransition($graph, $startVertex, $transition);
@@ -54,14 +43,22 @@ class VisualizeFlow
             }
         }
 
-        foreach ($process->getTokens() as $token) {
+        return $graph;
+    }
+
+    /**
+     * @param Graph $graph
+     * @param Process $process
+     * @param Token[] $tokens
+     */
+    public function applyTokens(Graph $graph, Process $process, array $tokens = [])
+    {
+        $endVertex = $this->createEndVertex($graph);
+
+        foreach ($tokens as $token) {
             foreach ($token->getTransitions() as $tokenTransition) {
                 $transition = $tokenTransition->getTransition();
                 $edge = $this->findTransitionEdge($graph, $transition);
-
-                if ($edge->getAttribute('pvm.state') === TokenTransition::STATE_PASSED) {
-                    continue;
-                }
 
                 $edge->setAttribute('pvm.state', $tokenTransition->getState());
                 $edge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
@@ -70,15 +67,23 @@ class VisualizeFlow
                     $from = $graph->getVertex($transition->getTo()->getId());
                     $edge = $from->getEdgesTo($endVertex)->getEdgeFirst();
 
-                    if ($edge->getAttribute('pvm.state') !== TokenTransition::STATE_PASSED) {
+                    if ($edge->getAttribute('pvm.state') === TokenTransition::STATE_PASSED) {
                         $edge->setAttribute('pvm.state', $tokenTransition->getState());
                         $edge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
                     }
                 }
             }
         }
+    }
 
-        return $graph;
+    public function createImageSrc(Graph $graph)
+    {
+        return (new GraphViz())->createImageSrc($graph);
+    }
+
+    public function display(Graph $graph)
+    {
+        (new GraphViz())->display($graph);
     }
 
     private function createVertex(Graph $graph, Node $node)
@@ -146,12 +151,14 @@ class VisualizeFlow
      */
     private function createStartVertex(Graph $graph)
     {
-        $vertex = $graph->createVertex(Uuid::generate());
-        $vertex->setAttribute('graphviz.label', 'Start');
-        $vertex->setAttribute('graphviz.color', 'blue');
-        $vertex->setAttribute('graphviz.shape', 'circle');
+        if (false == $graph->hasVertex('__start')) {
+            $vertex = $graph->createVertex('__start');
+            $vertex->setAttribute('graphviz.label', 'Start');
+            $vertex->setAttribute('graphviz.color', 'blue');
+            $vertex->setAttribute('graphviz.shape', 'circle');
+        }
 
-        return $vertex;
+        return $graph->getVertex('__start');
     }
 
     /**
@@ -161,12 +168,14 @@ class VisualizeFlow
      */
     private function createEndVertex(Graph $graph)
     {
-        $vertex = $graph->createVertex(Uuid::generate());
-        $vertex->setAttribute('graphviz.label', 'End');
-        $vertex->setAttribute('graphviz.color', 'red');
-        $vertex->setAttribute('graphviz.shape', 'circle');
+        if (false == $graph->hasVertex('__end')) {
+            $vertex = $graph->createVertex('__end');
+            $vertex->setAttribute('graphviz.label', 'End');
+            $vertex->setAttribute('graphviz.color', 'red');
+            $vertex->setAttribute('graphviz.shape', 'circle');
+        }
 
-        return $vertex;
+        return $graph->getVertex('__end');
     }
 
     private function guessTransitionColor(TokenTransition $transition): string
