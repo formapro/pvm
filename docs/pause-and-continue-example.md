@@ -37,9 +37,10 @@ $fooNode->setLabel('foo');
 $fooNode->setBehavior('pause_and_continue');
 
 $transition = $process->createTransition(null, $fooNode);
-$token = $process->createToken($transition);
 
-$waitTokens = (new ProcessEngine($registry))->proceed($token);
+$engine = new ProcessEngine($registry);
+$token = $engine->createProcessToken($process, $transition);
+$waitTokens = $engine->proceed($token);
 
 // we asked a customer for a credit card. the processes has eneded.
 // and now in another process we try to continue.

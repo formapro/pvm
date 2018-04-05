@@ -6,7 +6,7 @@ use Formapro\Pvm\Exception\WaitExecutionException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-class ProcessEngine
+final class ProcessEngine implements TokenContext
 {
     /**
      * @var BehaviorRegistry
@@ -29,6 +29,11 @@ class ProcessEngine
     private $tokenLocker;
 
     /**
+     * @var TokenContext
+     */
+    private $tokenContext;
+
+    /**
      * @var Transition[]
      */
     private $asyncTokens;
@@ -47,12 +52,14 @@ class ProcessEngine
         BehaviorRegistry $behaviorRegistry,
         ProcessStorage $processExecutionStorage = null,
         AsyncTransition $asyncTransition = null,
-        TokenLockerInterface $tokenLocker = null
+        TokenLockerInterface $tokenLocker = null,
+        TokenContext $tokenContext = null
     ) {
         $this->behaviorRegistry = $behaviorRegistry;
         $this->processExecutionStorage = $processExecutionStorage ?: new NullProcessStorage();
         $this->asyncTransition = $asyncTransition ?: new AsyncTransitionIsNotConfigured();
         $this->tokenLocker = $tokenLocker ?: new NullTokenLocker();
+        $this->tokenContext = $tokenContext ?: new DefaultTokenContext();
 
         $this->asyncTokens = [];
         $this->waitTokens = [];
@@ -74,7 +81,7 @@ class ProcessEngine
         $this->logger = $logger ?: new NullLogger();
 
         try {
-            $this->tokenLocker->lock($token);
+            $this->tokenLocker->lock($token->getId());
 
             $this->log('Start execution: process: %s, token: %s', $token->getProcess()->getId(), $token->getId());
             $this->doProceed($token);
@@ -92,7 +99,7 @@ class ProcessEngine
             // handle error
             throw $e;
         } finally {
-            $this->tokenLocker->unlock($token);
+            $this->tokenLocker->unlock($token->getId());
 
             $this->asyncTokens = [];
             $this->waitTokens = [];
@@ -106,8 +113,6 @@ class ProcessEngine
         $currentTransition = $tokenTransition->getTransition();
 
         try {
-
-
             if (false == $node = $currentTransition->getTo()) {
                 throw new \LogicException(sprintf(
                     'Out node is missing. process: %s, transitions: %s',
@@ -194,7 +199,7 @@ class ProcessEngine
 
                     $this->transition($token);
                 } else {
-                    $newToken = $token->getProcess()->createToken($transition);
+                    $newToken = $this->tokenContext->createProcessToken($token->getProcess(), $transition);
                     $newToken->getCurrentTransition()->setWeight($tokenTransition->getWeight());
 
                     $this->transition($newToken);
@@ -209,6 +214,8 @@ class ProcessEngine
             $this->waitTokens[] = $token;
 
             return;
+        } finally {
+            $this->tokenContext->persist($token);
         }
     }
 
@@ -229,5 +236,25 @@ class ProcessEngine
         }
 
         $this->doProceed($token);
+    }
+
+    public function createProcessToken(Process $process, Transition $transition, string $id = null): Token
+    {
+        return $this->tokenContext->createProcessToken($process, $transition, $id);
+    }
+
+    public function getProcessTokens(Process $process): \Traversable
+    {
+        return $this->tokenContext->getProcessTokens($process);
+    }
+
+    public function getProcessToken(Process $process, string $id): Token
+    {
+        return $this->tokenContext->getProcessToken($process, $id);
+    }
+
+    public function persist(Token $token): void
+    {
+        $this->tokenContext->persist($token);
     }
 }

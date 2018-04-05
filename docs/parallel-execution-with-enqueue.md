@@ -85,8 +85,7 @@ include __DIR__.'/config.php';
  * @var Transition $firstTransition 
  */
 
-$token = $process->createToken($firstTransition);
-
+$token = $engine->createProcessToken($process, $firstTransition);
 $engine->proceed($token);
 ```
 

@@ -51,9 +51,9 @@ $process->createTransition($bar, $baz, 'forth');
 $process->createTransition($bar, $foo, 'back');
 $transition = $process->createTransition(null, $foo);
 
-$token = $process->createToken($transition);
-
-(new ProcessEngine($registry))->proceed($token);
+$engine = new ProcessEngine($registry);
+$token = $engine->createProcessToken($process, $transition);
+$engine->proceed($token);
 
 // Prints "foo foo foo baz "
 ```

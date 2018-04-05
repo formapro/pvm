@@ -43,9 +43,9 @@ $process->createTransition($foo, $bar, 'first');
 $process->createTransition($foo, $baz, 'second');
 $transition = $process->createTransition(null, $foo);
 
-$token = $process->createToken($transition);
-
-(new ProcessEngine($registry))->proceed($token);
+$engine = new ProcessEngine($registry);
+$token = $engine->createProcessToken($process, $transition);
+$engine->proceed($token);
 
 // Prints "bar "
 ```

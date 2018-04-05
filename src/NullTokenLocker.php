@@ -3,11 +3,11 @@ namespace Formapro\Pvm;
 
 class NullTokenLocker implements TokenLockerInterface
 {
-    public function lock(Token $token): void
+    public function lock(string $token): void
     {
     }
 
-    public function unlock(Token $token): void
+    public function unlock(string $token): void
     {
     }
 }

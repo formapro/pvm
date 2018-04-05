@@ -61,7 +61,9 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberI
         }
 
         try {
-            $this->processEngine->proceed($process->getToken($data['token']), $this->logger);
+            $token = $this->processEngine->getProcessToken($process, $data['token']);
+
+            $this->processEngine->proceed($token, $this->logger);
         } finally {
             $this->processExecutionStorage->persist($process);
         }

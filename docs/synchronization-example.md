@@ -83,7 +83,8 @@ $process->createTransition($task3, $join);
 $process->createTransition($join, $task4);
 
 $engine = new ProcessEngine($registry);
-$engine->proceed($process->createToken($start));
+$token = $engine->createProcessToken($process, $start);
+$engine->proceed($token);
 
 // Prints "task 1 task 2 task 3 task 4 "
 ```

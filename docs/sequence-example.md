@@ -35,9 +35,10 @@ $barNode->setBehavior('print_label');
 $process->createTransition($fooNode, $barNode);
 
 $transition = $process->createTransition(null, $fooNode);
-$token = $process->createToken($transition);
 
-(new ProcessEngine($registry))->proceed($token);
+$engine = new ProcessEngine($registry);
+$token = $engine->createProcessToken($process, $transition);
+$engine->proceed($token);
 
 // Prints "foo bar "
 ```
