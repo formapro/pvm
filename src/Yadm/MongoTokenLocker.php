@@ -1,7 +1,6 @@
 <?php
 namespace Formapro\Pvm\Yadm;
 
-use Formapro\Pvm\Token;
 use Formapro\Pvm\TokenLockerInterface;
 use Makasim\Yadm\PessimisticLock;
 
@@ -17,13 +16,13 @@ class MongoTokenLocker implements TokenLockerInterface
         $this->lock = $lock;
     }
 
-    public function lock(Token $token): void
+    public function lock(string $tokenId): void
     {
-        $this->lock->lock($token->getId());
+        $this->lock->lock($tokenId);
     }
 
-    public function unlock(Token $token): void
+    public function unlock(string $tokenId): void
     {
-        $this->lock->unlock($token->getId());
+        $this->lock->unlock($tokenId);
     }
 }

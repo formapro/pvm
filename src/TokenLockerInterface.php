@@ -3,7 +3,7 @@ namespace Formapro\Pvm;
 
 interface TokenLockerInterface
 {
-    public function lock(Token $token): void;
+    public function lock(string $tokenId): void;
 
-    public function unlock(Token $token): void;
+    public function unlock(string $tokenId): void;
 }
