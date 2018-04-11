@@ -67,7 +67,7 @@ class VisualizeFlow
                 $edge->setAttribute('pvm.state', $tokenTransition->getState());
                 $edge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
 
-                if (empty($process->getOutTransitions($transition->getTo()))) {
+                if (false != $transition->getFrom() && empty($process->getOutTransitions($transition->getTo()))) {
                     $from = $graph->getVertex($transition->getTo()->getId());
                     $endEdge = $from->getEdgesTo($endVertex)->getEdgeFirst();
 

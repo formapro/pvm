@@ -3,6 +3,8 @@ namespace Formapro\Pvm\Yadm;
 
 use Formapro\Pvm\Process;
 use Formapro\Pvm\ProcessStorage;
+use Formapro\Pvm\Token;
+use function Makasim\Values\get_value;
 use function Makasim\Yadm\get_object_id;
 use Makasim\Yadm\Storage;
 
@@ -14,11 +16,14 @@ class MongoProcessStorage implements ProcessStorage
     private $storage;
 
     /**
-     * @param Storage $storage
+     * @var Storage|null
      */
-    public function __construct(Storage $storage)
+    private $tokenStorage;
+
+    public function __construct(Storage $processStorage, Storage $tokenStorage = null)
     {
-        $this->storage = $storage;
+        $this->storage = $processStorage;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -53,11 +58,20 @@ class MongoProcessStorage implements ProcessStorage
     /**
      * {@inheritdoc}
      */
-    public function getByToken(string $token): Process
+    public function getByToken(string $tokenString): Process
     {
+        if ($this->tokenStorage) {
+            /** @var Token $token */
+            if (false == $token = $this->tokenStorage->findOne(['id' => $tokenString])) {
+                throw new \LogicException(sprintf('The token "%s" could not be found', $tokenString));
+            }
+
+            return $this->get(get_value($token, 'processId'));
+        }
+
         /** @var Process $process */
-        if (false == $process = $this->storage->findOne(['tokens.'.$token => ['$exists' => true]])) {
-            throw new \LogicException(sprintf('The process with token "%s" could not be found', $token));
+        if (false == $process = $this->storage->findOne(['tokens.'.$tokenString => ['$exists' => true]])) {
+            throw new \LogicException(sprintf('The process with token "%s" could not be found', $tokenString));
         }
 
         return $process;

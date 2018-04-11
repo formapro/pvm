@@ -21,8 +21,8 @@ class NullProcessStorage implements ProcessStorage
     /**
      * {@inheritdoc}
      */
-    public function getByToken(string $token): Process
+    public function getByToken(string $tokenString): Process
     {
-        throw new \LogicException(sprintf('The process that has token "%s" could not be found', $token));
+        throw new \LogicException(sprintf('The process that has token "%s" could not be found', $tokenString));
     }
 }

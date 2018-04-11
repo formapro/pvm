@@ -19,11 +19,11 @@ interface ProcessStorage
     public function get(string $id): Process;
 
     /**
-     * @param string $token
+     * @param string $tokenString
      *
      * @throw \LogicException if there is no such process
      *
      * @return Process
      */
-    public function getByToken(string $token): Process;
+    public function getByToken(string $tokenString): Process;
 }
