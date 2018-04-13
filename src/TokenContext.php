@@ -3,11 +3,11 @@ namespace Formapro\Pvm;
 
 interface TokenContext
 {
-    public function createProcessToken(Process $process, Transition $transition, string $id = null): Token;
+    public function createProcessToken(Process $process, string $id = null): Token;
+
+    public function forkProcessToken(Token $token, string $id = null): Token;
 
     /**
-     * @param Process $process
-     *
      * @return Token[]|\Traversable
      */
     public function getProcessTokens(Process $process): \Traversable;

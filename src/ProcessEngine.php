@@ -199,7 +199,8 @@ final class ProcessEngine implements TokenContext
 
                     $this->transition($token);
                 } else {
-                    $newToken = $this->tokenContext->createProcessToken($token->getProcess(), $transition);
+                    $newToken = $this->tokenContext->forkProcessToken($token);
+                    $newToken->addTransition(TokenTransition::createFor($transition, $transition->getWeight()));
                     $newToken->getCurrentTransition()->setWeight($tokenTransition->getWeight());
 
                     $this->transition($newToken);
@@ -238,9 +239,14 @@ final class ProcessEngine implements TokenContext
         $this->doProceed($token);
     }
 
-    public function createProcessToken(Process $process, Transition $transition, string $id = null): Token
+    public function createProcessToken(Process $process, string $id = null): Token
     {
-        return $this->tokenContext->createProcessToken($process, $transition, $id);
+        return $this->tokenContext->createProcessToken($process, $id);
+    }
+
+    public function forkProcessToken(Token $token, string $id = null): Token
+    {
+        return $this->tokenContext->forkProcessToken($token, $id);
     }
 
     public function getProcessTokens(Process $process): \Traversable

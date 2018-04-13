@@ -7,16 +7,20 @@ use function Makasim\Values\set_object;
 
 class DefaultTokenContext implements TokenContext
 {
-    public function createProcessToken(Process $process, Transition $transition, string $id = null): Token
+    public function createProcessToken(Process $process, string $id = null): Token
     {
         $token = Token::create();
         $token->setId($id ?: Uuid::generate());
         $token->setProcess($process);
-        $token->addTransition(TokenTransition::createFor($transition, $transition->getWeight()));
 
         set_object($process, 'tokens.'.$token->getId(), $token);
 
         return $token;
+    }
+
+    public function forkProcessToken(Token $token, string $id = null): Token
+    {
+        return $this->createProcessToken($token->getProcess(), $id);
     }
 
     public function getProcessTokens(Process $process): \Traversable
