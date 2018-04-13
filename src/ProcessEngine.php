@@ -24,11 +24,6 @@ final class ProcessEngine implements TokenContext
     private $asyncTransition;
 
     /**
-     * @var TokenLockerInterface
-     */
-    private $tokenLocker;
-
-    /**
      * @var TokenContext
      */
     private $tokenContext;
@@ -52,13 +47,11 @@ final class ProcessEngine implements TokenContext
         BehaviorRegistry $behaviorRegistry,
         ProcessStorage $processExecutionStorage = null,
         AsyncTransition $asyncTransition = null,
-        TokenLockerInterface $tokenLocker = null,
         TokenContext $tokenContext = null
     ) {
         $this->behaviorRegistry = $behaviorRegistry;
         $this->processExecutionStorage = $processExecutionStorage ?: new NullProcessStorage();
         $this->asyncTransition = $asyncTransition ?: new AsyncTransitionIsNotConfigured();
-        $this->tokenLocker = $tokenLocker ?: new NullTokenLocker();
         $this->tokenContext = $tokenContext ?: new DefaultTokenContext();
 
         $this->asyncTokens = [];
@@ -81,26 +74,18 @@ final class ProcessEngine implements TokenContext
         $this->logger = $logger ?: new NullLogger();
 
         try {
-            $this->tokenLocker->lock($token->getId());
-
             $this->log('Start execution: process: %s, token: %s', $token->getProcess()->getId(), $token->getId());
             $this->doProceed($token);
             $this->processExecutionStorage->persist($token->getProcess());
 
             if ($this->asyncTokens) {
+                $this->log(sprintf('Handle async transitions: %s', count($this->asyncTokens)));
+
                 $this->asyncTransition->transition($this->asyncTokens);
             }
 
             return $this->waitTokens;
-        } catch (\Exception $e) {
-            // handle error
-            throw $e;
-        } catch (\Error $e) {
-            // handle error
-            throw $e;
         } finally {
-            $this->tokenLocker->unlock($token->getId());
-
             $this->asyncTokens = [];
             $this->waitTokens = [];
             $this->logger = null;

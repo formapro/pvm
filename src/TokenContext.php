@@ -14,5 +14,7 @@ interface TokenContext
 
     public function getProcessToken(Process $process, string $id): Token;
 
+    public function getToken(string $id): Token;
+
     public function persist(Token $token): void;
 }

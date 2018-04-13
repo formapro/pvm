@@ -2,10 +2,9 @@
 namespace Formapro\Pvm\Yadm;
 
 use Formapro\Pvm\Process;
+use Formapro\Pvm\ProcessStorage;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\TokenContext;
-use Formapro\Pvm\TokenTransition;
-use Formapro\Pvm\Transition;
 use Formapro\Pvm\Uuid;
 use function Makasim\Values\get_value;
 use function Makasim\Values\set_value;
@@ -14,12 +13,18 @@ use Makasim\Yadm\Storage;
 class StandaloneTokenContext implements TokenContext
 {
     /**
+     * @var ProcessStorage
+     */
+    private $processStorage;
+
+    /**
      * @var Storage
      */
     private $tokenStorage;
 
-    public function __construct(Storage $tokenStorage)
+    public function __construct(ProcessStorage $processStorage, Storage $tokenStorage)
     {
+        $this->processStorage = $processStorage;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -56,11 +61,28 @@ class StandaloneTokenContext implements TokenContext
     {
         /** @var Token $token */
         if (false == $token = $this->tokenStorage->findOne(['id' => $id])) {
-            throw new \LogicException(sprintf('Token Not found. Id: "%s"', $id));
+            throw TokenException::notFound($id);
         }
 
         if ($process->getId() !== get_value($token, 'processId')) {
-            throw new \LogicException('Another process token requested.');
+            throw new TokenException('Another process token requested.');
+        }
+
+        $token->setProcess($process);
+
+        return $token;
+    }
+
+    public function getToken(string $id): Token
+    {
+        /** @var Token $token */
+        if (false == $token = $this->tokenStorage->findOne(['id' => $id])) {
+            throw TokenException::notFound($id);
+        }
+
+        $processId = get_value($token, 'processId');
+        if (false == $process = $this->processStorage->get($processId)) {
+            throw new TokenException(sprintf('The process "%s" could not be found', $processId));
         }
 
         $token->setProcess($process);

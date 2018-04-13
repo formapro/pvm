@@ -10,4 +10,9 @@ class NullTokenLocker implements TokenLockerInterface
     public function unlock(string $token): void
     {
     }
+
+    public function locked(string $tokenId): bool
+    {
+        return false;
+    }
 }

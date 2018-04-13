@@ -1,12 +1,23 @@
 <?php
 namespace Formapro\Pvm;
 
+use Formapro\Pvm\Yadm\TokenException;
 use function Makasim\Values\get_object;
 use function Makasim\Values\get_objects;
 use function Makasim\Values\set_object;
 
 class DefaultTokenContext implements TokenContext
 {
+    /**
+     * @var ProcessStorage
+     */
+    private $processStorage;
+
+    public function __construct(ProcessStorage $processStorage)
+    {
+        $this->processStorage = $processStorage;
+    }
+
     public function createProcessToken(Process $process, string $id = null): Token
     {
         $token = Token::create();
@@ -38,7 +49,7 @@ class DefaultTokenContext implements TokenContext
     {
         /** @var Token $token */
         if (null === $token = get_object($process, 'tokens.'.$id, ClassClosure::create())) {
-            throw new \LogicException(sprintf('Token Not found. Id: "%s"', $id));
+            throw TokenException::notFound($id);
         }
 
         $token->setProcess($process);
@@ -46,8 +57,15 @@ class DefaultTokenContext implements TokenContext
         return $token;
     }
 
+    public function getToken(string $id): Token
+    {
+        $process = $this->processStorage->getByToken($id);
+
+        return $this->getProcessToken($process, $id);
+    }
+
     public function persist(Token $token): void
     {
-        // tokens are stored with the process, nothing to do here
+        $this->processStorage->persist($token->getProcess());
     }
 }
