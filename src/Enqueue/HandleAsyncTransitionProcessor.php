@@ -64,28 +64,26 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberI
             $token = $this->tokenContext->getToken($message->getToken());
 
             if ($token->getCurrentTransition()->getId() !== $message->getTokenTransitionId()) {
-                return self::REJECT;
+                return Result::reject('Token has changed the current transition.');
             }
         } catch (TokenException $e) {
-            return self::REJECT;
-        }
-
-        if ($this->tokenLocker->locked($message->getToken())) {
-            return self::REQUEUE;
+            return Result::reject('Token has not been found.');
         }
 
         try {
-            $this->tokenLocker->lock($message->getToken());
+            $this->tokenLocker->lock($message->getToken(), false);
 
             $token = $this->tokenContext->getToken($message->getToken());
 
             if ($token->getCurrentTransition()->getId() !== $message->getTokenTransitionId()) {
-                return self::REJECT;
+                return Result::reject('Token has changed the current transition.');
             }
 
             $this->processEngine->proceed($token, $this->logger);
         } catch (PessimisticLockException $e) {
-            return self::REQUEUE;
+            return Result::requeue('Token is locked at the moment. Requeue it to process later.');
+        } catch (TokenException $e) {
+            return Result::reject('Token has not been found.');
         } finally {
             $this->tokenLocker->unlock($message->getToken());
         }

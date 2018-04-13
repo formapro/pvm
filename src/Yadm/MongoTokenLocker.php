@@ -18,10 +18,10 @@ class MongoTokenLocker implements TokenLockerInterface
         $this->lock = $lock;
     }
 
-    public function lock(string $tokenId): void
+    public function lock(string $tokenId, bool $blocking = true): void
     {
         try {
-            $this->lock->lock($tokenId);
+            $this->lock->lock($tokenId, $blocking);
         } catch (YadmPessimisticLockException $e) {
             throw PessimisticLockException::lockFailed($e);
         }
