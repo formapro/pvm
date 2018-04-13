@@ -248,4 +248,9 @@ final class ProcessEngine implements TokenContext
     {
         $this->tokenContext->persist($token);
     }
+
+    public function getToken(string $id): Token
+    {
+        return $this->tokenContext->getToken($id);
+    }
 }
