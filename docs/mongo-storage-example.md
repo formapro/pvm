@@ -51,6 +51,7 @@ namespace Acme;
 
 use Formapro\Pvm\ProcessEngine;
 use Formapro\Pvm\DefaultBehaviorRegistry;
+use Formapro\Pvm\DefaultTokenContext;
 use Formapro\Pvm\Yadm\MongoProcessStorage;
 use Formapro\Pvm\Process;
 
@@ -58,8 +59,9 @@ $client = new \MongoDB\Client();
 $collection = $client->selectCollection('pvm', 'process');
 $mongoStorage = new \Makasim\Yadm\Storage($collection, new \Makasim\Yadm\Hydrator(Process::class));
 $processStorage = new MongoProcessStorage($mongoStorage);
+$tokenContext = new DefaultTokenContext($processStorage);
 
-$engine = new ProcessEngine(new DefaultBehaviorRegistry(), $processStorage);
+$engine = new ProcessEngine(new DefaultBehaviorRegistry(), $tokenContext);
 
 ```
 

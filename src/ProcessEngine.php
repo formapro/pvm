@@ -40,12 +40,12 @@ final class ProcessEngine implements TokenContext
 
     public function __construct(
         BehaviorRegistry $behaviorRegistry,
-        AsyncTransition $asyncTransition = null,
-        TokenContext $tokenContext = null
+        TokenContext $tokenContext = null,
+        AsyncTransition $asyncTransition = null
     ) {
         $this->behaviorRegistry = $behaviorRegistry;
-        $this->asyncTransition = $asyncTransition ?: new AsyncTransitionIsNotConfigured();
         $this->tokenContext = $tokenContext ?: new DefaultTokenContext(new NullProcessStorage());
+        $this->asyncTransition = $asyncTransition ?: new AsyncTransitionIsNotConfigured();
 
         $this->asyncTokens = [];
         $this->waitTokens = [];

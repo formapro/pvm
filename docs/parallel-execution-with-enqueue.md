@@ -18,6 +18,7 @@ We need the `enqueue/simple-client` library and one of the transports, for examp
 namespace Acme;
 
 use Enqueue\SimpleClient\SimpleClient;
+use Formapro\Pvm\DefaultTokenContext;
 use Formapro\Pvm\DefaultBehaviorRegistry;
 use Formapro\Pvm\CallbackBehavior;
 use Formapro\Pvm\ProcessEngine;
@@ -62,7 +63,9 @@ $transition->setAsync(true);
 
 $firstTransition = $process->createTransition(null, $foo);
 
-$engine = new ProcessEngine($registry, $persistentStorage, $asyncTransition);
+$tokenContext = new DefaultTokenContext($persistentStorage);
+
+$engine = new ProcessEngine($registry, $tokenContext, $asyncTransition);
 ```
 
 ## Execute process
