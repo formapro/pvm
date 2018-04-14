@@ -93,5 +93,6 @@ class StandaloneTokenContext implements TokenContext
     public function persist(Token $token): void
     {
         $this->tokenStorage->update($token);
+        $this->processStorage->persist($token->getProcess());
     }
 }

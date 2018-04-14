@@ -14,11 +14,6 @@ final class ProcessEngine implements TokenContext
     private $behaviorRegistry;
 
     /**
-     * @var ProcessStorage
-     */
-    private $processExecutionStorage;
-
-    /**
      * @var AsyncTransition
      */
     private $asyncTransition;
@@ -45,14 +40,12 @@ final class ProcessEngine implements TokenContext
 
     public function __construct(
         BehaviorRegistry $behaviorRegistry,
-        ProcessStorage $processExecutionStorage = null,
         AsyncTransition $asyncTransition = null,
         TokenContext $tokenContext = null
     ) {
         $this->behaviorRegistry = $behaviorRegistry;
-        $this->processExecutionStorage = $processExecutionStorage ?: new NullProcessStorage();
         $this->asyncTransition = $asyncTransition ?: new AsyncTransitionIsNotConfigured();
-        $this->tokenContext = $tokenContext ?: new DefaultTokenContext();
+        $this->tokenContext = $tokenContext ?: new DefaultTokenContext(new NullProcessStorage());
 
         $this->asyncTokens = [];
         $this->waitTokens = [];
@@ -76,7 +69,6 @@ final class ProcessEngine implements TokenContext
         try {
             $this->log('Start execution: process: %s, token: %s', $token->getProcess()->getId(), $token->getId());
             $this->doProceed($token);
-            $this->processExecutionStorage->persist($token->getProcess());
 
             if ($this->asyncTokens) {
                 $this->log(sprintf('Handle async transitions: %s', count($this->asyncTokens)));
@@ -191,17 +183,21 @@ final class ProcessEngine implements TokenContext
                     $this->transition($newToken);
                 }
             }
+
+            $this->tokenContext->persist($token);
         } catch (InterruptExecutionException $e) {
             $tokenTransition->setInterrupted();
+
+            $this->tokenContext->persist($token);
 
             return;
         } catch (WaitExecutionException $e) {
             $tokenTransition->setWaiting();
             $this->waitTokens[] = $token;
 
-            return;
-        } finally {
             $this->tokenContext->persist($token);
+
+            return;
         }
     }
 
