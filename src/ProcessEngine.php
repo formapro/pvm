@@ -144,7 +144,7 @@ final class ProcessEngine implements DAL
 
                         $tmpTransitions = array_merge($tmpTransitions, $transitionsWithName);
                     } elseif ($transition instanceof Transition) {
-                        $tmpTransitions[] = $tmpTransitions;
+                        $tmpTransitions[] = $transition;
                     } else {
                         throw new \LogicException('Unsupported element of array. Could be either instance of Transition or its name (string).');
                     }
