@@ -11,6 +11,7 @@ use Formapro\Pvm\TokenTransition;
 use Formapro\Pvm\Transition;
 use Graphp\GraphViz\GraphViz;
 use function Makasim\Values\get_object;
+use function Makasim\Values\get_value;
 
 class VisualizeFlow
 {
@@ -57,6 +58,8 @@ class VisualizeFlow
 
         foreach ($tokens as $token) {
             foreach ($token->getTransitions() as $tokenTransition) {
+                $hasException = get_value($tokenTransition, 'exception', false);
+
                 $transition = $tokenTransition->getTransition();
                 $edge = $this->findTransitionEdge($graph, $transition);
 
@@ -66,6 +69,10 @@ class VisualizeFlow
 
                 $edge->setAttribute('pvm.state', $tokenTransition->getState());
                 $edge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
+
+                if ($hasException) {
+                    $edge->getVertexEnd()->setAttribute('graphviz.color', 'red');
+                }
 
                 if (false != $transition->getFrom() && empty($process->getOutTransitions($transition->getTo()))) {
                     $from = $graph->getVertex($transition->getTo()->getId());

@@ -3,6 +3,7 @@ namespace Formapro\Pvm;
 
 use Formapro\Pvm\Exception\InterruptExecutionException;
 use Formapro\Pvm\Exception\WaitExecutionException;
+use function Makasim\Values\set_value;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -38,6 +39,10 @@ final class ProcessEngine implements DAL
      */
     private $logger;
 
+    private $logException;
+
+    private $exceptionLogged;
+
     public function __construct(
         BehaviorRegistry $behaviorRegistry,
         DAL $dal = null,
@@ -49,6 +54,8 @@ final class ProcessEngine implements DAL
 
         $this->asyncTokens = [];
         $this->waitTokens = [];
+        $this->logException = false;
+        $this->exceptionLogged = false;
     }
 
     private function log($text, ...$args)
@@ -81,6 +88,7 @@ final class ProcessEngine implements DAL
             $this->asyncTokens = [];
             $this->waitTokens = [];
             $this->logger = null;
+            $this->exceptionLogged = false;
         }
     }
 
@@ -201,6 +209,15 @@ final class ProcessEngine implements DAL
             $this->persistToken($token);
 
             return;
+        } catch (\Throwable $e) {
+            if ($this->logException && false == $this->exceptionLogged) {
+                set_value($tokenTransition, 'exception', (string) $e);
+                $this->persistToken($token);
+
+                $this->exceptionLogged = true;
+            }
+
+            throw $e;
         }
     }
 
@@ -257,5 +274,10 @@ final class ProcessEngine implements DAL
     public function getToken(string $id): Token
     {
         return $this->dal->getToken($id);
+    }
+
+    public function setLogException(bool $logException): void
+    {
+        $this->logException = $logException;
     }
 }
