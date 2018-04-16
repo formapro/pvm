@@ -19,6 +19,7 @@ namespace App\Pvm\Behavior;
 
 use Formapro\Pvm\Behavior;
 use Formapro\Pvm\Enqueue\HandleAsyncTransitionProcessor;
+use Formapro\Pvm\Enqueue\HandleAsyncTransition;
 use Formapro\Pvm\Exception\WaitExecutionException;
 use Formapro\Pvm\SignalBehavior;
 use Formapro\Pvm\Token;
@@ -50,13 +51,13 @@ class TwoDaysDelayBehavior implements Behavior, SignalBehavior
     {
         $job = JobBuilder::newJob(EnqueueResponseJob::class)->build();
         
+        $data = (new HandleAsyncTransition($token->getId(), $token->getCurrentTransition()->getId()))->jsonSerialize();
+        $data['command'] = HandleAsyncTransitionProcessor::COMMAND;
+        
         $trigger = TriggerBuilder::newTrigger()
             ->forJobDetail($job)
             ->withSchedule(SimpleScheduleBuilder::simpleSchedule()->repeatForever())
-            ->setJobData([
-                'command' => HandleAsyncTransitionProcessor::COMMAND,
-                'token' => $token->getId(),
-            ])
+            ->setJobData($data)
             ->startAt(new \DateTime('now + 2 days'))
             ->build();
 

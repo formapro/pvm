@@ -5,23 +5,23 @@ use Formapro\Pvm\Behavior;
 use Formapro\Pvm\Exception\InterruptExecutionException;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
-use Formapro\Pvm\Yadm\MongoProcessStorage;
 use function Makasim\Values\get_value;
+use Makasim\Yadm\Storage;
 use MongoDB\Operation\FindOneAndUpdate;
 
 class SimpleSynchronizeBehavior implements Behavior
 {
     /**
-     * @var MongoProcessStorage
+     * @var Storage
      */
-    private $processExecutionStorage;
+    private $processStorage;
 
     /**
-     * @param MongoProcessStorage $processExecutionStorage
+     * @param Storage $processStorage
      */
-    public function __construct(MongoProcessStorage $processExecutionStorage)
+    public function __construct(Storage $processStorage)
     {
-        $this->processExecutionStorage = $processExecutionStorage;
+        $this->processStorage = $processStorage;
     }
 
     /**
@@ -32,10 +32,10 @@ class SimpleSynchronizeBehavior implements Behavior
         $process = $token->getProcess();
         $node = $token->getCurrentTransition()->getTransition()->getTo();
 
-        $collection = $this->processExecutionStorage->getStorage()->getCollection();
+        $collection = $this->processStorage->getCollection();
 
         $rawRefreshedProcess = $collection->findOneAndUpdate(
-            ['id' => $process->getId()],
+            ['id' => new \Makasim\Yadm\Uuid($process->getId())],
             ['$inc' => ['nodes.'.$node->getId().'.currentWeight' => $token->getCurrentTransition()->getWeight()]],
             [
                 'typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array'],
