@@ -75,7 +75,7 @@ final class ProcessEngine implements DAL
 
         try {
             $this->log('Start execution: process: %s, token: %s', $token->getProcess()->getId(), $token->getId());
-            $this->transition($token);
+            $this->doProceed($token);
 
             if ($this->asyncTokens) {
                 $this->log(sprintf('Handle async transitions: %s', count($this->asyncTokens)));
