@@ -27,9 +27,10 @@ class AsyncTransition implements \Formapro\Pvm\AsyncTransition
         foreach ($tokens as $token) {
             /** @var Token $token */
 
-            $message = new HandleAsyncTransition($token->getId(), $token->getCurrentTransition()->getId());
-
-            $this->producer->sendCommand(HandleAsyncTransitionProcessor::COMMAND, json_encode($message));
+            $this->producer->sendCommand(
+                HandleAsyncTransitionProcessor::COMMAND,
+                HandleAsyncTransition::forToken($token)
+            );
         }
     }
 }

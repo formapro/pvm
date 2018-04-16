@@ -81,6 +81,8 @@ class StandaloneTokenDAL implements DAL
         }
 
         $processId = get_value($token, 'processId');
+
+        /** @var Process $process */
         if (false == $process = $this->processStorage->findOne(['id' => $processId])) {
             throw new TokenException(sprintf('The process "%s" could not be found', $processId));
         }

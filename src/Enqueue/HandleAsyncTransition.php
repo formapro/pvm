@@ -2,6 +2,8 @@
 namespace Formapro\Pvm\Enqueue;
 
 use Enqueue\Util\JSON;
+use Formapro\Pvm\Token;
+use Formapro\Pvm\Yadm\TokenException;
 
 class HandleAsyncTransition implements \JsonSerializable
 {
@@ -52,9 +54,13 @@ class HandleAsyncTransition implements \JsonSerializable
         return new static($data['token'], $data['tokenTransitionId']);
     }
 
-
     public function jsonSerialize(): array
     {
         return ['token' => $this->token, 'tokenTransitionId' => $this->tokenTransitionId];
+    }
+
+    public static function forToken(Token $token): self
+    {
+        return new static($token->getId(), $token->getCurrentTransition()->getId());
     }
 }
