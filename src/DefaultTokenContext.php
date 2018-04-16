@@ -8,16 +8,6 @@ use function Makasim\Values\set_object;
 
 class DefaultTokenContext implements TokenContext
 {
-    /**
-     * @var ProcessStorage
-     */
-    private $processStorage;
-
-    public function __construct(ProcessStorage $processStorage)
-    {
-        $this->processStorage = $processStorage;
-    }
-
     public function createProcessToken(Process $process, string $id = null): Token
     {
         $token = Token::create();
@@ -59,13 +49,11 @@ class DefaultTokenContext implements TokenContext
 
     public function getToken(string $id): Token
     {
-        $process = $this->processStorage->getByToken($id);
-
-        return $this->getProcessToken($process, $id);
+        throw new \LogicException('The context does not support this method.');
     }
 
     public function persist(Token $token): void
     {
-        $this->processStorage->persist($token->getProcess());
+        throw new \LogicException('The context does not support this method.');
     }
 }

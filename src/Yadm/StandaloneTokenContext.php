@@ -2,7 +2,6 @@
 namespace Formapro\Pvm\Yadm;
 
 use Formapro\Pvm\Process;
-use Formapro\Pvm\ProcessStorage;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\TokenContext;
 use Formapro\Pvm\Uuid;
@@ -13,7 +12,7 @@ use Makasim\Yadm\Storage;
 class StandaloneTokenContext implements TokenContext
 {
     /**
-     * @var ProcessStorage
+     * @var Storage
      */
     private $processStorage;
 
@@ -22,7 +21,7 @@ class StandaloneTokenContext implements TokenContext
      */
     private $tokenStorage;
 
-    public function __construct(ProcessStorage $processStorage, Storage $tokenStorage)
+    public function __construct(Storage $processStorage, Storage $tokenStorage)
     {
         $this->processStorage = $processStorage;
         $this->tokenStorage = $tokenStorage;

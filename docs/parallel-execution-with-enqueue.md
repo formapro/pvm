@@ -22,11 +22,11 @@ use Formapro\Pvm\DefaultTokenContext;
 use Formapro\Pvm\DefaultBehaviorRegistry;
 use Formapro\Pvm\CallbackBehavior;
 use Formapro\Pvm\ProcessEngine;
-use Formapro\Pvm\ProcessStorage;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\Enqueue\AsyncTransition;
 use Formapro\Pvm\Uuid;
+use Formapro\Pvm\Yadm\TokenContext;
 use function Makasim\Values\register_object_hooks;
 
 register_object_hooks();
@@ -34,7 +34,7 @@ register_object_hooks();
 $client = new SimpleClient('amqp://');
 $asyncTransition = new AsyncTransition($client->getProducer());
 
-/** @var ProcessStorage $persistentStorage */
+/** @var \Makasim\Yadm\Storage $processStorage */
 
 $registry = new DefaultBehaviorRegistry();
 $registry->register('print_label', new CallbackBehavior(function(Token $token) {
@@ -63,7 +63,7 @@ $transition->setAsync(true);
 
 $firstTransition = $process->createTransition(null, $foo);
 
-$tokenContext = new DefaultTokenContext($persistentStorage);
+$tokenContext = new TokenContext($processStorage);
 
 $engine = new ProcessEngine($registry, $tokenContext, $asyncTransition);
 ```
@@ -102,23 +102,24 @@ Now, we have to configure a processor for the queue.
 
 namespace Acme;
 
-use Formapro\Pvm\ProcessEngine;
-use Formapro\Pvm\ProcessStorage;
-use Enqueue\SimpleClient\SimpleClient;
-use Formapro\Pvm\Enqueue\HandleAsyncTransitionProcessor;
-use Interop\Queue\PsrMessage;
-use Interop\Queue\PsrContext;
 use Enqueue\Client\Config;
+use Enqueue\SimpleClient\SimpleClient;
+use Formapro\Pvm\ProcessEngine;
+use Formapro\Pvm\Yadm\TokenContext;
+use Formapro\Pvm\Enqueue\HandleAsyncTransitionProcessor;
+use Makasim\Yadm\Storage;
 
 include __DIR__.'/config.php';
 
 /** 
  * @var SimpleClient $client
  * @var ProcessEngine $engine
- * @var ProcessStorage $persistentStorage 
+ * @var Storage $processStorage 
  */
 
-$processor = new HandleAsyncTransitionProcessor($engine, $persistentStorage);
+$tokenContext = new TokenContext($processStorage);
+
+$processor = new HandleAsyncTransitionProcessor($engine, $tokenContext);
 
 $client->bind(Config::COMMAND_TOPIC, HandleAsyncTransitionProcessor::COMMAND, $processor);
 
