@@ -1,7 +1,7 @@
 <?php
 namespace Formapro\Pvm;
 
-interface TokenContext
+interface DAL
 {
     public function createProcessToken(Process $process, string $id = null): Token;
 
@@ -16,5 +16,7 @@ interface TokenContext
 
     public function getToken(string $id): Token;
 
-    public function persist(Token $token): void;
+    public function persistToken(Token $token): void;
+
+    public function persistProcess(Process $process): void;
 }

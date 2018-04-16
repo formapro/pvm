@@ -6,7 +6,7 @@ use Formapro\Pvm\TokenLockerInterface;
 use Makasim\Yadm\PessimisticLock;
 use Makasim\Yadm\PessimisticLockException as YadmPessimisticLockException;
 
-class MongoTokenLocker implements TokenLockerInterface
+class TokenLocker implements TokenLockerInterface
 {
     /**
      * @var PessimisticLock

@@ -6,7 +6,7 @@ use Formapro\Pvm\Exception\WaitExecutionException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-final class ProcessEngine implements TokenContext
+final class ProcessEngine implements DAL
 {
     /**
      * @var BehaviorRegistry
@@ -19,9 +19,9 @@ final class ProcessEngine implements TokenContext
     private $asyncTransition;
 
     /**
-     * @var TokenContext
+     * @var DAL
      */
-    private $tokenContext;
+    private $dal;
 
     /**
      * @var Transition[]
@@ -40,11 +40,11 @@ final class ProcessEngine implements TokenContext
 
     public function __construct(
         BehaviorRegistry $behaviorRegistry,
-        TokenContext $tokenContext = null,
+        DAL $dal = null,
         AsyncTransition $asyncTransition = null
     ) {
         $this->behaviorRegistry = $behaviorRegistry;
-        $this->tokenContext = $tokenContext ?: new DefaultTokenContext(new NullProcessStorage());
+        $this->dal = $dal ?: new InMemoryDAL();
         $this->asyncTransition = $asyncTransition ?: new AsyncTransitionIsNotConfigured();
 
         $this->asyncTokens = [];
@@ -176,7 +176,7 @@ final class ProcessEngine implements TokenContext
 
                     $this->transition($token);
                 } else {
-                    $newToken = $this->tokenContext->forkProcessToken($token);
+                    $newToken = $this->forkProcessToken($token);
                     $newToken->addTransition(TokenTransition::createFor($transition, $transition->getWeight()));
                     $newToken->getCurrentTransition()->setWeight($tokenTransition->getWeight());
 
@@ -184,18 +184,18 @@ final class ProcessEngine implements TokenContext
                 }
             }
 
-            $this->tokenContext->persist($token);
+            $this->persistToken($token);
         } catch (InterruptExecutionException $e) {
             $tokenTransition->setInterrupted();
 
-            $this->tokenContext->persist($token);
+            $this->persistToken($token);
 
             return;
         } catch (WaitExecutionException $e) {
             $tokenTransition->setWaiting();
             $this->waitTokens[] = $token;
 
-            $this->tokenContext->persist($token);
+            $this->persistToken($token);
 
             return;
         }
@@ -222,31 +222,36 @@ final class ProcessEngine implements TokenContext
 
     public function createProcessToken(Process $process, string $id = null): Token
     {
-        return $this->tokenContext->createProcessToken($process, $id);
+        return $this->dal->createProcessToken($process, $id);
     }
 
     public function forkProcessToken(Token $token, string $id = null): Token
     {
-        return $this->tokenContext->forkProcessToken($token, $id);
+        return $this->dal->forkProcessToken($token, $id);
     }
 
     public function getProcessTokens(Process $process): \Traversable
     {
-        return $this->tokenContext->getProcessTokens($process);
+        return $this->dal->getProcessTokens($process);
     }
 
     public function getProcessToken(Process $process, string $id): Token
     {
-        return $this->tokenContext->getProcessToken($process, $id);
+        return $this->dal->getProcessToken($process, $id);
     }
 
-    public function persist(Token $token): void
+    public function persistToken(Token $token): void
     {
-        $this->tokenContext->persist($token);
+        $this->dal->persistToken($token);
+    }
+
+    public function persistProcess(Process $process): void
+    {
+        $this->dal->persistProcess($process);
     }
 
     public function getToken(string $id): Token
     {
-        return $this->tokenContext->getToken($id);
+        return $this->dal->getToken($id);
     }
 }

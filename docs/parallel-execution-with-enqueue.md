@@ -18,7 +18,6 @@ We need the `enqueue/simple-client` library and one of the transports, for examp
 namespace Acme;
 
 use Enqueue\SimpleClient\SimpleClient;
-use Formapro\Pvm\DefaultTokenContext;
 use Formapro\Pvm\DefaultBehaviorRegistry;
 use Formapro\Pvm\CallbackBehavior;
 use Formapro\Pvm\ProcessEngine;
@@ -26,7 +25,9 @@ use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\Enqueue\AsyncTransition;
 use Formapro\Pvm\Uuid;
-use Formapro\Pvm\Yadm\TokenContext;
+use Formapro\Pvm\Yadm\InProcessDAL;
+use Makasim\Yadm\Hydrator;
+use Makasim\Yadm\Storage;
 use function Makasim\Values\register_object_hooks;
 
 register_object_hooks();
@@ -61,11 +62,13 @@ $process->createTransition($foo, $bar);
 $transition = $process->createTransition($foo, $baz);
 $transition->setAsync(true);
 
-$firstTransition = $process->createTransition(null, $foo);
+$client = new \MongoDB\Client();
+$collection = $client->selectCollection('pvm', 'process');
+$processStorage = new Storage($collection, new Hydrator(Process::class));
 
-$tokenContext = new TokenContext($processStorage);
+$dal = new InProcessDAL($processStorage);
 
-$engine = new ProcessEngine($registry, $tokenContext, $asyncTransition);
+$engine = new ProcessEngine($registry, $dal, $asyncTransition);
 ```
 
 ## Execute process
@@ -105,7 +108,6 @@ namespace Acme;
 use Enqueue\Client\Config;
 use Enqueue\SimpleClient\SimpleClient;
 use Formapro\Pvm\ProcessEngine;
-use Formapro\Pvm\Yadm\TokenContext;
 use Formapro\Pvm\Enqueue\HandleAsyncTransitionProcessor;
 use Makasim\Yadm\Storage;
 
@@ -114,12 +116,10 @@ include __DIR__.'/config.php';
 /** 
  * @var SimpleClient $client
  * @var ProcessEngine $engine
- * @var Storage $processStorage 
+ * @var Storage $processStorage
  */
 
-$tokenContext = new TokenContext($processStorage);
-
-$processor = new HandleAsyncTransitionProcessor($engine, $tokenContext);
+$processor = new HandleAsyncTransitionProcessor($engine);
 
 $client->bind(Config::COMMAND_TOPIC, HandleAsyncTransitionProcessor::COMMAND, $processor);
 

@@ -6,7 +6,7 @@ use function Makasim\Values\get_object;
 use function Makasim\Values\get_objects;
 use function Makasim\Values\set_object;
 
-class DefaultTokenContext implements TokenContext
+class InMemoryDAL implements DAL
 {
     public function createProcessToken(Process $process, string $id = null): Token
     {
@@ -47,12 +47,15 @@ class DefaultTokenContext implements TokenContext
         return $token;
     }
 
-    public function getToken(string $id): Token
+    public function persistToken(Token $token): void
     {
-        throw new \LogicException('The context does not support this method.');
     }
 
-    public function persist(Token $token): void
+    public function persistProcess(Process $process): void
+    {
+    }
+
+    public function getToken(string $id): Token
     {
         throw new \LogicException('The context does not support this method.');
     }

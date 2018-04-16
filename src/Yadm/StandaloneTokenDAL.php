@@ -3,13 +3,14 @@ namespace Formapro\Pvm\Yadm;
 
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
-use Formapro\Pvm\TokenContext;
+use Formapro\Pvm\DAL;
 use Formapro\Pvm\Uuid;
 use function Makasim\Values\get_value;
 use function Makasim\Values\set_value;
+use function Makasim\Yadm\get_object_id;
 use Makasim\Yadm\Storage;
 
-class StandaloneTokenContext implements TokenContext
+class StandaloneTokenDAL implements DAL
 {
     /**
      * @var Storage
@@ -80,7 +81,7 @@ class StandaloneTokenContext implements TokenContext
         }
 
         $processId = get_value($token, 'processId');
-        if (false == $process = $this->processStorage->get($processId)) {
+        if (false == $process = $this->processStorage->findOne(['id' => $processId])) {
             throw new TokenException(sprintf('The process "%s" could not be found', $processId));
         }
 
@@ -89,9 +90,15 @@ class StandaloneTokenContext implements TokenContext
         return $token;
     }
 
-    public function persist(Token $token): void
+    public function persistToken(Token $token): void
     {
+        $this->persistProcess($token->getProcess());
+
         $this->tokenStorage->update($token);
-        $this->processStorage->persist($token->getProcess());
+    }
+
+    public function persistProcess(Process $process): void
+    {
+        get_object_id($process) ? $this->processStorage->update($process) : $this->processStorage->insert($process);
     }
 }
