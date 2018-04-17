@@ -235,6 +235,8 @@ final class ProcessEngine implements DAL
         if ($transition->isAsync()) {
             $this->asyncTokens[] = $token;
 
+            $this->persistToken($token);
+
             return;
         }
 
