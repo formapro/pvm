@@ -41,6 +41,16 @@ class TokenTransition
         return get_value($this, 'id');
     }
 
+    public function setTransitionId(string $id): void
+    {
+        set_value($this, 'transitionId', $id);
+    }
+
+    public function getTransitionId(): string
+    {
+        return get_value($this, 'transitionId');
+    }
+
     /**
      * @return Process
      */
@@ -144,10 +154,23 @@ class TokenTransition
     public static function createFor(Transition $transition, int $weight): TokenTransition
     {
         $tokenTransition = static::create();
-        $tokenTransition->setId($transition->getId());
+        $tokenTransition->setId(Uuid::generate());
+        $tokenTransition->setTransitionId($transition->getId());
         $tokenTransition->setWeight($weight);
         $tokenTransition->setOpened();
         $tokenTransition->setTime((int) (microtime(true) * 10000));
+
+        return $tokenTransition;
+    }
+
+    public static function createForNewState(Token $token, string $state): TokenTransition
+    {
+        $tokenTransition = static::createFor(
+            $token->getCurrentTransition()->getTransition(),
+            $token->getCurrentTransition()->getTransition()->getWeight()
+        );
+
+        $tokenTransition->setState($state);
 
         return $tokenTransition;
     }

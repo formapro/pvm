@@ -102,7 +102,7 @@ class Process
     {
         /** @var Transition $transition */
         if (null === $transition = get_object($this, 'transitions.'.$id, ClassClosure::create())) {
-            throw new \LogicException('Not found');
+            throw new \LogicException(sprintf('Transition "%s" could not be found', $id));
         }
 
         $transition->setProcess($this);

@@ -125,7 +125,7 @@ final class ProcessEngine implements DAL
                 $behaviorResult = $behavior->execute($token);
             }
 
-            $tokenTransition->setPassed();
+            $token->addTransition(TokenTransition::createForNewState($token, TokenTransition::STATE_PASSED));
 
             if (false == $behaviorResult) {
                 $tmpTransitions = [];
@@ -197,13 +197,14 @@ final class ProcessEngine implements DAL
 
             $this->persistToken($token);
         } catch (InterruptExecutionException $e) {
+            $token->addTransition(TokenTransition::createForNewState($token, TokenTransition::STATE_INTERRUPTED));
             $tokenTransition->setInterrupted();
 
             $this->persistToken($token);
 
             return;
         } catch (WaitExecutionException $e) {
-            $tokenTransition->setWaiting();
+            $token->addTransition(TokenTransition::createForNewState($token, TokenTransition::STATE_WAITING));
             $this->waitTokens[] = $token;
 
             $this->persistToken($token);
