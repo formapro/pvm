@@ -74,7 +74,7 @@ class VisualizeFlow
                     $edge->getVertexEnd()->setAttribute('graphviz.color', 'red');
                 }
 
-                if (false != $transition->getFrom() && empty($process->getOutTransitions($transition->getTo()))) {
+                if (empty($process->getOutTransitions($transition->getTo()))) {
                     $from = $graph->getVertex($transition->getTo()->getId());
                     $endEdge = $from->getEdgesTo($endVertex)->getEdgeFirst();
 
