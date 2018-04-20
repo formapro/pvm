@@ -69,7 +69,7 @@ class TokenTransition
 
     public function getTransition(): Transition
     {
-        return $this->getProcess()->getTransition($this->getId());
+        return $this->getProcess()->getTransition($this->getTransitionId());
     }
 
     /**

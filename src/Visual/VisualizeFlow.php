@@ -37,10 +37,10 @@ class VisualizeFlow
 
             if ($transition->getFrom() && $transition->getTo()) {
                 $this->createMiddleTransition($graph, $transition);
+            }
 
-                if (empty($process->getOutTransitions($transition->getTo()))) {
-                    $this->createEndTransition($graph, $endVertex, $transition);
-                }
+            if (empty($process->getOutTransitions($transition->getTo()))) {
+                $this->createEndTransition($graph, $endVertex, $transition);
             }
         }
 
