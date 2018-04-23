@@ -204,7 +204,10 @@ final class ProcessEngine implements DAL
 
             return;
         } catch (WaitExecutionException $e) {
-            $token->addTransition(TokenTransition::createForNewState($token, TokenTransition::STATE_WAITING));
+            if ($e->isCreateWaitingTransition()) {
+                $token->addTransition(TokenTransition::createForNewState($token, TokenTransition::STATE_WAITING));
+            }
+
             $this->waitTokens[] = $token;
 
             $this->persistToken($token);
