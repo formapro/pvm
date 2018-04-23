@@ -1,6 +1,6 @@
 # Process virtual machine
 
-The library provides us with a frame to build a [workflow](https://en.wikipedia.org/wiki/Workflow) or business processes such as [BPMN](http://www.bpmn.org/). 
+The library provides tooling to build a [workflow](https://en.wikipedia.org/wiki/Workflow) or a business process (like [BPMN](http://www.bpmn.org/)). 
 It works like this: you build a process, create nodes and transitions, link them up. Than you can do:
 
 * Save process and execute later.
