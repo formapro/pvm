@@ -7,7 +7,11 @@ You must also provide a persisted storage as second argument.
   
 ## Install Enqueue  
  
-We need the `enqueue/simple-client` library and one of the transports, for example `enqueue/fs`. More [here](https://github.com/php-enqueue/enqueue-dev/blob/master/docs/client/quick_tour.md)
+We need the `enqueue/simple-client` library and one of the [supported transports](https://github.com/php-enqueue/enqueue-dev/tree/master/docs/transport), for example `enqueue/fs`. More about the client [here](https://github.com/php-enqueue/enqueue-dev/blob/master/docs/client/quick_tour.md)
+
+```bash
+$ composer req enqueue/simple-client enqueue/fs
+```
 
 ## Process engine configuration
  
