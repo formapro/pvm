@@ -7,7 +7,7 @@ You must also provide a persisted storage as second argument.
   
 ## Install Enqueue  
  
-We need the `enqueue/simple-client` library and one of the transports, for example `entransitionp-ext`. More [here](https://github.com/php-enqueue/enqueue-dev/blob/master/docs/client/quick_tour.md)
+We need the `enqueue/simple-client` library and one of the transports, for example `enqueue/fs`. More [here](https://github.com/php-enqueue/enqueue-dev/blob/master/docs/client/quick_tour.md)
 
 ## Process engine configuration
  
