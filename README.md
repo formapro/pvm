@@ -1,6 +1,6 @@
-# Process virtual machine
+# PHP Process virtual machine
 
-The library provides tooling to build a [workflow](https://en.wikipedia.org/wiki/Workflow) or a business process (like [BPMN](http://www.bpmn.org/)). 
+The library provides tooling to build [workflows](https://en.wikipedia.org/wiki/Workflow), [BPMN](http://www.bpmn.org/) like processes, or [state machines](https://en.wikipedia.org/wiki/Finite-state_machine).
 
 It works like this: you build a process, create nodes and transitions, link them up. Than you can do:
 
