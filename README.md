@@ -1,6 +1,6 @@
 # PHP Process virtual machine
 
-The library provides tooling to build\execute\visualise [workflows](https://en.wikipedia.org/wiki/Workflow), [BPMN](http://www.bpmn.org/) like processes, or [state machines](https://en.wikipedia.org/wiki/Finite-state_machine).
+The library provides tooling to build/execute/visualise [workflows](https://en.wikipedia.org/wiki/Workflow), [BPMN](http://www.bpmn.org/) like processes, or [state machines](https://en.wikipedia.org/wiki/Finite-state_machine).
 
 It works like this: you build a process, create nodes and transitions, link them up. Than you can do:
 
@@ -10,7 +10,7 @@ It works like this: you build a process, create nodes and transitions, link them
 * Supports async transition. Execute tasks in parallel.
 * Supports fork-join, conditions, cycles 
 
-It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories. . Here's a good [post on how Petri Nets works](https://www.techfak.uni-bielefeld.de/~mchen/BioPNML/Intro/pnfaq.html)
+It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories. Here's a good [post on how Petri Nets works](https://www.techfak.uni-bielefeld.de/~mchen/BioPNML/Intro/pnfaq.html)
 
 ![Example](docs/images/pizza-process.png)
         
