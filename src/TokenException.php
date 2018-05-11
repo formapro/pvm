@@ -1,5 +1,5 @@
 <?php
-namespace Formapro\Pvm\Yadm;
+namespace Formapro\Pvm;
 
 class TokenException extends \LogicException
 {

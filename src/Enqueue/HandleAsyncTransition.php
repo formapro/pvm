@@ -3,7 +3,6 @@ namespace Formapro\Pvm\Enqueue;
 
 use Enqueue\Util\JSON;
 use Formapro\Pvm\Token;
-use Formapro\Pvm\Yadm\TokenException;
 
 class HandleAsyncTransition implements \JsonSerializable
 {

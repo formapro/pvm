@@ -6,11 +6,11 @@ use Enqueue\Consumption\QueueSubscriberInterface;
 use Formapro\Pvm\NullTokenLocker;
 use Formapro\Pvm\PessimisticLockException;
 use Formapro\Pvm\TokenLockerInterface;
-use Formapro\Pvm\Yadm\TokenException;
+use Formapro\Pvm\TokenException;
+use Formapro\Pvm\ProcessEngine;
 use Interop\Queue\PsrContext;
 use Interop\Queue\PsrMessage;
 use Interop\Queue\PsrProcessor;
-use Formapro\Pvm\ProcessEngine;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
