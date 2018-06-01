@@ -146,6 +146,16 @@ class TokenTransition
         return get_value($this, 'time');
     }
 
+    public function setReason(string $reason = null): void
+    {
+        set_value($this, 'reason', $reason);
+    }
+
+    public function getReason(): ?string
+    {
+        return get_value($this, 'reason');
+    }
+
     private function setState($state): void
     {
         set_value($this, 'state', $state);

@@ -199,13 +199,17 @@ final class ProcessEngine implements DAL
         } catch (InterruptExecutionException $e) {
             $token->addTransition(TokenTransition::createForNewState($token, TokenTransition::STATE_INTERRUPTED));
             $tokenTransition->setInterrupted();
+            $tokenTransition->setReason($e->getMessage());
 
             $this->persistToken($token);
 
             return;
         } catch (WaitExecutionException $e) {
             if ($e->isCreateWaitingTransition()) {
-                $token->addTransition(TokenTransition::createForNewState($token, TokenTransition::STATE_WAITING));
+                $tokenTransition = TokenTransition::createForNewState($token, TokenTransition::STATE_WAITING);
+                $tokenTransition->setReason($e->getMessage());
+
+                $token->addTransition($tokenTransition);
             }
 
             $this->waitTokens[] = $token;
