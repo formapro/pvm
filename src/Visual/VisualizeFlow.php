@@ -103,6 +103,7 @@ class VisualizeFlow
         $options = get_object($node, 'visual', Options::class) ?: new Options();
         $vertex = $graph->createVertex($node->getId());
         $vertex->setAttribute('graphviz.label', $node->getLabel());
+        $vertex->setAttribute('graphviz.id', $node->getId());
 
         switch ($options->getType()) {
             case 'gateway':
@@ -149,6 +150,7 @@ class VisualizeFlow
 
         $edge = $from->createEdgeTo($to);
         $edge->setAttribute('pvm.transition_id', $transition->getId());
+        $edge->setAttribute('graphviz.id', $transition->getId());
         $edge->setAttribute(
             'graphviz.label',
             $transition->getName()
