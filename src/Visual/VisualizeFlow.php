@@ -22,6 +22,10 @@ class VisualizeFlow
         $graph->setAttribute('graphviz.graph.ranksep', 1);
 //        $graph->setAttribute('graphviz.graph.constraint', false);
 //        $graph->setAttribute('graphviz.graph.splines', 'ortho');
+        $graph->setAttribute('alom.graphviz', [
+            'rankdir' => 'TB',
+            'ranksep' => 1,
+        ]);
 
         $startVertex = $this->createStartVertex($graph);
         $endVertex = $this->createEndVertex($graph);
@@ -63,12 +67,15 @@ class VisualizeFlow
                 $transition = $tokenTransition->getTransition();
                 $edge = $this->findTransitionEdge($graph, $transition);
 
+                $alomEdgeAttributes = $edge->getAttribute('alom.graphviz', []);
+
                 if ($edge->getAttribute('pvm.state') === TokenTransition::STATE_PASSED) {
                     continue;
                 }
 
                 $edge->setAttribute('pvm.state', $tokenTransition->getState());
                 $edge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
+                $alomEdgeAttributes['color'] = $this->guessTransitionColor($tokenTransition);
 
                 if ($hasException) {
                     $edge->getVertexEnd()->setAttribute('graphviz.color', 'red');
@@ -81,8 +88,11 @@ class VisualizeFlow
                     if ($edge->getAttribute('pvm.state') === TokenTransition::STATE_PASSED) {
                         $endEdge->setAttribute('pvm.state', $tokenTransition->getState());
                         $endEdge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
+                        $alomEdgeAttributes['color'] = $this->guessTransitionColor($tokenTransition);
                     }
                 }
+
+                $edge->setAttribute('alom.graphviz', $alomEdgeAttributes);
             }
         }
     }
@@ -105,6 +115,10 @@ class VisualizeFlow
         $vertex->setAttribute('graphviz.label', $node->getLabel());
         $vertex->setAttribute('graphviz.id', $node->getId());
 
+        if (null !== $groupId = $node->getOption('group')) {
+            $vertex->setAttribute('alom.graphviz_subgroup', $groupId);
+        }
+
         switch ($options->getType()) {
             case 'gateway':
                 $shape = 'diamond';
@@ -114,6 +128,12 @@ class VisualizeFlow
         }
 
         $vertex->setAttribute('graphviz.shape', $shape);
+
+        $vertex->setAttribute('alom.graphviz', [
+            'label' => $node->getLabel(),
+            'id' => $node->getId(),
+            'shape' => $shape,
+        ]);
 
         return $vertex;
     }
@@ -128,6 +148,10 @@ class VisualizeFlow
             'graphviz.label',
             $transition->getName()
         );
+
+        $edge->setAttribute('alom.graphviz', [
+            'label' => $transition->getName(),
+        ]);
     }
 
     private function createEndTransition(Graph $graph, Vertex $to, Transition $transition)
@@ -141,6 +165,10 @@ class VisualizeFlow
         }
 
         $edge->setAttribute('graphviz.label', $transition->getName());
+
+        $edge->setAttribute('alom.graphviz', [
+            'label' => $transition->getName(),
+        ]);
     }
 
     private function createMiddleTransition(Graph $graph, Transition $transition)
@@ -155,6 +183,11 @@ class VisualizeFlow
             'graphviz.label',
             $transition->getName()
         );
+
+        $edge->setAttribute('alom.graphviz', [
+            'id' => $transition->getId(),
+            'label' => $transition->getName(),
+        ]);
     }
 
     /**
@@ -169,6 +202,12 @@ class VisualizeFlow
             $vertex->setAttribute('graphviz.label', 'Start');
             $vertex->setAttribute('graphviz.color', 'blue');
             $vertex->setAttribute('graphviz.shape', 'circle');
+
+            $vertex->setAttribute('alom.graphviz', [
+                'label' => 'Start',
+                'color' => 'blue',
+                'shape' => 'circle',
+            ]);
         }
 
         return $graph->getVertex('__start');
@@ -186,6 +225,12 @@ class VisualizeFlow
             $vertex->setAttribute('graphviz.label', 'End');
             $vertex->setAttribute('graphviz.color', 'red');
             $vertex->setAttribute('graphviz.shape', 'circle');
+
+            $vertex->setAttribute('alom.graphviz', [
+                'label' => 'End',
+                'color' => 'red',
+                'shape' => 'circle',
+            ]);
         }
 
         return $graph->getVertex('__end');
