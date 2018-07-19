@@ -35,3 +35,7 @@ Being a team of strong professionals we have an aim an ability to help community
 Our main specialization is Symfony framework based solution, but we are always looking to the technologies that allow us to do our job the best way. We are committed to creating solutions that revolutionize the way how things are developed in aspects of architecture & scalability.
 
 If you have any questions and inquires about our open source development, this product particularly or any other matter feel free to contact at opensource@forma-pro.com
+
+## License 
+
+MIT
