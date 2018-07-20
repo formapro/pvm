@@ -79,6 +79,11 @@ class VisualizeFlow
 
                 if ($hasException) {
                     $edge->getVertexEnd()->setAttribute('graphviz.color', 'red');
+
+                    $vertexEndAlomAttributes = $edge->getVertexEnd()->getAttribute('alom.graphviz', []);
+                    $vertexEndAlomAttributes['color'] = 'red';
+
+                    $edge->getVertexEnd()->setAttribute('alom.graphviz', $vertexEndAlomAttributes);
                 }
 
                 if (empty($process->getOutTransitions($transition->getTo()))) {
@@ -88,7 +93,10 @@ class VisualizeFlow
                     if ($edge->getAttribute('pvm.state') === TokenTransition::STATE_PASSED) {
                         $endEdge->setAttribute('pvm.state', $tokenTransition->getState());
                         $endEdge->setAttribute('graphviz.color', $this->guessTransitionColor($tokenTransition));
-                        $alomEdgeAttributes['color'] = $this->guessTransitionColor($tokenTransition);
+
+                        $endEdgeAlomAttribute = $endEdge->getAttribute('alom.graphviz', []);
+                        $endEdgeAlomAttribute['color'] = $this->guessTransitionColor($tokenTransition);
+                        $endEdge->setAttribute('alom.graphviz', $endEdgeAlomAttribute);
                     }
                 }
 
