@@ -8,12 +8,26 @@ class DefaultBehaviorRegistry implements BehaviorRegistry
      */
     private $behaviors;
 
+    public function __construct(array $behaviors = [])
+    {
+        foreach ($behaviors as $name => $behavior) {
+            $this->register($name, $behavior);
+        }
+    }
+
     /**
      * @param string   $name
-     * @param Behavior $behavior
+     * @param callable|Behavior $behavior
      */
-    public function register($name, Behavior $behavior)
+    public function register($name, $behavior)
     {
+        if (is_callable($behavior)) {
+            $behavior = new CallbackBehavior($behavior);
+        }
+        if (false == $behavior instanceof Behavior) {
+            throw new \InvalidArgumentException('The behavior must be callable or instance of Behavior.');
+        }
+
         $this->behaviors[$name] = $behavior;
     }
 

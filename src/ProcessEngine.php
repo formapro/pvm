@@ -256,6 +256,19 @@ final class ProcessEngine implements DAL
         return $this->dal->createProcessToken($process, $id);
     }
 
+    public function createToken(Process $process, string $id = null): Token
+    {
+        return $this->dal->createProcessToken($process, $id);
+    }
+
+    public function createTokenFor(Transition $transition, int $weight = 1, string $id = null): Token
+    {
+        $token = $this->dal->createProcessToken($transition->getProcess(), $id);
+        $token->addTransition(TokenTransition::createFor($transition, $weight));
+
+        return $token;
+    }
+
     public function forkProcessToken(Token $token, string $id = null): Token
     {
         return $this->dal->forkProcessToken($token, $id);

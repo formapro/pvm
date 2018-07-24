@@ -93,6 +93,31 @@ class Process
         return $transitions;
     }
 
+    public function getStartTransition(): Transition
+    {
+        $startTransitions = $this->getStartTransitions();
+        if (count($startTransitions) !== 1) {
+            throw new \LogicException(sprintf('There is one start transition expected but got "%s"', count($startTransitions)));
+        }
+
+        return $startTransitions[0];
+    }
+
+    /**
+     * @return array|Transition[]
+     */
+    public function getStartTransitions(): array
+    {
+        $startTransitions = [];
+        foreach ($this->getTransitions() as $transition) {
+            if (null === $transition->getFrom()) {
+                $startTransitions[] = $transition;
+            }
+        }
+
+        return $startTransitions;
+    }
+
     /**
      * @param string $id
      *
@@ -166,6 +191,8 @@ class Process
     }
 
     /**
+     * @deprecated
+     *
      * @param Node $node
      */
     public function registerNode(Node $node)
@@ -176,6 +203,8 @@ class Process
     }
 
     /**
+     * @deprecated
+     *
      * @param string $id
      *
      * @return Node
@@ -192,6 +221,8 @@ class Process
     }
 
     /**
+     * @deprecated
+     *
      * @param Node|null $from
      * @param Node|null $to
      * @param string|null $name
@@ -219,6 +250,9 @@ class Process
         return $transition;
     }
 
+    /**
+     * @deprecated
+     */
     public function breakTransition(Transition $transition, Node $node, string $newName = null): Transition
     {
         $oldTo = $transition->getTo();
