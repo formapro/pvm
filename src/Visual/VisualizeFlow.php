@@ -120,7 +120,7 @@ class VisualizeFlow
         /** @var Options $options */
         $options = get_object($node, 'visual', Options::class) ?: new Options();
         $vertex = $graph->createVertex($node->getId());
-        $vertex->setAttribute('graphviz.label', $node->getLabel());
+        $vertex->setAttribute('graphviz.label', $node->getLabel() ?: $node->getId());
         $vertex->setAttribute('graphviz.id', $node->getId());
 
         if (null !== $groupId = $node->getOption('group')) {
@@ -138,7 +138,7 @@ class VisualizeFlow
         $vertex->setAttribute('graphviz.shape', $shape);
 
         $vertex->setAttribute('alom.graphviz', [
-            'label' => $node->getLabel(),
+            'label' => $node->getLabel() ?: $node->getId(),
             'id' => $node->getId(),
             'shape' => $shape,
         ]);
