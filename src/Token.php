@@ -2,21 +2,20 @@
 namespace Formapro\Pvm;
 
 use function Makasim\Values\add_object;
-use function Makasim\Values\add_value;
-use function Makasim\Values\clone_object;
-use function Makasim\Values\get_object;
 use function Makasim\Values\get_objects;
 use function Makasim\Values\get_value;
-use function Makasim\Values\set_object;
 use function Makasim\Values\set_value;
+use Makasim\Values\ValuesTrait;
 
 class Token
 {
     const SCHEMA = 'http://pvm.forma-pro.com/schemas/Token.json';
 
     use CreateTrait;
-
-    protected $values = [];
+    use ValuesTrait {
+        getValue as public;
+        setValue as public;
+    }
 
     /**
      * @var Process
@@ -98,5 +97,15 @@ class Token
         });
 
         return $transitions;
+    }
+
+    public function getTo(): ?Node
+    {
+        return $this->getCurrentTransition()->getTransition()->getTo();
+    }
+
+    public function getFrom(): ?Node
+    {
+        return $this->getCurrentTransition()->getTransition()->getFrom();
     }
 }
