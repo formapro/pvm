@@ -19,7 +19,6 @@
     "require": {
         "php": "^7.1",
         "makasim/values": "0.5.x-dev",
-        "symfony/console": "^3.1|^4",
         "ramsey/uuid": "^3",
         "psr/log": "^1"
     },
