@@ -16,17 +16,19 @@ It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri
         
 ## Examples
 
-* [Sequence](docs/sequence-example.md)
-* [Fork](docs/fork-example.md)
-* [Conditions](docs/conditions-example.md)
-* [Cycles](docs/cycle-example.md)
-* [Synchronization](docs/synchronization-example.md)
-* [Pause and continue](docs/pause-and-continue-example.md)
+Checkout [PVM Examples](http://206.189.12.53/) site.
+
+* [Sequence](http://206.189.12.53/demo/sequence)
+* [Fork](http://206.189.12.53/demo/fork)
+* [Conditions](http://206.189.12.53/demo/condition)
+* [Cycles](http://206.189.12.53/demo/cycle)
+* [Synchronization](http://206.189.12.53/demo/synchronization)
+* [Pause and continue](http://206.189.12.53/demo/pause-and-contiue)
 * [Parallel execution](docs/parallel-execution-with-enqueue.md) (require [enqueue/simple-client](https://github.com/php-enqueue/enqueue-dev/blob/master/docs/client/quick_tour.md))
 * [Delayed transtions](docs/delayed-execution-with-quartz.md) (require [php-quartz/quartz](https://github.com/php-quartz/quartz))
 * [Mongo storage](docs/mongo-storage-example.md)
 * [Gallery](docs/gallery.md)
-* [Online demo](https://pvm-demo.forma-pro.com), [code](https://github.com/formapro/pvm-demo)
+* [Online demo](http://206.189.12.53/)
 
 ## Developed by Forma-Pro
 
