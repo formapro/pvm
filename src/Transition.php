@@ -44,7 +44,7 @@ class Transition
         return get_value($this, 'id');
     }
 
-    public function getName(): string
+    public function getName()
     {
         return get_value($this, 'name');
     }
@@ -76,13 +76,11 @@ class Transition
     /**
      * @return Node
      */
-    public function getFrom(): Node
+    public function getFrom()
     {
         if ($id = get_value($this, 'from')) {
             return $this->_process->getNode($id);
         }
-
-        return null;
     }
 
     /**
@@ -96,13 +94,11 @@ class Transition
     /**
      * @return Node
      */
-    public function getTo(): Node
+    public function getTo()
     {
         if ($id = get_value($this, 'to')) {
             return $this->_process->getNode($id);
         }
-
-        return null;
     }
 
     /**
