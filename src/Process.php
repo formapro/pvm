@@ -22,7 +22,7 @@ class Process
 
     protected $objects = [];
 
-    public function setId(string $id): void
+    public function setId(string $id)
     {
         set_value($this, 'id', $id);
     }
@@ -32,7 +32,7 @@ class Process
         return get_value($this, 'id');
     }
 
-    public function setExecutionId(string $id): void
+    public function setExecutionId(string $id)
     {
         set_value($this, 'executionId', $id);
     }

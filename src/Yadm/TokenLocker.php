@@ -18,7 +18,7 @@ class TokenLocker implements TokenLockerInterface
         $this->lock = $lock;
     }
 
-    public function lock(string $tokenId, bool $blocking = true): void
+    public function lock(string $tokenId, bool $blocking = true)
     {
         try {
             $this->lock->lock($tokenId, $blocking);
@@ -27,7 +27,7 @@ class TokenLocker implements TokenLockerInterface
         }
     }
 
-    public function unlock(string $tokenId): void
+    public function unlock(string $tokenId)
     {
         $this->lock->unlock($tokenId);
     }

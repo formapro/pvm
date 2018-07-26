@@ -8,7 +8,7 @@ class HandleAsyncTransitionResult extends Result
 {
     private $waitTokens = [];
 
-    public function setWaitTokens(array $tokens): void
+    public function setWaitTokens(array $tokens)
     {
         $this->waitTokens = $tokens;
     }

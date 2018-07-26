@@ -28,7 +28,7 @@ class TokenTransition
     /**
      * @param string $id
      */
-    public function setId(string $id): void
+    public function setId(string $id)
     {
         set_value($this, 'id', $id);
     }
@@ -41,7 +41,7 @@ class TokenTransition
         return get_value($this, 'id');
     }
 
-    public function setTransitionId(string $id): void
+    public function setTransitionId(string $id)
     {
         set_value($this, 'transitionId', $id);
     }
@@ -62,7 +62,7 @@ class TokenTransition
     /**
      * @param Process $process
      */
-    public function setProcess(Process $process): void
+    public function setProcess(Process $process)
     {
         $this->_process = $process;
     }
@@ -83,7 +83,7 @@ class TokenTransition
     /**
      * @param int $weight
      */
-    public function setWeight(int $weight): void
+    public function setWeight(int $weight)
     {
         set_value($this, 'weight', $weight);
     }
@@ -96,7 +96,7 @@ class TokenTransition
         return get_value($this, 'state');
     }
 
-    public function setPassed(): void
+    public function setPassed()
     {
         $this->setState(self::STATE_PASSED);
     }
@@ -106,7 +106,7 @@ class TokenTransition
         return $this->getState() === self::STATE_PASSED;
     }
 
-    public function setInterrupted(): void
+    public function setInterrupted()
     {
         $this->setState(self::STATE_INTERRUPTED);
     }
@@ -116,7 +116,7 @@ class TokenTransition
         return $this->getState() === self::STATE_INTERRUPTED;
     }
 
-    public function setWaiting(): void
+    public function setWaiting()
     {
         $this->setState(self::STATE_WAITING);
     }
@@ -126,7 +126,7 @@ class TokenTransition
         return $this->getState() === self::STATE_WAITING;
     }
 
-    public function setOpened(): void
+    public function setOpened()
     {
         $this->setState(self::STATE_OPENED);
     }
@@ -136,7 +136,7 @@ class TokenTransition
         return $this->getState() === self::STATE_OPENED;
     }
 
-    public function setTime(int $time): void
+    public function setTime(int $time)
     {
         set_value($this, 'time', $time);
     }
@@ -146,7 +146,7 @@ class TokenTransition
         return get_value($this, 'time');
     }
 
-    public function setReason(string $reason = null): void
+    public function setReason(string $reason = null)
     {
         set_value($this, 'reason', $reason);
     }
@@ -156,7 +156,7 @@ class TokenTransition
         return get_value($this, 'reason');
     }
 
-    private function setState($state): void
+    private function setState($state)
     {
         set_value($this, 'state', $state);
     }

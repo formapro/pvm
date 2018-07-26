@@ -16,7 +16,7 @@ interface DAL
 
     public function getToken(string $id): Token;
 
-    public function persistToken(Token $token): void;
+    public function persistToken(Token $token);
 
-    public function persistProcess(Process $process): void;
+    public function persistProcess(Process $process);
 }

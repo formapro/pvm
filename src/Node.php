@@ -28,7 +28,7 @@ class Node
     /**
      * @param Process $process
      */
-    public function setProcess(Process $process): void
+    public function setProcess(Process $process)
     {
         $this->_process = $process;
     }
@@ -44,7 +44,7 @@ class Node
     /**
      * @param string $id
      */
-    public function setId(string $id): void
+    public function setId(string $id)
     {
         set_value($this, 'id', $id);
     }
@@ -60,7 +60,7 @@ class Node
     /**
      * @param string $label
      */
-    public function setLabel(string $label): void
+    public function setLabel(string $label)
     {
         set_value($this, 'label', $label);
     }
@@ -76,7 +76,7 @@ class Node
     /**
      * @param string|null $behavior
      */
-    public function setBehavior(string $behavior = null): void
+    public function setBehavior(string $behavior = null)
     {
         set_value($this, 'behavior', $behavior);
     }
@@ -85,7 +85,7 @@ class Node
      * @param string $key
      * @param mixed  $value
      */
-    public function setOption(string $key, $value): void
+    public function setOption(string $key, $value)
     {
         set_value($this, 'option.'.$key, $value);
     }

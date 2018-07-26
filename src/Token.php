@@ -30,7 +30,7 @@ class Token
     /**
      * @param string $id
      */
-    public function setId(string $id): void
+    public function setId(string $id)
     {
         set_value($this, 'id', $id);
     }
@@ -54,12 +54,12 @@ class Token
     /**
      * @param Process $process
      */
-    public function setProcess(Process $process): void
+    public function setProcess(Process $process)
     {
         $this->_process = $process;
     }
 
-    public function addTransition(TokenTransition $transition): void
+    public function addTransition(TokenTransition $transition)
     {
         $transition->setProcess($this->getProcess());
 
