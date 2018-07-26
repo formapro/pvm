@@ -24,11 +24,13 @@ Checkout [PVM Examples](http://206.189.12.53/) site.
 * [Cycles](http://206.189.12.53/demo/cycle)
 * [Synchronization](http://206.189.12.53/demo/synchronization)
 * [Pause and continue](http://206.189.12.53/demo/pause-and-contiue)
-* [Parallel execution](docs/parallel-execution-with-enqueue.md) (require [enqueue/simple-client](https://github.com/php-enqueue/enqueue-dev/blob/master/docs/client/quick_tour.md))
+* [Clone and Modify](http://206.189.12.53/demo/clone-and-modify)
+* [Store to File](http://206.189.12.53/demo/store-to-file)
+* [Store to MongoDB](http://206.189.12.53/demo/store-to-mongodb)
+* [Parallel execution](http://206.189.12.53/demo/parallel-execution)
 * [Delayed transtions](docs/delayed-execution-with-quartz.md) (require [php-quartz/quartz](https://github.com/php-quartz/quartz))
-* [Mongo storage](docs/mongo-storage-example.md)
 * [Gallery](docs/gallery.md)
-* [Online demo](http://206.189.12.53/)
+* [All examples](http://206.189.12.53/)
 
 ## Developed by Forma-Pro
 
