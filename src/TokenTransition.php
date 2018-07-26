@@ -151,7 +151,7 @@ class TokenTransition
         set_value($this, 'reason', $reason);
     }
 
-    public function getReason(): ?string
+    public function getReason(): string
     {
         return get_value($this, 'reason');
     }

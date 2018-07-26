@@ -44,7 +44,7 @@ class Transition
         return get_value($this, 'id');
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return get_value($this, 'name');
     }
@@ -76,7 +76,7 @@ class Transition
     /**
      * @return Node
      */
-    public function getFrom(): ?Node
+    public function getFrom(): Node
     {
         if ($id = get_value($this, 'from')) {
             return $this->_process->getNode($id);
@@ -96,7 +96,7 @@ class Transition
     /**
      * @return Node
      */
-    public function getTo(): ?Node
+    public function getTo(): Node
     {
         if ($id = get_value($this, 'to')) {
             return $this->_process->getNode($id);
@@ -116,7 +116,7 @@ class Transition
     /**
      * @return int
      */
-    public function getWeight(): ?int
+    public function getWeight(): int
     {
         return get_value($this, 'weight');
     }

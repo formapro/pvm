@@ -99,12 +99,12 @@ class Token
         return $transitions;
     }
 
-    public function getTo(): ?Node
+    public function getTo(): Node
     {
         return $this->getCurrentTransition()->getTransition()->getTo();
     }
 
-    public function getFrom(): ?Node
+    public function getFrom(): Node
     {
         return $this->getCurrentTransition()->getTransition()->getFrom();
     }

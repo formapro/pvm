@@ -68,7 +68,7 @@ class Node
     /**
      * @return string
      */
-    public function getBehavior(): ?string
+    public function getBehavior(): string
     {
         return get_value($this, 'behavior');
     }
