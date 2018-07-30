@@ -30,12 +30,12 @@ class InProcessDAL extends InMemoryDAL
         return $this->getProcessToken($process, $id);
     }
 
-    public function persistToken(Token $token): void
+    public function persistToken(Token $token)
     {
         $this->persistProcess($token->getProcess());
     }
 
-    public function persistProcess(Process $process): void
+    public function persistProcess(Process $process)
     {
         get_object_id($process) ? $this->processStorage->update($process) : $this->processStorage->insert($process);
     }

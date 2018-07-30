@@ -16,13 +16,11 @@ final class ClassClosure
      */
     private static $instance;
 
-    public function __invoke(array $values): ?string
+    public function __invoke(array $values)
     {
         if (array_key_exists('schema', $values) && array_key_exists($values['schema'], self::CLASS_MAP)) {
             return self::CLASS_MAP[$values['schema']];
         }
-
-        return null;
     }
 
     public static function create(): ClassClosure

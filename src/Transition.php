@@ -31,7 +31,7 @@ class Transition
     /**
      * @param string $id
      */
-    public function setId(string $id): void
+    public function setId(string $id)
     {
         set_value($this, 'id', $id);
     }
@@ -44,7 +44,7 @@ class Transition
         return get_value($this, 'id');
     }
 
-    public function getName(): ?string
+    public function getName()
     {
         return get_value($this, 'name');
     }
@@ -52,7 +52,7 @@ class Transition
     /**
      * @param string $name
      */
-    public function setName(string $name = null): void
+    public function setName(string $name = null)
     {
         set_value($this, 'name', $name);
     }
@@ -60,7 +60,7 @@ class Transition
     /**
      * @param Process $process
      */
-    public function setProcess(Process $process): void
+    public function setProcess(Process $process)
     {
         $this->_process = $process;
     }
@@ -76,19 +76,17 @@ class Transition
     /**
      * @return Node
      */
-    public function getFrom(): ?Node
+    public function getFrom()
     {
         if ($id = get_value($this, 'from')) {
             return $this->_process->getNode($id);
         }
-
-        return null;
     }
 
     /**
      * @param Node $node
      */
-    public function setFrom(Node $node): void
+    public function setFrom(Node $node)
     {
         set_value($this, 'from', $node->getId());
     }
@@ -96,19 +94,17 @@ class Transition
     /**
      * @return Node
      */
-    public function getTo(): ?Node
+    public function getTo()
     {
         if ($id = get_value($this, 'to')) {
             return $this->_process->getNode($id);
         }
-
-        return null;
     }
 
     /**
      * @param Node $node
      */
-    public function setTo(Node $node): void
+    public function setTo(Node $node)
     {
         set_value($this, 'to', $node->getId());
     }
@@ -116,7 +112,7 @@ class Transition
     /**
      * @return int
      */
-    public function getWeight(): ?int
+    public function getWeight(): int
     {
         return get_value($this, 'weight');
     }
@@ -124,7 +120,7 @@ class Transition
     /**
      * @param int $weight
      */
-    public function setWeight(int $weight = null): void
+    public function setWeight(int $weight = null)
     {
         set_value($this, 'weight', $weight);
     }
@@ -140,7 +136,7 @@ class Transition
     /**
      * @param boolean $async
      */
-    public function setAsync(bool $async): void
+    public function setAsync(bool $async)
     {
         set_value($this, 'async', $async);
     }
@@ -156,7 +152,7 @@ class Transition
     /**
      * @param boolean $active
      */
-    public function setActive(bool $active): void
+    public function setActive(bool $active)
     {
         set_value($this, 'active', $active);
     }

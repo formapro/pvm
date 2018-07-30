@@ -46,11 +46,11 @@ class InMemoryDAL implements DAL
         return $token;
     }
 
-    public function persistToken(Token $token): void
+    public function persistToken(Token $token)
     {
     }
 
-    public function persistProcess(Process $process): void
+    public function persistProcess(Process $process)
     {
     }
 

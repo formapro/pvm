@@ -284,12 +284,12 @@ final class ProcessEngine implements DAL
         return $this->dal->getProcessToken($process, $id);
     }
 
-    public function persistToken(Token $token): void
+    public function persistToken(Token $token)
     {
         $this->dal->persistToken($token);
     }
 
-    public function persistProcess(Process $process): void
+    public function persistProcess(Process $process)
     {
         $this->dal->persistProcess($process);
     }
@@ -299,7 +299,7 @@ final class ProcessEngine implements DAL
         return $this->dal->getToken($id);
     }
 
-    public function setLogException(bool $logException): void
+    public function setLogException(bool $logException)
     {
         $this->logException = $logException;
     }
