@@ -1,19 +1,8 @@
 # PHP Process virtual machine
 
-The library provides tooling to build/execute/visualise [workflows](https://en.wikipedia.org/wiki/Workflow), [BPMN](http://www.bpmn.org/) like processes, or [state machines](https://en.wikipedia.org/wiki/Finite-state_machine).
-
-It works like this: you build a process, create nodes and transitions, link them up. Than you can do:
-
-* Save process and execute later.
-* Clone and execute several processes.
-* Pause & continue execution. 
-* Supports async transition. Execute tasks in parallel.
-* Supports fork-join, conditions, cycles 
-
+The library provides tooling to build/execute/visualise [workflows](https://en.wikipedia.org/wiki/Workflow), [BPMN](http://www.bpmn.org/) like processes, or [state machines](https://en.wikipedia.org/wiki/Finite-state_machine). 
 It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories. Here's a good [post on how Petri Nets works](https://www.techfak.uni-bielefeld.de/~mchen/BioPNML/Intro/pnfaq.html)
 
-![Example](docs/images/pizza-process.png)
-        
 ## Examples
 
 Checkout [PVM Examples](https://pvm-demo.forma-pro.com/) site.
@@ -31,9 +20,6 @@ Checkout [PVM Examples](https://pvm-demo.forma-pro.com/) site.
 * [Store to MongoDB](https://pvm-demo.forma-pro.com/demo/store-to-mongodb)
 * [Store with Doctrine](http://pvm-demo.forma-pro.com/demo/store-to-mysql)
 * [Parallel execution](https://pvm-demo.forma-pro.com/demo/parallel-execution)
-* [Delayed transtions](docs/delayed-execution-with-quartz.md) (require [php-quartz/quartz](https://github.com/php-quartz/quartz))
-* [Gallery](docs/gallery.md)
-* [All examples](https://pvm-demo.forma-pro.com/)
 
 ## Developed by Forma-Pro
 
@@ -45,4 +31,4 @@ If you have any questions and inquires about our open source development, this p
 
 ## License 
 
-MIT
+[MIT License](LICENSE)
