@@ -16,21 +16,23 @@ It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri
         
 ## Examples
 
-Checkout [PVM Examples](http://206.189.12.53/) site.
+Checkout [PVM Examples](https://pvm-demo.forma-pro.com/) site.
 
-* [Sequence](http://206.189.12.53/demo/sequence)
-* [Fork](http://206.189.12.53/demo/fork)
-* [Conditions](http://206.189.12.53/demo/condition)
-* [Cycles](http://206.189.12.53/demo/cycle)
-* [Synchronization](http://206.189.12.53/demo/synchronization)
-* [Pause and continue](http://206.189.12.53/demo/pause-and-contiue)
-* [Clone and Modify](http://206.189.12.53/demo/clone-and-modify)
-* [Store to File](http://206.189.12.53/demo/store-to-file)
-* [Store to MongoDB](http://206.189.12.53/demo/store-to-mongodb)
-* [Parallel execution](http://206.189.12.53/demo/parallel-execution)
+* [Sequence](https://pvm-demo.forma-pro.com/demo/sequence)
+* [Fork](https://pvm-demo.forma-pro.com/demo/fork)
+* [Conditions](https://pvm-demo.forma-pro.com/demo/condition)
+* [Cycles](https://pvm-demo.forma-pro.com/demo/cycle)
+* [Synchronization](https://pvm-demo.forma-pro.com/demo/synchronization)
+* [Pause and continue](https://pvm-demo.forma-pro.com/demo/pause-and-contiue)
+* [Clone and Modify](https://pvm-demo.forma-pro.com/demo/clone-and-modify)
+* [Grouping](https://pvm-demo.forma-pro.com/demo/grouping)
+* [Exception](https://pvm-demo.forma-pro.com/demo/exception)
+* [Store to File](https://pvm-demo.forma-pro.com/store-to-file)
+* [Store to MongoDB](https://pvm-demo.forma-pro.com/store-to-mongodb)
+* [Parallel execution](https://pvm-demo.forma-pro.com/parallel-execution)
 * [Delayed transtions](docs/delayed-execution-with-quartz.md) (require [php-quartz/quartz](https://github.com/php-quartz/quartz))
 * [Gallery](docs/gallery.md)
-* [All examples](http://206.189.12.53/)
+* [All examples](https://pvm-demo.forma-pro.com/)
 
 ## Developed by Forma-Pro
 
