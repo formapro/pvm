@@ -29,6 +29,7 @@ Checkout [PVM Examples](https://pvm-demo.forma-pro.com/) site.
 * [Exception](https://pvm-demo.forma-pro.com/demo/exception)
 * [Store to File](https://pvm-demo.forma-pro.com/store-to-file)
 * [Store to MongoDB](https://pvm-demo.forma-pro.com/store-to-mongodb)
+* [Store with Doctrine](http://pvm-demo.forma-pro.com/store-to-mysql)
 * [Parallel execution](https://pvm-demo.forma-pro.com/parallel-execution)
 * [Delayed transtions](docs/delayed-execution-with-quartz.md) (require [php-quartz/quartz](https://github.com/php-quartz/quartz))
 * [Gallery](docs/gallery.md)
