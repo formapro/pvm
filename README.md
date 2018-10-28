@@ -1,7 +1,6 @@
 # PHP Process virtual machine
 
-The library provides tooling to build/execute/visualise [workflows](https://en.wikipedia.org/wiki/Workflow), [BPMN](http://www.bpmn.org/) like processes, or [state machines](https://en.wikipedia.org/wiki/Finite-state_machine). 
-It is backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories. Here's a good [post on how Petri Nets works](https://www.techfak.uni-bielefeld.de/~mchen/BioPNML/Intro/pnfaq.html)
+The library provides tooling to build/execute/visualise [workflows](https://en.wikipedia.org/wiki/Workflow), [BPMN](http://www.bpmn.org/) like processes, or [state machines](https://en.wikipedia.org/wiki/Finite-state_machine). Designed for parallel and destributed execution. Backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories. 
 
 ## Examples
 
@@ -20,6 +19,7 @@ Checkout [PVM Examples](https://pvm-demo.forma-pro.com/) site.
 * [Store to MongoDB](https://pvm-demo.forma-pro.com/demo/store-to-mongodb)
 * [Store with Doctrine](http://pvm-demo.forma-pro.com/demo/store-to-mysql)
 * [Parallel execution](https://pvm-demo.forma-pro.com/demo/parallel-execution)
+* [Good writeup on Petri Nets](https://www.techfak.uni-bielefeld.de/~mchen/BioPNML/Intro/pnfaq.html)
 
 ## Developed by Forma-Pro
 
