@@ -1,20 +1,18 @@
 <?php
 namespace Formapro\Pvm\Enqueue;
 
-use Enqueue\Client\CommandSubscriberInterface;
-use Enqueue\Consumption\QueueSubscriberInterface;
 use Formapro\Pvm\NullTokenLocker;
 use Formapro\Pvm\PessimisticLockException;
 use Formapro\Pvm\TokenLockerInterface;
 use Formapro\Pvm\TokenException;
 use Formapro\Pvm\ProcessEngine;
-use Interop\Queue\PsrContext;
-use Interop\Queue\PsrMessage;
-use Interop\Queue\PsrProcessor;
+use Interop\Queue\Context;
+use Interop\Queue\Message;
+use Interop\Queue\Processor;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberInterface, QueueSubscriberInterface
+class HandleAsyncTransitionProcessor implements Processor
 {
     const COMMAND = 'pvm_handle_async_transition';
 
@@ -40,13 +38,10 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberI
         $this->logger = $logger ?: new NullLogger();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function process(PsrMessage $psrMessage, PsrContext $psrContext): HandleAsyncTransitionResult
+    public function process(Message $interopMessage, Context $interopContext): HandleAsyncTransitionResult
     {
         try {
-            $message = HandleAsyncTransition::jsonUnserialize($psrMessage->getBody());
+            $message = HandleAsyncTransition::jsonUnserialize($interopMessage->getBody());
         } catch (\Throwable $e) {
             return HandleAsyncTransitionResult::reject($e->getMessage());
         }
@@ -83,26 +78,5 @@ class HandleAsyncTransitionProcessor implements PsrProcessor, CommandSubscriberI
         } finally {
             $this->tokenLocker->unlock($message->getToken());
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedCommand()
-    {
-        return [
-            'processorName' => static::COMMAND,
-            'queueName' => static::COMMAND,
-            'queueNameHardcoded' => true,
-            'exclusive' => true,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedQueues()
-    {
-        return [static::COMMAND];
     }
 }
