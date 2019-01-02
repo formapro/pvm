@@ -1,6 +1,6 @@
 # PHP Process virtual machine
 
-The library provides tooling to build/execute/visualise [workflows](https://en.wikipedia.org/wiki/Workflow), [BPMN](http://www.bpmn.org/) like processes, or [state machines](https://en.wikipedia.org/wiki/Finite-state_machine). Designed for parallel and destributed execution. Backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories. 
+The library provides tooling to build/execute/visualise [workflows](https://en.wikipedia.org/wiki/Workflow), [BPMN](http://www.bpmn.org/), chat bots, [state machines](https://en.wikipedia.org/wiki/Finite-state_machine). Designed for parallel and destributed execution. Backed up by [workflow nets (WF-nets)](https://en.wikipedia.org/wiki/Petri_net) and [graphs](https://en.wikipedia.org/wiki/Graph_theory) theories. 
 
 ## Examples
 
