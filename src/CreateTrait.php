@@ -5,14 +5,17 @@ use function Makasim\Values\build_object;
 
 trait CreateTrait
 {
-    /**
-     * @param array $data
-     *
-     * @return self|object
-     */
     public static function create(array $data = [])
     {
-        return build_object(ClassClosure::create(), array_replace([
+        $classMap = [
+            Process::SCHEMA => Process::class,
+            Node::SCHEMA => Node::class,
+            Token::SCHEMA => Token::class,
+            Transition::SCHEMA => Transition::class,
+            TokenTransition::SCHEMA => TokenTransition::class,
+        ];
+
+        return build_object($classMap[static::SCHEMA], array_replace([
             'schema' => static::SCHEMA,
         ], $data));
     }

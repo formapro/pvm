@@ -50,7 +50,7 @@ class Process
     public function getNode(string $id): Node
     {
         /** @var Node $node */
-        if (null === $node = get_object($this, 'nodes.'.$id, ClassClosure::create())) {
+        if (null === $node = get_object($this, 'nodes.'.$id, Node::class)) {
             throw new \LogicException('Not found');
         }
 
@@ -65,7 +65,7 @@ class Process
     public function getNodes(): array
     {
         $nodes = [];
-        foreach (get_objects($this, 'nodes', ClassClosure::create()) as $node) {
+        foreach (get_objects($this, 'nodes', Node::class) as $node) {
             /** @var Node $node */
 
             $node->setProcess($this);
@@ -82,7 +82,7 @@ class Process
     public function getTransitions(): array
     {
         $transitions = [];
-        foreach (get_objects($this, 'transitions', ClassClosure::create()) as $transition) {
+        foreach (get_objects($this, 'transitions', Transition::class) as $transition) {
             /** @var Transition $transition */
 
             $transition->setProcess($this);
@@ -126,7 +126,7 @@ class Process
     public function getTransition(string $id): Transition
     {
         /** @var Transition $transition */
-        if (null === $transition = get_object($this, 'transitions.'.$id, ClassClosure::create())) {
+        if (null === $transition = get_object($this, 'transitions.'.$id, Transition::class)) {
             throw new \LogicException(sprintf('Transition "%s" could not be found', $id));
         }
 

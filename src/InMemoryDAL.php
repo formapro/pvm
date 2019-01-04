@@ -25,7 +25,7 @@ class InMemoryDAL implements DAL
 
     public function getProcessTokens(Process $process): \Traversable
     {
-        foreach (get_objects($process, 'tokens', ClassClosure::create()) as $token) {
+        foreach (get_objects($process, 'tokens', Token::class) as $token) {
             /** @var Token $token */
 
             $token->setProcess($process);
@@ -37,7 +37,7 @@ class InMemoryDAL implements DAL
     public function getProcessToken(Process $process, string $id): Token
     {
         /** @var Token $token */
-        if (null === $token = get_object($process, 'tokens.'.$id, ClassClosure::create())) {
+        if (null === $token = get_object($process, 'tokens.'.$id, Token::class)) {
             throw TokenException::notFound($id);
         }
 

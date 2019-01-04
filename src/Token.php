@@ -85,7 +85,7 @@ class Token
     public function getTransitions(): array
     {
         $transitions = [];
-        foreach (get_objects($this, 'transitions', ClassClosure::create()) as $transition) {
+        foreach (get_objects($this, 'transitions', TokenTransition::class) as $transition) {
             /** @var TokenTransition $transition */
 
             $transition->setProcess($this->getProcess());
