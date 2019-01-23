@@ -5,6 +5,7 @@ use Formapro\Pvm\ProcessBuilder;
 use Formapro\Pvm\Transition;
 use Formapro\Pvm\Uuid;
 use function Makasim\Values\get_value;
+use function Makasim\Values\set_object;
 
 class TransitionBuilder
 {
@@ -30,7 +31,14 @@ class TransitionBuilder
 
     public function setId(string $id): self
     {
+        $oldId = get_value($this->transition, 'id');
+
+        if (null !== $oldId) {
+            set_object($this->processBuilder->getProcess(), 'transitions.'.$oldId, null);
+        }
+
         $this->transition->setId($id);
+        set_object($this->processBuilder->getProcess(), 'transitions.'.$id, $this->transition);
 
         return $this;
     }
