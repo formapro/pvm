@@ -25,6 +25,11 @@ class TokenTransition
      */
     private $_process;
 
+    public function __construct()
+    {
+        $this->setWeight(1);
+    }
+
     /**
      * @param string $id
      */
