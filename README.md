@@ -19,6 +19,7 @@ Checkout [PVM Examples](https://pvm-demo.forma-pro.com/) site.
 * [Store to MongoDB](https://pvm-demo.forma-pro.com/demo/store-to-mongodb)
 * [Store with Doctrine](http://pvm-demo.forma-pro.com/demo/store-to-mysql)
 * [Parallel execution](https://pvm-demo.forma-pro.com/demo/parallel-execution)
+* [Telegram Bot example](https://www.youtube.com/watch?v=HYZ-ZQvCEsI)
 * [Good writeup on Petri Nets](https://www.techfak.uni-bielefeld.de/~mchen/BioPNML/Intro/pnfaq.html)
 
 ## Developed by Forma-Pro
