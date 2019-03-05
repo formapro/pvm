@@ -6,10 +6,10 @@ use Formapro\Pvm\Token;
 use Formapro\Pvm\DAL;
 use Formapro\Pvm\TokenException;
 use Formapro\Pvm\Uuid;
-use function Makasim\Values\get_value;
-use function Makasim\Values\set_value;
-use function Makasim\Yadm\get_object_id;
-use Makasim\Yadm\Storage;
+use function Formapro\Values\get_value;
+use function Formapro\Values\set_value;
+use function Formapro\Yadm\get_object_id;
+use Formapro\Yadm\Storage;
 
 class StandaloneTokenDAL implements DAL
 {

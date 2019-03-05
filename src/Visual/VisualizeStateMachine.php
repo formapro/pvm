@@ -6,7 +6,7 @@ use Formapro\Pvm\Node;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Transition;
 use Graphp\GraphViz\GraphViz;
-use function Makasim\Values\get_object;
+use function Formapro\Values\get_object;
 
 class VisualizeStateMachine
 {

@@ -18,7 +18,7 @@
     },
     "require": {
         "php": "^7.1",
-        "makasim/values": "^0.5",
+        "formapro/values": "^0.5",
         "ramsey/uuid": "^3",
         "psr/log": "^1"
     },
@@ -29,7 +29,7 @@
         "enqueue/enqueue": "^0.9 Install the Enqueue library to be able to process tasks async (by using MQ).",
         "graphp/graphviz": "^0.2 If you want to visualize graphs",
         "alom/graphviz": "^1.1 If you want to visualize graphs",
-        "makasim/yadm": "^0.5 Install the Yadm library to be able to persist store in MongoDB"
+        "formapro/yadm": "^0.5 Install the Yadm library to be able to persist store in MongoDB"
     },
     "extra": {
         "branch-alias": {

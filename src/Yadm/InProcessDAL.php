@@ -5,8 +5,8 @@ use Formapro\Pvm\InMemoryDAL;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
 use Formapro\Pvm\TokenException;
-use function Makasim\Yadm\get_object_id;
-use Makasim\Yadm\Storage;
+use function Formapro\Yadm\get_object_id;
+use Formapro\Yadm\Storage;
 
 class InProcessDAL extends InMemoryDAL
 {

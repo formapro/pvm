@@ -5,8 +5,8 @@ use Formapro\Pvm\Behavior;
 use Formapro\Pvm\Exception\InterruptExecutionException;
 use Formapro\Pvm\Process;
 use Formapro\Pvm\Token;
-use function Makasim\Values\get_value;
-use Makasim\Yadm\Storage;
+use function Formapro\Values\get_value;
+use Formapro\Yadm\Storage;
 use MongoDB\Operation\FindOneAndUpdate;
 
 class SimpleSynchronizeBehavior implements Behavior
@@ -35,7 +35,7 @@ class SimpleSynchronizeBehavior implements Behavior
         $collection = $this->processStorage->getCollection();
 
         $rawRefreshedProcess = $collection->findOneAndUpdate(
-            ['id' => new \Makasim\Yadm\Uuid($process->getId())],
+            ['id' => new \Formapro\Yadm\Uuid($process->getId())],
             ['$inc' => ['nodes.'.$node->getId().'.currentWeight' => $token->getCurrentTransition()->getWeight()]],
             [
                 'typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array'],
