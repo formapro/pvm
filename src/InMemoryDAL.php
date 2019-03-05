@@ -1,9 +1,9 @@
 <?php
 namespace Formapro\Pvm;
 
-use function Makasim\Values\get_object;
-use function Makasim\Values\get_objects;
-use function Makasim\Values\set_object;
+use function Formapro\Values\get_object;
+use function Formapro\Values\get_objects;
+use function Formapro\Values\set_object;
 
 class InMemoryDAL implements DAL
 {
