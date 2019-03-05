@@ -102,6 +102,6 @@ class StandaloneTokenDAL implements DAL
 
     public function persistProcess(Process $process)
     {
-        get_object_id($process) ? $this->processStorage->update($process) : $this->processStorage->insert($process);
+        get_object_id($process, true) ? $this->processStorage->update($process) : $this->processStorage->insert($process);
     }
 }
