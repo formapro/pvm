@@ -6,6 +6,7 @@ use Formapro\Pvm\Transition;
 use Formapro\Pvm\Uuid;
 use function Formapro\Values\get_value;
 use function Formapro\Values\set_object;
+use function Formapro\Values\set_value;
 
 class TransitionBuilder
 {
@@ -39,6 +40,24 @@ class TransitionBuilder
 
         $this->transition->setId($id);
         set_object($this->processBuilder->getProcess(), 'transitions.'.$id, $this->transition);
+        
+        if ($to = $this->transition->getTo()) {
+            $inTransitions = get_value($this->processBuilder->getProcess(), 'inTransitions.'.$to->getId());
+            if (false !== $i = array_search($oldId, $inTransitions)) {
+                $inTransitions[$i] = $id;
+
+                set_value($this->processBuilder->getProcess(), 'inTransitions.'.$to->getId(), $inTransitions);
+            }
+        }
+
+        if ($from = $this->transition->getFrom()) {
+            $outTransitions = get_value($this->processBuilder->getProcess(), 'outTransitions.'.$from->getId());
+            if (false !== $i = array_search($oldId, $outTransitions)) {
+                $outTransitions[$i] = $id;
+
+                set_value($this->processBuilder->getProcess(), 'outTransitions.'.$from->getId(), $outTransitions);
+            }
+        }
 
         return $this;
     }
