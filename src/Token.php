@@ -62,6 +62,7 @@ class Token
     public function addTransition(TokenTransition $transition)
     {
         $transition->setProcess($this->getProcess());
+        $transition->setContext($this->getContext());
 
         add_object($this, 'transitions', $transition);
 
@@ -107,5 +108,15 @@ class Token
     public function getFrom(): Node
     {
         return $this->getCurrentTransition()->getTransition()->getFrom();
+    }
+
+    public function setContext(?array $context): void
+    {
+        set_value($this, 'context', $context);
+    }
+
+    public function getContext(): ?array
+    {
+        return get_value($this, 'context');
     }
 }

@@ -166,6 +166,16 @@ class TokenTransition
         set_value($this, 'state', $state);
     }
 
+    public function setContext(?array $context): void
+    {
+        set_value($this, 'context', $context);
+    }
+
+    public function getContext(): ?array
+    {
+        return get_value($this, 'context');
+    }
+
     public static function createFor(Transition $transition, int $weight): TokenTransition
     {
         $tokenTransition = static::create();
