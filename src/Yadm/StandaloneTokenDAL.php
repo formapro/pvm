@@ -37,8 +37,6 @@ class StandaloneTokenDAL implements DAL
 
         set_value($token, 'processId', $process->getId());
 
-        $this->tokenStorage->insert($token);
-
         return $token;
     }
 
@@ -97,7 +95,7 @@ class StandaloneTokenDAL implements DAL
     {
         $this->persistProcess($token->getProcess());
 
-        $this->tokenStorage->update($token);
+        get_object_id($token, true) ? $this->tokenStorage->update($token) : $this->tokenStorage->insert($token);
     }
 
     public function persistProcess(Process $process)

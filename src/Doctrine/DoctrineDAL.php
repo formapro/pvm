@@ -38,8 +38,6 @@ class DoctrineDAL implements DAL
         $token->setId($id ?: Uuid::generate());
         $token->setProcess($process);
 
-        $this->persistToken($token);
-
         return $token;
     }
 
