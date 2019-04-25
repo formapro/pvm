@@ -20,12 +20,19 @@ class Transition
      */
     private $_process;
 
+    /**
+     * @var array
+     */
+    private $tokenValues;
+
     public function __construct()
     {
         $this->setId(Uuid::generate());
         $this->setWeight(1);
         $this->setAsync(false);
         $this->setActive(true);
+
+        $this->tokenValues = [];
     }
 
     /**
@@ -165,5 +172,15 @@ class Transition
     public function getState(): string
     {
         return get_value($this, 'state');
+    }
+
+    public function setTokenValues(?array $values): void
+    {
+        $this->tokenValues = $values;
+    }
+
+    public function getTokenValues(): array
+    {
+        return $this->tokenValues;
     }
 }
