@@ -74,7 +74,7 @@ class BuildDigraphScript
             }
 
         }
-//dump($digraph->render());die;
+
         return $digraph->render();
     }
 }
