@@ -174,7 +174,7 @@ class Transition
         return get_value($this, 'state');
     }
 
-    public function setTokenValues(?array $values): void
+    public function setTokenValues(array $values): void
     {
         $this->tokenValues = $values;
     }

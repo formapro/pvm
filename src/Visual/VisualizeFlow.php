@@ -157,7 +157,7 @@ class VisualizeFlow
 
         $edge->setAttribute('alom.graphviz', [
             'label' => $transition->getName(),
-            'id' => $transition->getId(),
+            'id' => sprintf('%s->%s', $from->getId(), $to->getId()),
         ]);
     }
 
@@ -171,13 +171,15 @@ class VisualizeFlow
             $edge = $from->createEdgeTo($to);
         }
 
-        $edge->setAttribute('graphviz.label', $transition->getName());
-        $edge->setAttribute('graphviz.id', $transition->getId());
-        $edge->setAttribute('pvm.transition_id', $transition->getId());
+        $id = sprintf('%s->%s', $from->getId(), $to->getId());
+
+        $edge->setAttribute('graphviz.label', $id);
+        $edge->setAttribute('graphviz.id', $id);
+        $edge->setAttribute('pvm.transition_id', $id);
 
         $edge->setAttribute('alom.graphviz', [
             'label' => $transition->getName(),
-            'id' => $transition->getId(),
+            'id' => $id,
         ]);
     }
 
@@ -189,10 +191,7 @@ class VisualizeFlow
         $edge = $from->createEdgeTo($to);
         $edge->setAttribute('pvm.transition_id', $transition->getId());
         $edge->setAttribute('graphviz.id', $transition->getId());
-        $edge->setAttribute(
-            'graphviz.label',
-            $transition->getName()
-        );
+        $edge->setAttribute('graphviz.label', $transition->getName());
 
         $edge->setAttribute('alom.graphviz', [
             'id' => $transition->getId(),
