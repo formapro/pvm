@@ -131,6 +131,9 @@ class VisualizeFlow
             case 'gateway':
                 $shape = 'diamond';
                 break;
+            case 'event':
+                $shape = 'circle';
+                break;
             default:
                 $shape = 'box';
         }
