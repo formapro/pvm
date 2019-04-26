@@ -118,7 +118,7 @@ class VisualizeFlow
     private function createVertex(Graph $graph, Node $node)
     {
         /** @var Options $options */
-        $options = get_object($node, 'visual', Options::class) ?: new Options();
+        $options = get_object($node, 'option', Options::class) ?: new Options();
         $vertex = $graph->createVertex($node->getId());
         $vertex->setAttribute('graphviz.label', $node->getLabel() ?: $node->getId());
         $vertex->setAttribute('graphviz.id', $node->getId());
