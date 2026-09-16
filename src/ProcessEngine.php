@@ -175,6 +175,7 @@ final class ProcessEngine implements DAL
             }
 
             $first = true;
+            /** @var Transition $transition */
             foreach ($transitions as $transition) {
                 $this->log('Next transition: %s -> %s',
                     $transition->getFrom() ? $transition->getFrom()->getLabel() : 'start',
@@ -185,11 +186,19 @@ final class ProcessEngine implements DAL
                     $first = false;
                     $token->addTransition(TokenTransition::createFor($transition, $tokenTransition->getWeight()));
 
+                    foreach ($transition->getTokenValues() as $key => $value) {
+                        set_value($token, $key, $value);
+                    }
+
                     $this->transition($token);
                 } else {
                     $newToken = $this->forkProcessToken($token);
                     $newToken->addTransition(TokenTransition::createFor($transition, $transition->getWeight()));
                     $newToken->getCurrentTransition()->setWeight($tokenTransition->getWeight());
+
+                    foreach ($transition->getTokenValues() as $key => $value) {
+                        set_value($newToken, $key, $value);
+                    }
 
                     $this->transition($newToken);
                 }
